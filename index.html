@@ -408,7 +408,8 @@
       <div class="topbar-left">
         <div class="page-title" id="pageTitle">Project Planning</div>
       </div>
-      <div class="topbar-right"></div>
+      <div class="topbar-right">
+        <span id="drive-status" style="font-size:11px;font-weight:600;color:var(--vip-midnight-muted);cursor:default;margin-right:4px;" title="Drive sync status">○ Local</span></div>
     </div>
 
     <!-- SPRINT PROGRESS BAR -->
@@ -951,7 +952,7 @@
             </div>
             <div style="padding:12px 14px;background:var(--vip-blue-pale);border-radius:8px;">
               <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">3 — Push to GitHub</div>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Replace the file in the GitHub repo with the new version and commit to <code style="background:var(--paper-mid);padding:1px 6px;border-radius:4px;font-size:12px;">main</code>. Netlify detects the push and redeploys automatically within 30–60 seconds.</div>
+              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Go to your <code style="background:var(--paper-mid);padding:1px 6px;border-radius:4px;font-size:12px;">buckeye-evalcommons</code> repo on GitHub. Click <code style="background:var(--paper-mid);padding:1px 6px;border-radius:4px;font-size:12px;">index.html</code> → click the <strong>pencil icon</strong> to edit → select all the content and replace it with the new file from Claude → commit directly to <code style="background:var(--paper-mid);padding:1px 6px;border-radius:4px;font-size:12px;">main</code>. Netlify detects the push and redeploys automatically within 30–60 seconds.</div>
             </div>
             <div style="padding:12px 14px;background:var(--vip-blue-pale);border-radius:8px;">
               <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">4 — Verify on live site</div>
@@ -3119,6 +3120,36 @@ function openModal(id) {
 
 initCodingStudio();
 
+
+// ── GOOGLE DRIVE SYNC ─────────────────────────────────────────────────────────
+const DRIVE_API = 'https://script.google.com/a/macros/vergeimpactpartners.com/s/AKfycbzqo40RgZNNxY1vSswxi8Wu7m5R4lYQ66NEOp_j6IXiBP-Egrr80LvLmDtqLkybsAm_eA/exec';
+var _driveOnline = null; // null=unknown, true=online, false=offline
+
+async function drivePost(action, payload) {
+  try {
+    const res = await fetch(DRIVE_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' }, // avoid CORS preflight
+      body: JSON.stringify({ action, payload })
+    });
+    const json = await res.json();
+    _driveOnline = true;
+    return json.ok ? json.data : null;
+  } catch(e) {
+    _driveOnline = false;
+    console.warn('Drive offline, using localStorage fallback:', e.message);
+    return null;
+  }
+}
+
+function showDriveStatus(ok) {
+  var el = document.getElementById('drive-status');
+  if (!el) return;
+  el.textContent = ok ? '● Drive' : '○ Local';
+  el.style.color = ok ? '#1a6b3e' : 'var(--vip-midnight-muted)';
+  el.title = ok ? 'Data syncing to Google Drive' : 'Drive offline — data saved locally';
+}
+
 // ── PUBLISH WORKFLOW ─────────────────────────────────────────────────────────
 // Publish state persists in localStorage so village page stays published
 // across reloads and evaluator updates
@@ -3135,13 +3166,34 @@ function savePublishState() {
   try {
     localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets));
   } catch(e) {}
+  // Sync to Drive (non-blocking)
+  drivePost('save_publish', publishedWidgets).then(function(res) {
+    showDriveStatus(res !== null);
+  });
 }
 
 const publishedWidgets = loadPublishState();
 
 // Restore all published widgets on page load
 function restorePublishedState() {
-  // Title widget (Example Learning Widget)
+  // Try Drive first, fall back to localStorage
+  drivePost('load_publish', {}).then(function(driveState) {
+    if (driveState && Object.keys(driveState).length > 0) {
+      Object.assign(publishedWidgets, driveState);
+      // Also update localStorage to keep in sync
+      try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
+      showDriveStatus(true);
+    } else {
+      showDriveStatus(false);
+    }
+    _applyPublishedState();
+  }).catch(function() {
+    showDriveStatus(false);
+    _applyPublishedState();
+  });
+}
+
+function _applyPublishedState() {
   if (publishedWidgets['titleWidget']) {
     var w = document.getElementById('comm-title-widget');
     if (w) w.style.display = 'block';
@@ -3152,7 +3204,6 @@ function restorePublishedState() {
     if (btn) { btn.textContent = 'Unpublish'; btn.style.background = 'var(--vip-magenta)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--vip-magenta)'; }
     if (status) { status.textContent = '● Live on Village page'; status.style.color = '#1a6b3e'; }
   }
-  // Fidelity tracker
   if (publishedWidgets['fidelity']) {
     var w = document.getElementById('comm-fidelity-widget');
     if (w) { w.style.display = 'block'; syncFidelityVillage(); }
@@ -3161,7 +3212,6 @@ function restorePublishedState() {
     if (btn) { btn.textContent = 'Unpublish'; btn.style.background = 'var(--vip-midnight)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--vip-midnight)'; }
     if (status) { status.textContent = '● Live on Village page'; status.style.color = '#1a6b3e'; }
   }
-  // Learning questions
   if (publishedWidgets['lq']) {
     var w = document.getElementById('comm-lq-widget');
     if (w) w.style.display = 'block';
@@ -3828,6 +3878,7 @@ var fidelitySignalColors = {
 
 function saveFidelityData() {
   try { localStorage.setItem('evalcommons_fidelity_v1', JSON.stringify(fidelityData)); } catch(e) {}
+  drivePost('save_fidelity', { data: fidelityData }).then(function(res) { showDriveStatus(res !== null); });
 }
 
 function setFidelitySprint(sprint) {
