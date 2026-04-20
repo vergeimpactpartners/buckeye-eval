@@ -923,11 +923,11 @@
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;gap:10px;align-items:flex-start;">
               <span style="background:var(--vip-midnight);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-top:2px;">Evaluator</span>
-              <span style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-family:monospace;">yoursite.netlify.app</span>
+              <span style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-family:monospace;"><a href="https://buckeye-eval.netlify.app" target="_blank" style="color:var(--vip-blue);">buckeye-eval.netlify.app</a></span>
             </div>
             <div style="display:flex;gap:10px;align-items:flex-start;">
               <span style="background:var(--vip-magenta);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-top:2px;">Village</span>
-              <span style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-family:monospace;">yoursite.netlify.app?mode=village</span>
+              <span style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-family:monospace;"><a href="https://buckeye-eval.netlify.app?mode=community" target="_blank" style="color:var(--vip-magenta);">buckeye-eval.netlify.app?mode=community</a></span>
             </div>
           </div>
         </div>
@@ -935,7 +935,19 @@
         <!-- Status note -->
         <div style="background:var(--paper-mid);border-radius:10px;padding:16px 18px;margin-bottom:16px;">
           <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Current build status</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.8;">This platform is in active development. Data does not yet persist between sessions — stories, notes, and reflections will reset on page refresh until Google Drive is connected at launch. The voice story widget and AI Sensemaking features require HTTPS, which Netlify provides automatically on deployment.</div>
+          <div style="font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px;">The platform is live at <a href="https://buckeye-eval.netlify.app" target="_blank" style="color:var(--vip-blue);">buckeye-eval.netlify.app</a>. Data syncs to Google Drive via César's account — publish state, fidelity assessments, and stories are shared across all evaluator devices. The voice story widget and AI Sensemaking require HTTPS, which Netlify provides automatically.</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border-radius:8px;border:1px solid var(--border);">
+            <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:12px;font-weight:700;color:#1a6b3e;">● Drive</span>
+                <span style="font-size:12px;color:var(--ink-soft);">Data syncing to Google Drive — all evaluators see the same state</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:12px;font-weight:700;color:var(--vip-midnight-muted);">○ Local</span>
+                <span style="font-size:12px;color:var(--ink-soft);">Drive temporarily unavailable — data saved locally and will sync when reconnected</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- How to update -->
@@ -3127,17 +3139,24 @@ var _driveOnline = null; // null=unknown, true=online, false=offline
 
 async function drivePost(action, payload) {
   try {
-    const res = await fetch(DRIVE_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' }, // avoid CORS preflight
-      body: JSON.stringify({ action, payload })
-    });
+    var isLoad = action.startsWith('load_');
+    var res;
+    if (isLoad) {
+      // GET for load actions — no CORS preflight
+      res = await fetch(DRIVE_API + '?action=' + action, { method: 'GET' });
+    } else {
+      // POST for save actions — use text/plain to avoid preflight
+      res = await fetch(DRIVE_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: action, payload: payload })
+      });
+    }
     const json = await res.json();
     _driveOnline = true;
     return json.ok ? json.data : null;
   } catch(e) {
     _driveOnline = false;
-    console.warn('Drive offline, using localStorage fallback:', e.message);
     return null;
   }
 }
