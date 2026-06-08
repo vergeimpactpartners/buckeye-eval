@@ -60,7 +60,8 @@
   .sidebar { width: 240px; flex-shrink: 0; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
   .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 2px solid var(--vip-blue-light); background: var(--white); flex-shrink: 0; }
-  .content-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 28px 32px; position: relative; }
+  .content-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 28px 32px; position: relative; min-height: 0; }
+  body.mode-residents .content-area { padding-top: 0; }
 
   /* SIDEBAR */
   .sidebar-brand { padding: 20px 18px 16px; border-bottom: 3px solid var(--vip-blue); }
@@ -108,8 +109,8 @@
   .btn-ai:hover { background: #7d1850; }
 
   /* VIEWS (hidden/shown) */
-  .view { display: none; position: relative; }
-  .view.active { display: block; position: relative; max-width: 100%; }
+  .view { display: none; position: relative; min-height: 0; }
+  .view.active { display: block; position: relative; max-width: 100%; min-height: 0; }
   .eval-only { display: inline-block; }
   body.mode-village .eval-only { display: none !important; }
   body.mode-village .themes-panel-unpublished { display: none !important; }
@@ -1457,7 +1458,7 @@
       <div id="view-village" class="view">
 
         <!-- Header -->
-        <div style="padding:24px 28px 0;">
+        <div style="padding:12px 28px 0;">
           <div style="font-size:22px;font-weight:800;color:var(--vip-midnight);margin-bottom:4px;">Village Hub</div>
           <div style="font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:20px;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
         </div>
