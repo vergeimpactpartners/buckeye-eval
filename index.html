@@ -3495,7 +3495,8 @@ if (urlMode === 'ehw') {
   document.querySelector('.sidebar-mode').style.display = 'none';
   var ca = document.getElementById('mainContentArea');
   if (ca) {
-    ca.style.cssText += '; overflow-y: scroll !important; min-height: calc(100vh - 60px) !important; height: auto !important; flex: none !important;';
+    ca.style.overflowY = 'scroll';
+    ca.style.maxHeight = 'calc(100vh - 60px)';
   }
 } else if (urlMode === 'eval') {
   setMode('eval');
