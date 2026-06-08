@@ -3493,8 +3493,12 @@ if (urlMode === 'ehw') {
   document.getElementById('evalModeBtn').style.display = 'none';
 } else if (urlMode === 'village') {
   setMode('residents');
-  document.querySelector('.sidebar').style.display = 'none';
-  document.querySelector('.main').style.width = '100%';
+  document.querySelector('.sidebar-mode').style.display = 'none';
+  var ca = document.getElementById('mainContentArea');
+  if (ca) {
+    ca.style.overflowY = 'scroll';
+    ca.style.height = 'calc(100vh - 60px)';
+  }
 } else if (urlMode === 'eval') {
   setMode('eval');
 }
