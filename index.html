@@ -354,6 +354,26 @@
   .btn-ai { background: var(--vip-magenta); color: white; border-color: var(--vip-magenta); font-weight: 600; letter-spacing: 0.02em; }
   .btn-ai:hover { background: #7d1850; }
 
+
+  /* ── MOBILE ─────────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .app { flex-direction: column; height: auto; overflow: visible; }
+    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; padding: 10px 16px; gap: 8px; overflow: visible; }
+    .sidebar-brand { padding: 0; border-bottom: none; flex: 1; }
+    .brand-name { font-size: 14px !important; }
+    .brand-sub { display: none; }
+    .sidebar-project { display: none; }
+    .sidebar-nav { display: none; }
+    .sidebar-mode { padding: 0; border-top: none; }
+    .main { width: 100%; overflow: visible; }
+    .topbar { padding: 10px 16px; }
+    .page-title { font-size: 13px !important; }
+    .content-area { padding: 16px; height: auto; overflow: visible; max-height: none !important; }
+    body.mode-residents .content-area { padding: 12px; }
+    body.mode-residents #sprintProgressBarWrap { display: none !important; }
+    .view.active { display: block; }
+  }
+
 </style>
 </head>
 <body>
@@ -397,7 +417,7 @@
       <div class="nav-group-label" style="margin-top:8px;">Activities</div>
       <div style="padding:0 6px 8px;">
         <div class="nav-item" data-color="vip-blue" onclick="scrollToResActivity('res-act-1')"><span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">Planning for EVB Kickoff</span></div>
-        <div class="nav-item" data-color="vip-midnight" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Building the Village</span></div>
+        <div class="nav-item" data-color="vip-midnight" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Group and Individual Roles</span></div>
       </div>
     </div>
 
@@ -1591,6 +1611,38 @@
                 </div>
               </div>
             </div>
+            <!-- Action bubble + AAR scrollable -->
+            <div style="overflow-x:auto;margin-top:20px;">
+              <div style="display:flex;gap:0;align-items:flex-start;width:max-content;">
+                <!-- Action bubble -->
+                <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:120px;align-self:flex-start;margin-top:20px;">
+                  <div style="width:2px;height:40px;background:var(--border);"></div>
+                  <div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:4px;">Action</div>
+                    <div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">EVB Kickoff</div>
+                  </div>
+                  <div style="width:2px;height:40px;background:var(--border);"></div>
+                </div>
+                <!-- AAR table -->
+                <div style="border:2px solid var(--vip-blue);border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;">
+                  <div style="background:var(--vip-blue);color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;">
+                    <span>After Action Review</span>
+                    <span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We'll return to this</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);">
+                    <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                    <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                    <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
+                    <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                    <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                  </div>
+                  <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                </div>
+              </div>
+            </div>
+
 <!-- Emerging Themes Panel -->
             <div id="res-act-1-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
@@ -1614,12 +1666,13 @@
 
             
         </div>
+        </div>
 
 <!-- Activity 2: Building the Village -->
         <div id="res-act-2" style="padding:0 28px 28px;">
           <div onclick="toggleResActivity('res-act-2')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-midnight);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">
             <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="font-size:15px;font-weight:700;">Building the Village</div>
+              <div style="font-size:15px;font-weight:700;">Data Collection: Group and Individual Roles in the Village</div>
               <div style="font-size:11px;opacity:0.8;">Before Action Review + After Action Review</div>
               <div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">Steering Committee Work</span></div>
             </div>
@@ -1629,28 +1682,92 @@
             </div>
           </div>
           <div id="res-act-2-body" style="border:1px solid rgba(30,42,60,0.2);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">
+            <!-- Framing question -->
             <div style="background:var(--vip-blue-pale);padding:20px 22px;border-bottom:1px solid var(--vip-blue-light);">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-blue);margin-bottom:10px;">Framing Question</div>
-              <div style="font-size:20px;font-weight:700;color:var(--vip-midnight);font-style:italic;line-height:1.5;">What would it take for you to successfully build your part of the village?</div>
+              <div style="font-size:16px;font-weight:400;color:var(--vip-midnight);font-style:italic;line-height:1.5;margin-bottom:4px;">Over the months of May and June,</div>
+              <div style="font-size:20px;font-weight:700;color:var(--vip-midnight);font-style:italic;line-height:1.5;">What would it take for us to successfully carry out our specific roles as we build the Village and carry out our work (e.g. the kickoff)?</div>
+              <!-- Roles box -->
+              <div style="margin-top:16px;padding:16px;background:white;border-radius:10px;border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">The roles we are playing include:</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="background:#EBF6FB;border-radius:8px;padding:10px 14px;">
+                    <div style="font-size:13px;font-weight:700;color:var(--vip-blue);">Setting Up Green Spaces &amp; the Pod</div>
+                  </div>
+                  <div style="background:#f5f0fb;border-radius:8px;padding:10px 14px;">
+                    <div style="font-size:13px;font-weight:700;color:#7B3FA0;">Storytelling</div>
+                  </div>
+                  <div style="background:#f0f7f1;border-radius:8px;padding:10px 14px;">
+                    <div style="font-size:13px;font-weight:700;color:#2E7D32;">Establishing Resident-Derived Priorities</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style="padding:20px;display:flex;flex-direction:column;gap:32px;">
-<div><div style="font-size:15px;font-weight:700;color:#1890BA;margin-bottom:8px;">Green Spaces &amp; the Pod <span style="font-weight:400;color:#1890BA;opacity:0.8;">— Derick</span></div><div style="overflow-x:auto;"><div style="display:flex;gap:0;align-items:stretch;"><div style="border:2px solid #1890BA;border-radius:12px;overflow:hidden;width:700px;flex-shrink:0;"><div style="background:#1890BA;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>Before Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Derick</span></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What are our intended results?</div><div style="display:flex;gap:5px;margin-bottom:4px;"><span style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);flex-shrink:0;min-width:16px;">1.</span><span style="font-size:13px;color:var(--vip-midnight);line-height:1.5;">Cultivating more green spaces in the community and neighborhood and making them more than empty plots of land</span></div><div style="display:flex;gap:5px;margin-bottom:4px;"><span style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);flex-shrink:0;min-width:16px;">2.</span><span style="font-size:13px;color:var(--vip-midnight);line-height:1.5;">Beautifying the neighborhood with things that are healthy for the neighborhood like trees and gardens</span></div><div style="display:flex;gap:5px;margin-bottom:4px;"><span style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);flex-shrink:0;min-width:16px;">3.</span><span style="font-size:13px;color:var(--vip-midnight);line-height:1.5;">Connecting with the people who are doing the above</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will success look like? How will we know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What challenges might we encounter?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What have we learned from similar situations?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will make us successful?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:110px;align-self:flex-start;margin-top:60px;"><div style="width:2px;height:40px;background:var(--border);"></div><div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:2px;">Action</div><div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">Green Spaces &amp; the Pod</div></div><div style="width:2px;height:40px;background:var(--border);"></div></div><div style="border:2px solid #1890BA;border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;"><div style="background:#1890BA;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>After Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Derick</span><span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We'll return to this</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div></div></div>
-<div><div style="font-size:15px;font-weight:700;color:#7B3FA0;margin-top:24px;margin-bottom:8px;">Storytelling <span style="font-weight:400;color:#7B3FA0;opacity:0.8;">— Jerrod</span></div><div style="overflow-x:auto;"><div style="display:flex;gap:0;align-items:stretch;"><div style="border:2px solid #7B3FA0;border-radius:12px;overflow:hidden;width:700px;flex-shrink:0;"><div style="background:#7B3FA0;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>Before Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Jerrod</span></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What are our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will success look like? How will we know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What challenges might we encounter?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What have we learned from similar situations?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will make us successful?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:110px;align-self:flex-start;margin-top:60px;"><div style="width:2px;height:40px;background:var(--border);"></div><div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:2px;">Action</div><div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">Storytelling</div></div><div style="width:2px;height:40px;background:var(--border);"></div></div><div style="border:2px solid #7B3FA0;border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;"><div style="background:#7B3FA0;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>After Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Jerrod</span><span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We'll return to this</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div></div></div>
-<div><div style="font-size:15px;font-weight:700;color:#2E7D32;margin-top:24px;margin-bottom:8px;">Establish Resident-Derived Priorities <span style="font-weight:400;color:#2E7D32;opacity:0.8;">— Miss Toni</span></div><div style="overflow-x:auto;"><div style="display:flex;gap:0;align-items:stretch;"><div style="border:2px solid #2E7D32;border-radius:12px;overflow:hidden;width:700px;flex-shrink:0;"><div style="background:#2E7D32;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>Before Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Miss Toni</span></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What are our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will success look like? How will we know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What challenges might we encounter?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What have we learned from similar situations?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will make us successful?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:110px;align-self:flex-start;margin-top:60px;"><div style="width:2px;height:40px;background:var(--border);"></div><div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:2px;">Action</div><div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">Resident-Derived Priorities</div></div><div style="width:2px;height:40px;background:var(--border);"></div></div><div style="border:2px solid #2E7D32;border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;"><div style="background:#2E7D32;color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;"><span>After Action Review</span><span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:10px;font-weight:600;">Miss Toni</span><span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We'll return to this</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);"><div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div><div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div></div></div></div>
+            <!-- Activities divider -->
+            <div style="margin:0 28px;border-top:2px solid var(--border);position:relative;margin-top:20px;">
+              <span style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:white;padding:0 14px;font-size:11px;font-weight:700;color:var(--vip-midnight-muted);text-transform:uppercase;letter-spacing:0.08em;">Activities</span>
+            </div>
+            <!-- What will make us successful? — condensed single table -->
+            <div style="padding:20px;background:white;">
+              <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+                <div style="background:#f2f2f2;padding:10px 14px;border-bottom:1px solid var(--border);">
+                  <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);">What will make us successful?</div>
+                </div>
+                                  <div style="padding:12px 14px;background:#EBF6FB;border-bottom:1px solid var(--border);">
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-blue);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
+                    <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                  </div>
+                                  <div style="padding:12px 14px;background:#f5f0fb;border-bottom:1px solid var(--border);">
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#7B3FA0;margin-bottom:8px;">Storytelling</div>
+                    <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                  </div>
+                                  <div style="padding:12px 14px;background:#f0f7f1;border-bottom:1px solid var(--border);">
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#2E7D32;margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
+                    <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                  </div>
+              </div>
+              <!-- Action bubble + AAR -->
+              <div style="overflow-x:auto;margin-top:20px;">
+                <div style="display:flex;gap:0;align-items:flex-start;width:max-content;">
+                  <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:120px;align-self:flex-start;margin-top:20px;">
+                    <div style="width:2px;height:40px;background:var(--border);"></div>
+                    <div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:4px;">Action</div>
+                      <div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">Building the Village</div>
+                    </div>
+                    <div style="width:2px;height:40px;background:var(--border);"></div>
+                  </div>
+                  <div style="border:2px solid var(--vip-midnight);border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;">
+                    <div style="background:var(--vip-midnight);color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;">
+                      <span>After Action Review</span>
+                      <span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We'll return to this</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);">
+                      <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                      <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                      <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
+                      <div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                      <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                    </div>
+                    <div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            
-
-            </div></div></div>
-          </div>
-  
-<!-- Emerging Themes Panel -->
+            <!-- Emerging Themes Panel -->
             <div id="res-act-2-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
                 <div>
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>
+                  <button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>
+                </div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
@@ -1660,11 +1777,11 @@
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
               </div>
-
             </div>
-                </div>
+          </div>
         </div>
-      <div id="view-ehw" class="view">
+
+<div id="view-ehw" class="view">
         <!-- Welcome + Last updated -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
           <div id="commLastUpdated" style="font-size:11px;color:var(--vip-midnight-muted);"></div>
