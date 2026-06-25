@@ -483,7 +483,7 @@
       <div class="mode-toggle">
         <div class="mode-btn active" id="evalModeBtn" onclick="setMode('eval')">Evaluator</div>
         <div class="mode-btn" id="commModeBtn" onclick="setMode('ehw')">EHW</div>
-        <div class="mode-btn" id="resModeBtn" onclick="setMode('residents')">Village</div>
+        
       </div>
     </div>
   </div>
@@ -1762,7 +1762,6 @@
             
 
             
-        </div>
           </div><!-- /res-act-1-themes -->
           </div><!-- /res-act-1-body -->
         </div><!-- /res-act-1 -->
@@ -2779,12 +2778,11 @@ function showView(name, navEl) {
 function setMode(mode) {
   currentMode = mode;
   // Re-apply visibility when switching to village view in evaluator
-  if (mode === 'residents' && typeof _restoreActivityVisibility === 'function') _restoreActivityVisibility();
   document.body.className = document.body.className.replace(/mode-\S+/g, '').trim();
   document.body.classList.add('mode-' + mode);
   document.getElementById('evalModeBtn').classList.toggle('active', mode === 'eval');
   document.getElementById('commModeBtn').classList.toggle('active', mode === 'ehw');
-  document.getElementById('resModeBtn').classList.toggle('active', mode === 'residents');
+  var _rmb = document.getElementById('resModeBtn'); if(_rmb) _rmb.classList.toggle('active', mode === 'residents');
   document.getElementById('evalNav').style.display = mode === 'eval' ? 'block' : 'none';
   document.getElementById('communityNav').style.display = mode === 'ehw' ? 'block' : 'none';
   document.getElementById('residentsNav').style.display = 'none';
@@ -5435,52 +5433,28 @@ function _applyActivityVisibility(actNum, visible) {
   var card = document.getElementById('res-act-' + actNum);
   if (card) {
     if (currentMode === 'residents') {
-      // Village mode: truly hide/show
+      // Village URL (?mode=village): hide unpublished activities from residents
       card.style.display = visible ? 'block' : 'none';
       card.style.opacity = '';
       _removeHiddenBadge(actNum);
     } else {
-      // Evaluator mode: NEVER set display — let view-village CSS handle it
-      // Just control opacity and badge
       card.style.display = '';
-      if (visible) {
-        card.style.opacity = '';
-        _removeHiddenBadge(actNum);
-      } else {
-        var villageViewActive = document.getElementById('view-village') &&
-          document.getElementById('view-village').classList.contains('active');
-        card.style.opacity = villageViewActive ? '0.45' : '';
-        if (villageViewActive) {
-          _addHiddenBadge(actNum);
-        } else {
-          _removeHiddenBadge(actNum);
-        }
-      }
+      card.style.opacity = (!visible && document.getElementById('view-village') &&
+        document.getElementById('view-village').classList.contains('active')) ? '0.45' : '';
+      if (!visible && card.style.opacity === '0.45') _addHiddenBadge(actNum);
+      else _removeHiddenBadge(actNum);
     }
   }
-
-  // Show/hide nav item in residents sidebar only
-  var navDots = document.querySelectorAll('#residentsNav .nav-item');
-  navDots.forEach(function(item) {
-    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + actNum + "'")) {
+  document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
+    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + actNum + "'"))
       item.style.display = visible ? '' : 'none';
-    }
   });
-
-  // Update VE visibility button
   var btn = document.getElementById('vis-btn-act' + actNum);
   if (btn) {
-    if (visible) {
-      btn.innerHTML = '&#9679; Published';
-      btn.style.background = 'var(--vip-blue)';
-      btn.style.borderColor = 'var(--vip-blue)';
-      btn.style.color = 'white';
-    } else {
-      btn.innerHTML = '&#9675; Hidden';
-      btn.style.background = 'white';
-      btn.style.borderColor = 'var(--border)';
-      btn.style.color = 'var(--vip-midnight-muted)';
-    }
+    btn.innerHTML = visible ? '&#9679; Published' : '&#9675; Hidden';
+    btn.style.background = visible ? 'var(--vip-blue)' : 'white';
+    btn.style.borderColor = visible ? 'var(--vip-blue)' : 'var(--border)';
+    btn.style.color = visible ? 'white' : 'var(--vip-midnight-muted)';
   }
 }
 
@@ -5488,13 +5462,16 @@ function _addHiddenBadge(actNum) {
   var header = document.querySelector('#res-act-' + actNum + ' [onclick*="toggleResActivity"]');
   if (!header) return;
   if (header.querySelector('.hidden-from-village-badge')) return;
-  var badge = document.createElement('span');
-  badge.className = 'hidden-from-village-badge eval-only';
-  badge.textContent = 'Hidden from Village';
-  badge.style.cssText = 'font-size:10px;font-weight:600;background:rgba(0,0,0,0.35);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;margin-left:8px;vertical-align:middle;';
-  // Insert into header after existing content
-  var titleDiv = header.querySelector('div');
-  if (titleDiv) titleDiv.appendChild(badge);
+  // Match themes box layout: full-width row, text left, pill right
+  var row = document.createElement('div');
+  row.className = 'hidden-from-village-badge eval-only';
+  row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);width:100%;';
+  row.innerHTML =
+    '<span style="font-size:11px;color:rgba(255,255,255,0.6);font-style:italic;">Evaluator view only until published</span>' +
+    '<button onclick="event.stopPropagation();toggleActivityVisibility(' + actNum + ')" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>';
+  // Append to the left content div inside the header flex container
+  var leftDiv = header.querySelector('div');
+  if (leftDiv) leftDiv.appendChild(row);
 }
 
 function _removeHiddenBadge(actNum) {
