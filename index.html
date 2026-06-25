@@ -421,6 +421,10 @@
       <div style="padding:0 6px 8px;">
         <div class="nav-item" data-color="vip-blue" onclick="scrollToResActivity('res-act-1')"><span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">Planning for EVB Kickoff</span></div>
         <div class="nav-item" data-color="vip-midnight" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Group and Individual Roles</span></div>
+        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-3')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Tasty</span></div>
+        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-4')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Trust</span></div>
+        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-3')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Tasty</span></div>
+        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-4')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Trust</span></div>
       </div>
     </div>
 
@@ -476,7 +480,7 @@
         <div class="page-title" id="pageTitle">Project Planning</div>
       </div>
       <div class="topbar-right">
-        <span id="drive-status" style="font-size:11px;font-weight:600;color:var(--vip-midnight-muted);cursor:default;margin-right:4px;" title="Drive sync status">○ Local</span></div>
+        <span id="drive-status" style="font-size:11px;font-weight:600;color:var(--vip-blue);cursor:default;margin-right:4px;" title="Connecting to Google Drive…">⟳ Connecting…</span></div>
     </div>
 
     <!-- SPRINT PROGRESS BAR -->
@@ -1667,7 +1671,9 @@
 
             
         </div>
-        </div>
+          </div><!-- /res-act-1-themes -->
+          </div><!-- /res-act-1-body -->
+        </div><!-- /res-act-1 -->
 
 
 <!-- Activity 2: Building the Village -->
@@ -1772,8 +1778,215 @@
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
               </div>
+            </div><!-- /res-act-2-themes -->
+          </div><!-- /res-act-2-body -->
+        </div><!-- /res-act-2 -->
+
+        <!-- Activity 3: Submit Data: Tasty (Photovoice) -->
+        <div id="res-act-3" style="padding:0 28px 28px;">
+          <div onclick="toggleResActivity('res-act-3')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-amber);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="font-size:15px;font-weight:700;">Submit Data: Tasty</div>
+              <div style="font-size:11px;opacity:0.85;">Photovoice</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button id="act-link-btn-3" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(3,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#128279; Set as default</button>
+              <span id="res-act-3-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
+            </div>
           </div>
-        </div>
+          <div id="res-act-3-body" style="border:1px solid var(--vip-amber-light);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">
+
+            <!-- Framing question -->
+            <div style="background:#FEF8EC;padding:20px 22px;border-bottom:1px solid var(--vip-amber-light);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:10px;">Activity Type</div>
+              <div style="font-size:18px;font-weight:700;color:var(--vip-midnight);">Photovoice</div>
+              <div style="margin-top:12px;font-size:14px;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Tasty</strong> in your community. Every submission helps us understand what food, flavor, and nourishment mean here.</div>
+            </div>
+
+            <!-- Submission form -->
+            <div id="res-act-3-form-wrap" style="background:white;padding:22px;">
+              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em;">Add a Submission</div>
+
+              <!-- Media type selector -->
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+                <button onclick="pvSetType('act3','photo')" id="act3-type-photo" class="pv-type-btn pv-type-active" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--vip-amber);background:var(--vip-amber);color:white;font-size:12px;font-weight:600;cursor:pointer;">&#128247; Photo</button>
+                <button onclick="pvSetType('act3','video')" id="act3-type-video" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127909; Video</button>
+                <button onclick="pvSetType('act3','story')" id="act3-type-story" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#128221; Written Story</button>
+                <button onclick="pvSetType('act3','audio')" id="act3-type-audio" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127908; Audio</button>
+              </div>
+
+              <!-- File upload (photo/video) -->
+              <div id="act3-input-photo" class="pv-input-section" style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Photo</label>
+                <input type="file" id="act3-file-photo" accept="image/*" style="font-size:13px;width:100%;">
+              </div>
+              <div id="act3-input-video" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Video</label>
+                <input type="file" id="act3-file-video" accept="video/*" style="font-size:13px;width:100%;">
+              </div>
+              <div id="act3-input-story" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Write your story</label>
+                <textarea id="act3-story-text" rows="4" placeholder="Share your story here..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+              <div id="act3-input-audio" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Record or Upload Audio</label>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                  <button onclick="pvToggleRecord('act3')" id="act3-record-btn" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--vip-amber);background:white;color:var(--vip-amber);font-size:12px;font-weight:600;cursor:pointer;">&#9679; Start Recording</button>
+                  <input type="file" id="act3-file-audio" accept="audio/*" style="font-size:12px;flex:1;">
+                </div>
+                <div id="act3-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>
+              </div>
+
+              <!-- Code -->
+              <div style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Code <span style="font-weight:400;font-style:italic;">(write in a code for this submission)</span></label>
+                <input type="text" id="act3-code" placeholder="e.g. TAS-01" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+              </div>
+
+              <!-- Description -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Anything else we should know about your submission?</label>
+                <textarea id="act3-description" rows="3" placeholder="Description, location, context, etc." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+
+              <button onclick="pvSubmit('act3','tasty')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
+              <div id="act3-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
+            </div>
+
+            <!-- Gallery -->
+            <div style="background:#FFFBF2;border-top:2px solid var(--vip-amber-light);padding:20px 22px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>
+              <div id="act3-gallery" style="display:flex;flex-direction:column;gap:14px;">
+                <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;padding:20px 0;" id="act3-gallery-empty">No submissions yet — be the first!</div>
+              </div>
+            </div>
+
+            <!-- Emerging Themes Panel -->
+            <div id="res-act-3-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
+                  <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-3-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-3')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+              </div>
+              <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
+                <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
+              </div>
+              <div id="res-act-3-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+              </div>
+            </div>
+
+          </div><!-- /res-act-3-body -->
+        </div><!-- /res-act-3 -->
+
+
+        <!-- Activity 4: Submit Data: Trust (Photovoice) -->
+        <div id="res-act-4" style="padding:0 28px 28px;">
+          <div onclick="toggleResActivity('res-act-4')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-amber);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="font-size:15px;font-weight:700;">Submit Data: Trust</div>
+              <div style="font-size:11px;opacity:0.85;">Photovoice</div>
+              <div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">The Model</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button id="act-link-btn-4" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(4,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#128279; Set as default</button>
+              <span id="res-act-4-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
+            </div>
+          </div>
+          <div id="res-act-4-body" style="border:1px solid var(--vip-amber-light);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">
+
+            <!-- Framing question -->
+            <div style="background:#FEF8EC;padding:20px 22px;border-bottom:1px solid var(--vip-amber-light);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:10px;">Activity Type</div>
+              <div style="font-size:18px;font-weight:700;color:var(--vip-midnight);">Photovoice</div>
+              <div style="margin-top:6px;display:inline-block;padding:4px 12px;background:var(--vip-amber-light);border-radius:20px;font-size:12px;font-weight:600;color:var(--vip-amber);">The Model</div>
+              <div style="margin-top:12px;font-size:14px;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Trust</strong> in your community. What does trust look like, feel like, or mean to you here?</div>
+            </div>
+
+            <!-- Submission form -->
+            <div id="res-act-4-form-wrap" style="background:white;padding:22px;">
+              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em;">Add a Submission</div>
+
+              <!-- Media type selector -->
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+                <button onclick="pvSetType('act4','photo')" id="act4-type-photo" class="pv-type-btn pv-type-active" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--vip-amber);background:var(--vip-amber);color:white;font-size:12px;font-weight:600;cursor:pointer;">&#128247; Photo</button>
+                <button onclick="pvSetType('act4','video')" id="act4-type-video" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127909; Video</button>
+                <button onclick="pvSetType('act4','story')" id="act4-type-story" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#128221; Written Story</button>
+                <button onclick="pvSetType('act4','audio')" id="act4-type-audio" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127908; Audio</button>
+              </div>
+
+              <!-- File upload (photo/video) -->
+              <div id="act4-input-photo" class="pv-input-section" style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Photo</label>
+                <input type="file" id="act4-file-photo" accept="image/*" style="font-size:13px;width:100%;">
+              </div>
+              <div id="act4-input-video" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Video</label>
+                <input type="file" id="act4-file-video" accept="video/*" style="font-size:13px;width:100%;">
+              </div>
+              <div id="act4-input-story" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Write your story</label>
+                <textarea id="act4-story-text" rows="4" placeholder="Share your story here..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+              <div id="act4-input-audio" class="pv-input-section" style="display:none;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Record or Upload Audio</label>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                  <button onclick="pvToggleRecord('act4')" id="act4-record-btn" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--vip-amber);background:white;color:var(--vip-amber);font-size:12px;font-weight:600;cursor:pointer;">&#9679; Start Recording</button>
+                  <input type="file" id="act4-file-audio" accept="audio/*" style="font-size:12px;flex:1;">
+                </div>
+                <div id="act4-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>
+              </div>
+
+              <!-- Code -->
+              <div style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Code <span style="font-weight:400;font-style:italic;">(write in a code for this submission)</span></label>
+                <input type="text" id="act4-code" placeholder="e.g. TRU-01" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+              </div>
+
+              <!-- Description -->
+              <div style="margin-bottom:18px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Anything else we should know about your submission?</label>
+                <textarea id="act4-description" rows="3" placeholder="Description, location, context, etc." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+
+              <button onclick="pvSubmit('act4','trust')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
+              <div id="act4-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
+            </div>
+
+            <!-- Gallery -->
+            <div style="background:#FFFBF2;border-top:2px solid var(--vip-amber-light);padding:20px 22px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>
+              <div id="act4-gallery" style="display:flex;flex-direction:column;gap:14px;">
+                <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;padding:20px 0;" id="act4-gallery-empty">No submissions yet — be the first!</div>
+              </div>
+            </div>
+
+            <!-- Emerging Themes Panel -->
+            <div id="res-act-4-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
+                  <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-4-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-4')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+              </div>
+              <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
+                <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
+              </div>
+              <div id="res-act-4-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+                <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
+              </div>
+            </div>
+
+          </div><!-- /res-act-4-body -->
+        </div><!-- /res-act-4 -->
+
 
 <div id="view-ehw" class="view">
         <!-- Welcome + Last updated -->
@@ -3694,12 +3907,45 @@ async function drivePost(action, payload) {
   }
 }
 
-function showDriveStatus(ok) {
+function showDriveStatus(state) {
   var el = document.getElementById('drive-status');
   if (!el) return;
-  el.textContent = ok ? '● Drive' : '○ Local';
-  el.style.color = ok ? '#1a6b3e' : 'var(--vip-midnight-muted)';
-  el.title = ok ? 'Data syncing to Google Drive' : 'Drive offline — data saved locally';
+  if (state === true || state === 'ok') {
+    el.innerHTML = '● Drive';
+    el.style.color = '#1a6b3e';
+    el.title = 'Data syncing to Google Drive';
+    el.onclick = null;
+    el.style.cursor = 'default';
+    _driveOnline = true;
+  } else if (state === 'saving') {
+    el.innerHTML = '⟳ Saving…';
+    el.style.color = 'var(--vip-blue)';
+    el.title = 'Saving to Google Drive…';
+    el.onclick = null;
+    el.style.cursor = 'default';
+  } else if (state === false || state === 'fail') {
+    el.innerHTML = '○ Local <span style="font-size:10px;text-decoration:underline;cursor:pointer;" onclick="retryDriveSync()">retry</span>';
+    el.style.color = 'var(--vip-midnight-muted)';
+    el.title = 'Drive offline — data saved locally. Click retry to reconnect.';
+    el.style.cursor = 'default';
+    _driveOnline = false;
+  }
+}
+
+function retryDriveSync() {
+  showDriveStatus('saving');
+  drivePost('save_publish', publishedWidgets).then(function(res) {
+    showDriveStatus(res !== null ? 'ok' : 'fail');
+    if (res !== null) {
+      // Also reload from Drive to confirm round-trip
+      drivePost('load_publish', {}).then(function(driveState) {
+        if (driveState && Object.keys(driveState).length > 0) {
+          Object.assign(publishedWidgets, driveState);
+          try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
+        }
+      });
+    }
+  });
 }
 
 // ── PUBLISH WORKFLOW ─────────────────────────────────────────────────────────
@@ -3729,25 +3975,26 @@ const publishedWidgets = loadPublishState();
 // Restore all published widgets on page load
 function restorePublishedState() {
   // Try Drive first, fall back to localStorage
+  showDriveStatus('saving');
   drivePost('load_publish', {}).then(function(driveState) {
     if (driveState && Object.keys(driveState).length > 0) {
       Object.assign(publishedWidgets, driveState);
       // Also update localStorage to keep in sync
       try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
-      showDriveStatus(true);
+      showDriveStatus('ok');
     } else {
-      showDriveStatus(false);
+      showDriveStatus('fail');
     }
     _applyPublishedState();
   }).catch(function() {
-    showDriveStatus(false);
+    showDriveStatus('fail');
     _applyPublishedState();
   });
 }
 
 function _applyPublishedState() {
   // Restore themes publish state
-  ['res-act-1','res-act-2'].forEach(function(actId) {
+  ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(actId) {
     var key = actId + '-themes';
     if (publishedWidgets[key]) {
       var panel = document.getElementById(key);
@@ -4677,12 +4924,19 @@ var activeActivityId = null;
 
 function setActiveActivity(actNum, btnEl) {
   activeActivityId = actNum;
-  // Save to localStorage + Drive
-  try { localStorage.setItem('evalcommons_active_activity', actNum); } catch(e) {}
-  drivePost('save_publish', { activeActivity: String(actNum) }).then(function(res) {
-    showDriveStatus(res !== null);
+  // Merge into publishedWidgets so we don't clobber other saved state
+  publishedWidgets['activeActivity'] = String(actNum);
+  try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
+  // Save full merged state to Drive
+  showDriveStatus('saving');
+  drivePost('save_publish', publishedWidgets).then(function(res) {
+    showDriveStatus(res !== null ? 'ok' : 'fail');
   });
-  // Update button states
+  // If already in Village mode, apply immediately — don't wait for reload
+  if (currentMode === 'residents') {
+    applyActiveActivity(actNum);
+  }
+  // Update button states on evaluator page
   document.querySelectorAll('.act-link-btn').forEach(function(b) {
     b.innerHTML = '🔗 Set as default';
     b.style.background = 'rgba(255,255,255,0.15)';
@@ -4696,7 +4950,7 @@ function setActiveActivity(actNum, btnEl) {
 function applyActiveActivity(actNum) {
   if (!actNum) return;
   // Close all activities
-  ['res-act-1','res-act-2'].forEach(function(id) {
+  ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(id) {
     var body = document.getElementById(id + '-body');
     var chev = document.getElementById(id + '-chevron');
     if (body) body.style.display = 'none';
@@ -4793,6 +5047,212 @@ function restoreUpNext() {
 
 
 // ── END UTILITY FEATURES ──────────────────────────────────────────────────────
+
+
+// ── PHOTOVOICE ────────────────────────────────────────────────────────────────
+
+var pvRecorders = {};   // actId -> { mediaRecorder, chunks, blob }
+var pvCurrentType = {}; // actId -> 'photo'|'video'|'story'|'audio'
+
+function pvSetType(actId, type) {
+  pvCurrentType[actId] = type;
+  // Update button styles
+  ['photo','video','story','audio'].forEach(function(t) {
+    var btn = document.getElementById(actId + '-type-' + t);
+    if (!btn) return;
+    if (t === type) {
+      btn.style.background = 'var(--vip-amber)';
+      btn.style.color = 'white';
+      btn.style.borderColor = 'var(--vip-amber)';
+    } else {
+      btn.style.background = 'white';
+      btn.style.color = 'var(--vip-midnight)';
+      btn.style.borderColor = 'var(--border)';
+    }
+  });
+  // Show/hide input sections
+  ['photo','video','story','audio'].forEach(function(t) {
+    var el = document.getElementById(actId + '-input-' + t);
+    if (el) el.style.display = t === type ? 'block' : 'none';
+  });
+}
+
+function pvToggleRecord(actId) {
+  var rec = pvRecorders[actId] || {};
+  var btn = document.getElementById(actId + '-record-btn');
+  var status = document.getElementById(actId + '-record-status');
+
+  if (rec.mediaRecorder && rec.mediaRecorder.state === 'recording') {
+    // Stop recording
+    rec.mediaRecorder.stop();
+    btn.textContent = '⏺ Start Recording';
+    btn.style.color = 'var(--vip-amber)';
+    status.textContent = 'Recording saved — ready to submit.';
+    return;
+  }
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+    var chunks = [];
+    var mr = new MediaRecorder(stream);
+    mr.ondataavailable = function(e) { if (e.data.size > 0) chunks.push(e.data); };
+    mr.onstop = function() {
+      var blob = new Blob(chunks, { type: 'audio/webm' });
+      rec.blob = blob;
+      pvRecorders[actId] = rec;
+      stream.getTracks().forEach(function(t) { t.stop(); });
+    };
+    rec.mediaRecorder = mr;
+    rec.chunks = chunks;
+    pvRecorders[actId] = rec;
+    mr.start();
+    btn.textContent = '⏹ Stop Recording';
+    btn.style.color = '#c62828';
+    btn.style.borderColor = '#c62828';
+    status.textContent = '● Recording…';
+  }).catch(function(e) {
+    if (status) status.textContent = 'Microphone access denied.';
+  });
+}
+
+async function pvSubmit(actId, topic) {
+  var type = pvCurrentType[actId] || 'photo';
+  var code = (document.getElementById(actId + '-code').value || '').trim();
+  var desc = (document.getElementById(actId + '-description').value || '').trim();
+  var statusEl = document.getElementById(actId + '-submit-status');
+
+  if (!code) { showToast('Please enter a code for this submission'); return; }
+
+  statusEl.textContent = 'Preparing submission…';
+
+  var payload = {
+    action: 'save_photovoice',
+    topic: topic,
+    type: type,
+    code: code,
+    description: desc,
+    timestamp: new Date().toISOString()
+  };
+
+  // Gather media
+  try {
+    if (type === 'photo') {
+      var file = document.getElementById(actId + '-file-photo').files[0];
+      if (!file) { showToast('Please select a photo'); statusEl.textContent = ''; return; }
+      payload.filename = file.name;
+      payload.mimeType = file.type;
+      payload.fileData = await pvReadFileBase64(file);
+    } else if (type === 'video') {
+      var file = document.getElementById(actId + '-file-video').files[0];
+      if (!file) { showToast('Please select a video'); statusEl.textContent = ''; return; }
+      payload.filename = file.name;
+      payload.mimeType = file.type;
+      payload.fileData = await pvReadFileBase64(file);
+    } else if (type === 'story') {
+      var text = document.getElementById(actId + '-story-text').value.trim();
+      if (!text) { showToast('Please write your story'); statusEl.textContent = ''; return; }
+      payload.storyText = text;
+    } else if (type === 'audio') {
+      var uploadedFile = document.getElementById(actId + '-file-audio').files[0];
+      var recordedBlob = pvRecorders[actId] && pvRecorders[actId].blob;
+      if (uploadedFile) {
+        payload.filename = uploadedFile.name;
+        payload.mimeType = uploadedFile.type;
+        payload.fileData = await pvReadFileBase64(uploadedFile);
+      } else if (recordedBlob) {
+        payload.filename = 'recording-' + Date.now() + '.webm';
+        payload.mimeType = 'audio/webm';
+        payload.fileData = await pvReadFileBase64(recordedBlob);
+      } else {
+        showToast('Please record or upload audio'); statusEl.textContent = ''; return;
+      }
+    }
+  } catch(e) {
+    statusEl.textContent = 'Error reading file.';
+    return;
+  }
+
+  statusEl.textContent = 'Submitting to Drive…';
+  var result = await drivePost('save_photovoice', payload);
+  showDriveStatus(result !== null ? 'ok' : 'fail');
+
+  // Add to gallery immediately regardless of Drive status
+  pvAddToGallery(actId, topic, type, code, desc, payload, result);
+
+  // Reset form
+  pvResetForm(actId);
+  statusEl.textContent = result !== null ? '✓ Saved to Drive' : '✓ Saved locally (Drive offline)';
+  setTimeout(function() { statusEl.textContent = ''; }, 3000);
+  showToast('Submission received — thank you!');
+}
+
+function pvReadFileBase64(fileOrBlob) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) { resolve(e.target.result.split(',')[1]); };
+    reader.onerror = reject;
+    reader.readAsDataURL(fileOrBlob);
+  });
+}
+
+function pvAddToGallery(actId, topic, type, code, desc, payload, driveResult) {
+  var gallery = document.getElementById(actId + '-gallery');
+  if (!gallery) return;
+  // Remove empty state message
+  var empty = document.getElementById(actId + '-gallery-empty');
+  if (empty) empty.remove();
+
+  var ts = new Date().toLocaleString();
+  var mediaHtml = '';
+
+  if (type === 'photo' && payload.fileData) {
+    mediaHtml = '<img src="data:' + payload.mimeType + ';base64,' + payload.fileData + '" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;">';
+  } else if (type === 'video' && payload.fileData) {
+    mediaHtml = '<video controls style="width:100%;border-radius:8px;margin-bottom:10px;"><source src="data:' + payload.mimeType + ';base64,' + payload.fileData + '"></video>';
+  } else if (type === 'story') {
+    var storyEscaped = payload.storyText.replace(/&/g,'&amp;').replace(/[<]/g,'&lt;').replace(/[>]/g,'&gt;').replace(/\n/g,'<br>');
+    mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:14px;color:var(--vip-midnight);line-height:1.7;border-left:3px solid var(--vip-amber);">' + storyEscaped + '</div>';
+  } else if (type === 'audio' && payload.fileData) {
+    mediaHtml = '<audio controls style="width:100%;margin-bottom:10px;"><source src="data:' + payload.mimeType + ';base64,' + payload.fileData + '"></audio>';
+  }
+
+  var card = document.createElement('div');
+  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:16px;';
+  card.innerHTML = mediaHtml +
+    '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">' +
+      '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;">' + pvEscape(code) + '</span>' +
+        '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + pvTypeLabel(type) + '</span>' +
+      '</div>' +
+      '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + ts + '</span>' +
+    '</div>' +
+    (desc ? '<div style="margin-top:8px;font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(desc) + '</div>' : '');
+
+  // Newest first — insert before first child
+  gallery.insertBefore(card, gallery.firstChild);
+}
+
+function pvTypeLabel(type) {
+  return { photo: '📷 Photo', video: '🎬 Video', story: '📝 Story', audio: '🎙 Audio' }[type] || type;
+}
+
+function pvEscape(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function pvResetForm(actId) {
+  var type = pvCurrentType[actId] || 'photo';
+  if (type === 'photo') { var f = document.getElementById(actId+'-file-photo'); if(f) f.value=''; }
+  if (type === 'video') { var f = document.getElementById(actId+'-file-video'); if(f) f.value=''; }
+  if (type === 'story') { var f = document.getElementById(actId+'-story-text'); if(f) f.value=''; }
+  if (type === 'audio') {
+    var f = document.getElementById(actId+'-file-audio'); if(f) f.value='';
+    if (pvRecorders[actId]) pvRecorders[actId].blob = null;
+    var s = document.getElementById(actId+'-record-status'); if(s) s.textContent='';
+    var b = document.getElementById(actId+'-record-btn'); if(b) { b.textContent='⏺ Start Recording'; b.style.color='var(--vip-amber)'; b.style.borderColor='var(--vip-amber)'; }
+  }
+  var c = document.getElementById(actId+'-code'); if(c) c.value='';
+  var d = document.getElementById(actId+'-description'); if(d) d.value='';
+}
 
 </script>
 </body>
