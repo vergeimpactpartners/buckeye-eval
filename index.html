@@ -81,7 +81,13 @@
   .eval-only { display: inline-block; }
   body.mode-village .eval-only, body.mode-residents .eval-only { display: none !important; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
+  /* Village/residents: hide unpublished themes */
   body.mode-village .themes-panel-unpublished,
+  body.mode-residents .themes-panel-unpublished { display: none !important; }
+  /* Evaluator: show unpublished themes in village view but dimmed */
+  #view-village .themes-panel-unpublished { opacity: 0.5; }
+  body.mode-residents #view-village .themes-panel-unpublished,
+  body.mode-village #view-village .themes-panel-unpublished { opacity: 1; }
   body.mode-residents.hide-eval .themes-panel-unpublished { display: none !important; }
 
 
@@ -556,7 +562,13 @@
 
       <div id="view-evaluator" class="view active">
 
-
+        <!-- Header -->
+        <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
+          <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Project Planning</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Sprint planning, meeting timeline, and process documentation for the Buckeye EcoVillage evaluation.</div>
+        </div>
 
 <!-- OUR PROCESS: vertical scrollable timeline -->
         <div id="ev-our-process" style="margin-bottom:8px;">
@@ -903,7 +915,7 @@
         <!-- Header -->
         <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
           <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate · Verge Impact Partners</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
           <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Platform Guide</div>
           <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">How this platform is structured, what each page is for, and how to use it.</div>
         </div>
@@ -1523,8 +1535,14 @@
 
       <!-- ═══════════════════════════════ VILLAGE EXPERIENCE ═══════════════════════════ -->
       <div id="view-village-experience" class="view">
-        <div style="font-size:22px;font-weight:800;color:var(--vip-midnight);margin-bottom:4px;letter-spacing:-0.01em;">Village Experience</div>
-        <div style="font-size:13px;color:var(--vip-midnight-muted);margin-bottom:24px;">Manage what residents see and where they land when they open the Village view</div>
+        <!-- Header -->
+        <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
+          <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Experience</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Manage what residents see and where they land when they open the Village view.</div>
+        </div>
+
 
         <!-- Meeting Timeline -->
         <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;">
@@ -1539,43 +1557,48 @@
         <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;">
           <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Activities</div>
           <div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:16px;">Set the default activity and control visibility for each</div>
-          <div style="display:grid;grid-template-columns:1fr 130px 130px;gap:8px;margin-bottom:8px;padding:0 14px;">
+          <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;gap:8px;margin-bottom:8px;padding:0 14px;">
             <div></div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);text-align:center;">Default</div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);text-align:center;">Visibility</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);text-align:center;">Themes</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+            <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
               <div>
                 <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Data Collection: Planning for EVB Kickoff</div>
                 <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Before Action Review + After Action Review</div>
               </div>
               <button id="ve-default-btn-1" onclick="setActiveActivity(1, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
               <button id="vis-btn-act1" onclick="toggleActivityVisibility(1)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+              <button id="ve-themes-btn-1" onclick="toggleThemesPublish('res-act-1')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+            <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
               <div>
                 <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Data Collection: Group and Individual Roles</div>
                 <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Before Action Review + After Action Review</div>
               </div>
               <button id="ve-default-btn-2" onclick="setActiveActivity(2, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
               <button id="vis-btn-act2" onclick="toggleActivityVisibility(2)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+              <button id="ve-themes-btn-2" onclick="toggleThemesPublish('res-act-2')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+            <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
               <div>
                 <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Submit Data: Tasty</div>
                 <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Photovoice</div>
               </div>
               <button id="ve-default-btn-3" onclick="setActiveActivity(3, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
               <button id="vis-btn-act3" onclick="toggleActivityVisibility(3)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+              <button id="ve-themes-btn-3" onclick="toggleThemesPublish('res-act-3')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+            <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
               <div>
                 <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Submit Data: Trust</div>
                 <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Photovoice · The Model</div>
               </div>
               <button id="ve-default-btn-4" onclick="setActiveActivity(4, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
               <button id="vis-btn-act4" onclick="toggleActivityVisibility(4)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">&#9675; Hidden</button>
+              <button id="ve-themes-btn-4" onclick="toggleThemesPublish('res-act-4')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
           </div>
         </div>
@@ -1584,10 +1607,16 @@
       <!-- ═══════════════════════════════ /VILLAGE EXPERIENCE ══════════════════════════ -->
       <div id="view-village" class="view">
 
+
         <!-- Header -->
         <div style="padding:12px 28px 0;">
-          <div style="font-size:22px;font-weight:800;color:var(--vip-midnight);margin-bottom:4px;">Village Hub</div>
-          <div style="font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:20px;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
+        <!-- Header -->
+        <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
+          <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Hub</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
+        </div>
         </div>
 
         <!-- Timeline -->
@@ -2047,6 +2076,8 @@
           </div><!-- /res-act-4-body -->
         </div><!-- /res-act-4 -->
 
+
+      </div><!-- /view-village -->
 
 <div id="view-ehw" class="view">
         <!-- Welcome + Last updated -->
@@ -2747,6 +2778,8 @@ function showView(name, navEl) {
 
 function setMode(mode) {
   currentMode = mode;
+  // Re-apply visibility when switching to village view in evaluator
+  if (mode === 'residents' && typeof _restoreActivityVisibility === 'function') _restoreActivityVisibility();
   document.body.className = document.body.className.replace(/mode-\S+/g, '').trim();
   document.body.classList.add('mode-' + mode);
   document.getElementById('evalModeBtn').classList.toggle('active', mode === 'eval');
@@ -4064,6 +4097,7 @@ function _applyPublishedState() {
       var btn = document.getElementById(key + '-pub-btn');
       if (btn) { btn.textContent = '✓ Published to Village'; btn.style.background = 'rgba(255,255,255,0.35)'; }
     }
+    _updateVeThemesBtn(actId, !!publishedWidgets[key]);
   });
 
   restoreMeetingData();
@@ -5067,13 +5101,63 @@ function publishThemes(actId) {
   // Show on village
   var panel = document.getElementById(key);
   if (panel) panel.classList.remove('themes-panel-unpublished');
-  // Update button — permanently published
+  // Update inline pub button
   var btn = document.getElementById(key + '-pub-btn');
   if (btn) {
     btn.textContent = '✓ Published to Village';
     btn.style.background = 'rgba(255,255,255,0.35)';
     btn.style.cursor = 'default';
     btn.onclick = null;
+  }
+  // Update VE themes button
+  _updateVeThemesBtn(actId, true);
+}
+
+function toggleThemesPublish(actId) {
+  var key = actId + '-themes';
+  var current = !!publishedWidgets[key];
+  var next = !current;
+  publishedWidgets[key] = next;
+  savePublishState();
+  var panel = document.getElementById(key);
+  if (panel) {
+    if (next) {
+      panel.classList.remove('themes-panel-unpublished');
+    } else {
+      panel.classList.add('themes-panel-unpublished');
+    }
+  }
+  // Update inline pub button
+  var btn = document.getElementById(key + '-pub-btn');
+  if (btn) {
+    if (next) {
+      btn.textContent = '✓ Published to Village';
+      btn.style.background = 'rgba(255,255,255,0.35)';
+    } else {
+      btn.textContent = 'Publish to Village';
+      btn.style.background = 'rgba(158,31,99,0.12)';
+      btn.style.cursor = 'pointer';
+      btn.onclick = function() { publishThemes(actId); };
+    }
+  }
+  _updateVeThemesBtn(actId, next);
+  showToast(next ? 'Themes published to Village' : 'Themes unpublished');
+}
+
+function _updateVeThemesBtn(actId, published) {
+  var num = actId.replace('res-act-','');
+  var veBtn = document.getElementById('ve-themes-btn-' + num);
+  if (!veBtn) return;
+  if (published) {
+    veBtn.textContent = '✓ Published';
+    veBtn.style.background = 'var(--vip-magenta)';
+    veBtn.style.borderColor = 'var(--vip-magenta)';
+    veBtn.style.color = 'white';
+  } else {
+    veBtn.textContent = 'Unpublished';
+    veBtn.style.background = 'white';
+    veBtn.style.borderColor = 'var(--border)';
+    veBtn.style.color = 'var(--vip-midnight-muted)';
   }
 }
 
@@ -5348,11 +5432,34 @@ function toggleActivityVisibility(actNum) {
 }
 
 function _applyActivityVisibility(actNum, visible) {
-  // Show/hide the activity card in village view
   var card = document.getElementById('res-act-' + actNum);
-  if (card) card.style.display = visible ? 'block' : 'none';
+  if (card) {
+    if (currentMode === 'residents') {
+      // Village mode: truly hide/show
+      card.style.display = visible ? 'block' : 'none';
+      card.style.opacity = '';
+      _removeHiddenBadge(actNum);
+    } else {
+      // Evaluator mode: NEVER set display — let view-village CSS handle it
+      // Just control opacity and badge
+      card.style.display = '';
+      if (visible) {
+        card.style.opacity = '';
+        _removeHiddenBadge(actNum);
+      } else {
+        var villageViewActive = document.getElementById('view-village') &&
+          document.getElementById('view-village').classList.contains('active');
+        card.style.opacity = villageViewActive ? '0.45' : '';
+        if (villageViewActive) {
+          _addHiddenBadge(actNum);
+        } else {
+          _removeHiddenBadge(actNum);
+        }
+      }
+    }
+  }
 
-  // Show/hide the nav item in residents sidebar
+  // Show/hide nav item in residents sidebar only
   var navDots = document.querySelectorAll('#residentsNav .nav-item');
   navDots.forEach(function(item) {
     if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + actNum + "'")) {
@@ -5360,7 +5467,7 @@ function _applyActivityVisibility(actNum, visible) {
     }
   });
 
-  // Update the visibility button in the evaluator panel
+  // Update VE visibility button
   var btn = document.getElementById('vis-btn-act' + actNum);
   if (btn) {
     if (visible) {
@@ -5375,6 +5482,24 @@ function _applyActivityVisibility(actNum, visible) {
       btn.style.color = 'var(--vip-midnight-muted)';
     }
   }
+}
+
+function _addHiddenBadge(actNum) {
+  var header = document.querySelector('#res-act-' + actNum + ' [onclick*="toggleResActivity"]');
+  if (!header) return;
+  if (header.querySelector('.hidden-from-village-badge')) return;
+  var badge = document.createElement('span');
+  badge.className = 'hidden-from-village-badge eval-only';
+  badge.textContent = 'Hidden from Village';
+  badge.style.cssText = 'font-size:10px;font-weight:600;background:rgba(0,0,0,0.35);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;margin-left:8px;vertical-align:middle;';
+  // Insert into header after existing content
+  var titleDiv = header.querySelector('div');
+  if (titleDiv) titleDiv.appendChild(badge);
+}
+
+function _removeHiddenBadge(actNum) {
+  var badge = document.querySelector('#res-act-' + actNum + ' .hidden-from-village-badge');
+  if (badge) badge.remove();
 }
 
 function _restoreActivityVisibility() {
