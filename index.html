@@ -79,16 +79,14 @@
   .view { display: none; position: relative; }
   .view.active { display: block; position: relative; max-width: 100%; }
   .eval-only { display: inline-block; }
-  body.mode-village .eval-only, body.mode-residents .eval-only { display: none !important; }
+  body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
-  /* Village/residents: hide unpublished themes */
-  body.mode-village .themes-panel-unpublished,
-  body.mode-residents .themes-panel-unpublished { display: none !important; }
-  /* Evaluator: show unpublished themes in village view but dimmed */
+  /* True village URL only: hide unpublished themes from residents */
+  body.mode-residents.hide-eval .themes-panel-unpublished,
+  body.mode-village .themes-panel-unpublished { display: none !important; }
+  /* Evaluator in Village mode: show unpublished themes dimmed */
   #view-village .themes-panel-unpublished { opacity: 0.5; }
-  body.mode-residents #view-village .themes-panel-unpublished,
-  body.mode-village #view-village .themes-panel-unpublished { opacity: 1; }
-  body.mode-residents.hide-eval .themes-panel-unpublished { display: none !important; }
+  body.mode-residents.hide-eval #view-village .themes-panel-unpublished { display: none !important; }
 
 
   /* PHASE STRIP */
@@ -483,6 +481,7 @@
       <div class="mode-toggle">
         <div class="mode-btn active" id="evalModeBtn" onclick="setMode('eval')">Evaluator</div>
         <div class="mode-btn" id="commModeBtn" onclick="setMode('ehw')">EHW</div>
+        <div class="mode-btn" id="resModeBtn" onclick="setMode('residents')">Village</div>
         
       </div>
     </div>
@@ -1929,7 +1928,7 @@
               <!-- Code -->
               <div style="margin-bottom:14px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;font-style:italic;">(Refer back to our construct map)</span></label>
-                <input type="text" id="act3-code" placeholder="e.g. Access, Trust, Belonging…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <input type="text" id="act3-code" placeholder="" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
               </div>
 
               <!-- Description -->
@@ -1945,7 +1944,7 @@
             <!-- Gallery -->
             <div style="background:#FFFBF2;border-top:2px solid var(--vip-amber-light);padding:20px 22px;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>
-              <div id="act3-gallery" style="display:flex;flex-direction:column;gap:14px;">
+              <div id="act3-gallery" style="display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;">
                 <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;padding:20px 0;" id="act3-gallery-empty">No submissions yet — be the first!</div>
               </div>
             </div>
@@ -2048,7 +2047,7 @@
             <!-- Gallery -->
             <div style="background:#FFFBF2;border-top:2px solid var(--vip-amber-light);padding:20px 22px;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>
-              <div id="act4-gallery" style="display:flex;flex-direction:column;gap:14px;">
+              <div id="act4-gallery" style="display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;">
                 <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;padding:20px 0;" id="act4-gallery-empty">No submissions yet — be the first!</div>
               </div>
             </div>
@@ -2807,6 +2806,7 @@ function setMode(mode) {
     // Apply activity state BEFORE showing the view to avoid visible flash
     if (activeActivityId) applyActiveActivity(activeActivityId, true);
     showView('village', null);
+    if (typeof _restoreActivityVisibility === 'function') _restoreActivityVisibility();
     var _pb3 = document.getElementById('phaseBadge'); if(_pb3) _pb3.style.display = 'none';
     var projCycle = document.querySelector('.proj-cycle'); if(projCycle) projCycle.style.display = 'none';
     document.getElementById('residentsNav').style.display = 'block';
@@ -4089,7 +4089,7 @@ function restorePublishedState() {
 function _applyPublishedState() {
   _restoreActivityVisibility();
   // Restore themes publish state
-  ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(actId) {
+  ACTIVITY_IDS.forEach(function(actId) {
     var key = actId + '-themes';
     if (publishedWidgets[key]) {
       var panel = document.getElementById(key);
@@ -4413,7 +4413,7 @@ function navigateToStep(stepNum) {
 
 function updateProgressBar() {
   const stepLabelsFull = {1:'Set up', 2:'Learning Loop', 3:'Adapt', 4:'Close'};
-  [1,2,3,4].forEach(n => {
+  ACTIVITY_NUMS.forEach(n => {
     const el = document.getElementById('pb-s1-step' + n);
     if (!el) return;
     const status = stepStatuses[n] || 'upcoming';
@@ -4451,7 +4451,7 @@ function updateProgressBar() {
 
 function syncCommProgressBar() {
   var labels = {1:'Set up', 2:'Learning Loop', 3:'Adapt', 4:'Close'};
-  [1,2,3,4].forEach(function(n) {
+  ACTIVITY_NUMS.forEach(function(n) {
     var el = document.getElementById('comm-pb-s1-step' + n);
     if (!el) return;
     var status = stepStatuses[n] || 'upcoming';
@@ -4500,7 +4500,7 @@ function syncStepHeaders() {
     active:   { headerBg: 'var(--vip-blue-pale)', borderColor: 'var(--vip-blue-light)', circleBg: 'var(--vip-blue)', circleColor: 'white', circleFontSize: '10px', circleText: function(n){return String(n);}, titleColor: 'var(--vip-blue)', subColor: 'var(--vip-blue)', subOpacity: '0.75', headerPad: '12px 16px' },
     upcoming: { headerBg: 'var(--white)', borderColor: 'var(--border)', circleBg: 'var(--paper-mid)', circleColor: 'var(--vip-midnight-soft)', circleFontSize: '10px', circleText: function(n){return String(n);}, titleColor: 'var(--ink-soft)', subColor: 'var(--vip-midnight-muted)', subOpacity: '1', headerPad: '14px 16px' }
   };
-  [1,2,3,4].forEach(function(n) {
+  ACTIVITY_NUMS.forEach(function(n) {
     var status = stepStatuses[n] || 'upcoming';
     var s = styleMap[status];
     document.querySelectorAll('[data-step="' + n + '"]').forEach(function(header) {
@@ -4701,14 +4701,14 @@ function updateLastUpdatedDisplay(stored) {
 
 // Collapse / Expand all steps
 function collapseAllSteps() {
-  [1,2,3,4].forEach(function(n) {
+  ACTIVITY_NUMS.forEach(function(n) {
     var body = document.getElementById('ev-step' + n + '-body');
     var header = body && body.previousElementSibling;
     if (body && body.style.display !== 'none') toggleStep('ev-step' + n + '-body', header);
   });
 }
 function expandAllSteps() {
-  [1,2,3,4].forEach(function(n) {
+  ACTIVITY_NUMS.forEach(function(n) {
     var body = document.getElementById('ev-step' + n + '-body');
     var header = body && body.previousElementSibling;
     if (body && body.style.display === 'none') toggleStep('ev-step' + n + '-body', header);
@@ -5027,6 +5027,20 @@ function toggleResActivity(id) {
 
 var activeActivityId = null;
 
+// ── ACTIVITY REGISTRY ─────────────────────────────────────────────────────────
+// To add a new activity: add an entry here. Everything else updates automatically.
+// id: the HTML element id; defaultVisible: whether residents see it on first load
+var ACTIVITIES = [
+  { num: 1, id: 'res-act-1', defaultVisible: true  },
+  { num: 2, id: 'res-act-2', defaultVisible: true  },
+  { num: 3, id: 'res-act-3', defaultVisible: true  },
+  { num: 4, id: 'res-act-4', defaultVisible: false }
+];
+var ACTIVITY_IDS  = ACTIVITIES.map(function(a) { return a.id; });
+var ACTIVITY_NUMS = ACTIVITIES.map(function(a) { return a.num; });
+// ─────────────────────────────────────────────────────────────────────────────
+
+
 function setActiveActivity(actNum, btnEl) {
   activeActivityId = actNum;
   // Merge into publishedWidgets so we don't clobber other saved state
@@ -5042,7 +5056,7 @@ function setActiveActivity(actNum, btnEl) {
     applyActiveActivity(actNum);
   }
   // Update VE default buttons
-  [1,2,3,4].forEach(function(n) {
+  ACTIVITY_NUMS.forEach(function(n) {
     var b = document.getElementById('ve-default-btn-' + n);
     if (!b) return;
     if (n === actNum) {
@@ -5063,7 +5077,7 @@ function setActiveActivity(actNum, btnEl) {
 function applyActiveActivity(actNum, silent) {
   if (!actNum) return;
   // Close all activities instantly (no transition)
-  ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(id) {
+  ACTIVITY_IDS.forEach(function(id) {
     var body = document.getElementById(id + '-body');
     var chev = document.getElementById(id + '-chevron');
     if (body) body.style.display = 'none';
@@ -5379,16 +5393,18 @@ function pvAddToGallery(actId, topic, type, code, desc, payload, driveResult) {
   }
 
   var card = document.createElement('div');
-  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:16px;';
+  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:14px;min-width:240px;max-width:280px;flex-shrink:0;scroll-snap-align:start;';
+  // Theme pills from comma-separated code value
+  var themePills = code.split(',').map(function(t) {
+    t = t.trim();
+    return t ? '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">' + pvEscape(t) + '</span>' : '';
+  }).join('');
   card.innerHTML = mediaHtml +
-    '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">' +
-      '<div style="display:flex;align-items:center;gap:8px;">' +
-        '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;">' + pvEscape(code) + '</span>' +
-        '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + pvTypeLabel(type) + '</span>' +
-      '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">' + themePills + '</div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+      '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + pvTypeLabel(type) + '</span>' +
       '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + ts + '</span>' +
-    '</div>' +
-    (desc ? '<div style="margin-top:8px;font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(desc) + '</div>' : '');
+    '</div>';
 
   // Newest first — insert before first child
   gallery.insertBefore(card, gallery.firstChild);
@@ -5434,11 +5450,20 @@ function toggleActivityVisibility(actNum) {
 function _applyActivityVisibility(actNum, visible) {
   var card = document.getElementById('res-act-' + actNum);
   if (card) {
-    if (currentMode === 'residents') {
-      // Village URL (?mode=village): hide unpublished activities from residents
+    if (currentMode === 'residents' && urlMode === 'village') {
+      // True resident URL (?mode=village): hide unpublished completely
       card.style.display = visible ? 'block' : 'none';
       card.style.opacity = '';
       _removeHiddenBadge(actNum);
+    } else if (currentMode === 'residents' && urlMode !== 'village') {
+      // Evaluator clicked Village mode: show all, dim unpublished with badge
+      card.style.display = 'block';
+      card.style.opacity = '';
+      // Dim only the body, keep header fully visible for the publish button
+      var body = document.getElementById('res-act-' + actNum + '-body');
+      if (body) body.style.opacity = visible ? '' : '0.45';
+      if (!visible) _addHiddenBadge(actNum);
+      else _removeHiddenBadge(actNum);
     } else {
       card.style.display = '';
       card.style.opacity = (!visible && document.getElementById('view-village') &&
@@ -5449,7 +5474,7 @@ function _applyActivityVisibility(actNum, visible) {
   }
   document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
     if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + actNum + "'"))
-      item.style.display = visible ? '' : 'none';
+      item.style.display = (urlMode === 'village' && !visible) ? 'none' : '';
   });
   var btn = document.getElementById('vis-btn-act' + actNum);
   if (btn) {
@@ -5464,34 +5489,35 @@ function _addHiddenBadge(actNum) {
   var header = document.querySelector('#res-act-' + actNum + ' [onclick*="toggleResActivity"]');
   if (!header) return;
   if (header.querySelector('.hidden-from-village-badge')) return;
-  // Match themes box layout: full-width row, text left, pill right
-  var row = document.createElement('div');
-  row.className = 'hidden-from-village-badge eval-only';
-  row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.15);width:100%;';
-  row.innerHTML =
-    '<span style="font-size:11px;color:rgba(255,255,255,0.6);font-style:italic;">Evaluator view only until published</span>' +
-    '<button onclick="event.stopPropagation();toggleActivityVisibility(' + actNum + ')" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>';
-  // Append to the left content div inside the header flex container
-  var leftDiv = header.querySelector('div');
-  if (leftDiv) leftDiv.appendChild(row);
+  // Find the right-side flex div (contains chevron) and inject badge into it before the chevron
+  var chevronEl = document.getElementById('res-act-' + actNum + '-chevron');
+  if (!chevronEl) return;
+  var rightDiv = chevronEl.parentElement;
+  var badge = document.createElement('div');
+  badge.className = 'hidden-from-village-badge eval-only';
+  badge.style.cssText = 'display:flex;align-items:center;gap:10px;';
+  badge.innerHTML =
+    '<span style="font-size:11px;color:rgba(255,255,255,0.85);font-style:italic;white-space:nowrap;">Evaluator view only until published</span>' +
+    '<button onclick="event.stopPropagation();toggleActivityVisibility(' + actNum + ')" style="background:rgba(255,255,255,0.25);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>';
+  rightDiv.insertBefore(badge, chevronEl);
 }
 
 function _removeHiddenBadge(actNum) {
   var badge = document.querySelector('#res-act-' + actNum + ' .hidden-from-village-badge');
   if (badge) badge.remove();
+  var body = document.getElementById('res-act-' + actNum + '-body');
+  if (body) body.style.opacity = '';
+  var card = document.getElementById('res-act-' + actNum);
+  if (card) card.style.opacity = '';
 }
 
 function _restoreActivityVisibility() {
-  [1, 2, 3, 4].forEach(function(actNum) {
-    var key = 'act-' + actNum + '-visible';
-    // Default: acts 1-3 visible, act 4 hidden
-    var visible = (key in publishedWidgets) ? publishedWidgets[key] : (actNum !== 4);
-    _applyActivityVisibility(actNum, visible);
+  ACTIVITIES.forEach(function(act) {
+    var key = 'act-' + act.num + '-visible';
+    var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
+    _applyActivityVisibility(act.num, visible);
   });
 }
-
-
-// ── PHOTOVOICE GALLERY LOAD FROM DRIVE ────────────────────────────────────────
 
 function loadPhotovoiceGalleries() {
   ['tasty', 'trust'].forEach(function(topic) {
@@ -5508,44 +5534,47 @@ function loadPhotovoiceGalleries() {
 function pvAddToGalleryFromMeta(actId, meta) {
   var gallery = document.getElementById(actId + '-gallery');
   if (!gallery) return;
-  // Skip if already rendered (same code + timestamp)
   var dupKey = actId + '-' + meta.code + '-' + meta.timestamp;
   if (gallery.querySelector('[data-sub-key="' + dupKey + '"]')) return;
-  // Remove empty state
   var empty = document.getElementById(actId + '-gallery-empty');
   if (empty) empty.remove();
 
   var ts = meta.timestamp ? new Date(meta.timestamp).toLocaleString() : '';
-  var mediaHtml = '';
   var files = meta.files || [];
+  var mediaHtml = '';
 
-  if (meta.type === 'photo' && files.length > 0 && files[0].thumbnailUrl) {
-    mediaHtml = '<a href="' + files[0].viewUrl + '" target="_blank" style="display:block;">' +
-      '<img src="' + files[0].thumbnailUrl + '" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;">' +
+  // Support both spreadsheet format (driveLink/thumbUrl) and legacy files[] format
+  var viewUrl  = meta.driveLink || (files.length > 0 ? files[0].viewUrl : '');
+  var thumbUrl = meta.thumbUrl  || (files.length > 0 ? files[0].thumbnailUrl : '');
+
+  if (meta.type === 'photo' && thumbUrl) {
+    mediaHtml = '<a href="' + viewUrl + '" target="_blank" style="display:block;margin-bottom:10px;">' +
+      '<img src="' + thumbUrl + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;">' +
       '</a>';
   } else if (meta.type === 'story' && meta.storyText) {
-    var escaped = pvEscape(meta.storyText);
-    mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:14px;color:var(--vip-midnight);line-height:1.7;border-left:3px solid var(--vip-amber);">' + escaped + '</div>';
-  } else if (files.length > 0 && files[0].viewUrl) {
+    mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--vip-midnight);line-height:1.6;border-left:3px solid var(--vip-amber);">' + pvEscape(meta.storyText) + '</div>';
+  } else if (viewUrl) {
     var icon = { video: '🎬', audio: '🎙', story: '📝' }[meta.type] || '📎';
-    mediaHtml = '<a href="' + files[0].viewUrl + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f5f5f5;border-radius:8px;margin-bottom:10px;font-size:13px;color:var(--vip-blue);text-decoration:none;">' +
+    mediaHtml = '<a href="' + viewUrl + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f5f5f5;border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--vip-blue);text-decoration:none;">' +
       icon + ' Open in Drive</a>';
   }
 
+  // Theme pills
+  var themePills = (meta.code || '').split(',').map(function(t) {
+    t = t.trim();
+    return t ? '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">' + pvEscape(t) + '</span>' : '';
+  }).join('');
+
   var card = document.createElement('div');
   card.setAttribute('data-sub-key', dupKey);
-  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:16px;';
+  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:14px;min-width:240px;max-width:280px;flex-shrink:0;scroll-snap-align:start;';
   card.innerHTML = mediaHtml +
-    '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">' +
-      '<div style="display:flex;align-items:center;gap:8px;">' +
-        '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;">' + pvEscape(meta.code || '') + '</span>' +
-        '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + pvTypeLabel(meta.type) + '</span>' +
-      '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">' + themePills + '</div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+      '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + pvTypeLabel(meta.type) + '</span>' +
       '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + ts + '</span>' +
-    '</div>' +
-    (meta.description ? '<div style="margin-top:8px;font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(meta.description) + '</div>' : '');
+    '</div>';
 
-  // Append — Drive returns newest first already
   gallery.appendChild(card);
 }
 
