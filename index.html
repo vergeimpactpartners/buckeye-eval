@@ -51,7 +51,17 @@
     --sans: 'Outfit', system-ui, sans-serif;
     --radius: 10px;
     --radius-lg: 14px;
-  }
+  
+  /* BAR table category colors */
+  --bar-purple: var(--bar-purple);
+  --bar-green: var(--bar-green);
+  --bar-orange: var(--bar-orange);
+  --bar-red: var(--bar-red);
+  --bar-purple-dark: var(--bar-purple-dark);
+  --bar-green-dark: var(--bar-green-dark);
+  --bar-orange-dark: var(--bar-orange-dark);
+  --bar-red-dark: var(--bar-red-dark);
+}
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 14px; }
 
@@ -69,7 +79,7 @@
   .view { display: none; position: relative; }
   .view.active { display: block; position: relative; max-width: 100%; }
   .eval-only { display: inline-block; }
-  body.mode-village .eval-only { display: none !important; }
+  body.mode-village .eval-only, body.mode-residents .eval-only { display: none !important; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
   body.mode-village .themes-panel-unpublished,
   body.mode-residents.hide-eval .themes-panel-unpublished { display: none !important; }
@@ -397,6 +407,7 @@
     <div id="evalNav" class="nav-group">
       <div class="nav-group-label">Workspace</div>
       <div class="nav-item active" data-color="blue" onclick="showView('evaluator', this)"><span class="nav-dot" style="background:var(--vip-blue);"></span> Project Planning</div>
+      <div class="nav-item" data-color="blue" onclick="showView('village-experience', this)"><span class="nav-dot" style="background:var(--vip-blue);"></span> Village Experience</div>
       <div class="nav-item" data-color="blue" onclick="showView('guide', this)"><span class="nav-dot" style="background:var(--vip-blue);"></span> Platform Guide</div>
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-orange);">Data collection</div>
       <div class="nav-item" data-color="orange" onclick="showView('overview', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Overview</span></div>
@@ -421,8 +432,6 @@
       <div style="padding:0 6px 8px;">
         <div class="nav-item" data-color="vip-blue" onclick="scrollToResActivity('res-act-1')"><span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">Planning for EVB Kickoff</span></div>
         <div class="nav-item" data-color="vip-midnight" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Group and Individual Roles</span></div>
-        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-3')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Tasty</span></div>
-        <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-4')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Trust</span></div>
         <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-3')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Tasty</span></div>
         <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-4')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Trust</span></div>
       </div>
@@ -547,14 +556,7 @@
 
       <div id="view-evaluator" class="view active">
 
-        <!-- MEETING TIMELINE (evaluator) -->
-        <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;">Meeting Timeline</div>
-            <div style="font-size:11px;color:var(--ink-soft);">Click <strong>✏ Edit</strong> on the Up Next meeting to update or advance</div>
-          </div>
-          <div id="meeting-timeline-render-eval" style="display:flex;align-items:flex-end;gap:0;overflow-x:auto;padding-bottom:8px;"></div>
-        </div>
+
 
 <!-- OUR PROCESS: vertical scrollable timeline -->
         <div id="ev-our-process" style="margin-bottom:8px;">
@@ -1518,6 +1520,68 @@
         </div>
       </div>
 
+
+      <!-- ═══════════════════════════════ VILLAGE EXPERIENCE ═══════════════════════════ -->
+      <div id="view-village-experience" class="view">
+        <div style="font-size:22px;font-weight:800;color:var(--vip-midnight);margin-bottom:4px;letter-spacing:-0.01em;">Village Experience</div>
+        <div style="font-size:13px;color:var(--vip-midnight-muted);margin-bottom:24px;">Manage what residents see and where they land when they open the Village view</div>
+
+        <!-- Meeting Timeline -->
+        <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;">Meeting Timeline</div>
+            <div style="font-size:11px;color:var(--ink-soft);">Click <strong>&#9999; Edit</strong> on the Up Next meeting to update or advance</div>
+          </div>
+          <div id="meeting-timeline-render-eval" style="display:flex;align-items:flex-end;gap:0;overflow-x:auto;padding-bottom:8px;"></div>
+        </div>
+
+        <!-- Activities Panel -->
+        <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Activities</div>
+          <div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:16px;">Set the default activity and control visibility for each</div>
+          <div style="display:grid;grid-template-columns:1fr 130px 130px;gap:8px;margin-bottom:8px;padding:0 14px;">
+            <div></div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);text-align:center;">Default</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);text-align:center;">Visibility</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Data Collection: Planning for EVB Kickoff</div>
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Before Action Review + After Action Review</div>
+              </div>
+              <button id="ve-default-btn-1" onclick="setActiveActivity(1, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
+              <button id="vis-btn-act1" onclick="toggleActivityVisibility(1)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Data Collection: Group and Individual Roles</div>
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Before Action Review + After Action Review</div>
+              </div>
+              <button id="ve-default-btn-2" onclick="setActiveActivity(2, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
+              <button id="vis-btn-act2" onclick="toggleActivityVisibility(2)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Submit Data: Tasty</div>
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Photovoice</div>
+              </div>
+              <button id="ve-default-btn-3" onclick="setActiveActivity(3, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
+              <button id="vis-btn-act3" onclick="toggleActivityVisibility(3)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Submit Data: Trust</div>
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">Photovoice · The Model</div>
+              </div>
+              <button id="ve-default-btn-4" onclick="setActiveActivity(4, this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>
+              <button id="vis-btn-act4" onclick="toggleActivityVisibility(4)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">&#9675; Hidden</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- ═══════════════════════════════ /VILLAGE EXPERIENCE ══════════════════════════ -->
       <div id="view-village" class="view">
 
         <!-- Header -->
@@ -1554,8 +1618,7 @@
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
-              <button id="act-link-btn-1" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(1,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">🔗 Set as default</button>
-              <span id="res-act-1-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>
+                            <span id="res-act-1-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>
             </div>
           </div>
 
@@ -1571,20 +1634,20 @@
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">There are four ways of working that came up during our evaluation kickoff. They are:</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                   <div style="background:#f5f0fb;border-radius:8px;padding:12px 14px;">
-                    <div style="font-size:13px;font-weight:700;color:#7B3FA0;margin-bottom:5px;">Residents set priorities:</div>
-                    <div style="font-size:13px;color:#4a1a6b;line-height:1.6;">residents establish the priorities for EVB, partners and organizations need to align with them</div>
+                    <div style="font-size:13px;font-weight:700;color:var(--bar-purple);margin-bottom:5px;">Residents set priorities:</div>
+                    <div style="font-size:13px;color:var(--bar-purple-dark);line-height:1.6;">residents establish the priorities for EVB, partners and organizations need to align with them</div>
                   </div>
                   <div style="background:#f0f7f1;border-radius:8px;padding:12px 14px;">
-                    <div style="font-size:13px;font-weight:700;color:#2E7D32;margin-bottom:5px;">Space to disagree:</div>
-                    <div style="font-size:13px;color:#1b4d1e;line-height:1.6;">hold space for people to disagree authentically</div>
+                    <div style="font-size:13px;font-weight:700;color:var(--bar-green);margin-bottom:5px;">Space to disagree:</div>
+                    <div style="font-size:13px;color:var(--bar-green-dark);line-height:1.6;">hold space for people to disagree authentically</div>
                   </div>
                   <div style="background:#fdf7f0;border-radius:8px;padding:12px 14px;">
-                    <div style="font-size:13px;font-weight:700;color:#E65100;margin-bottom:5px;">Different outcomes:</div>
-                    <div style="font-size:13px;color:#7a2900;line-height:1.6;">be open to different outcomes and measures of success than the ones originally conceived</div>
+                    <div style="font-size:13px;font-weight:700;color:var(--bar-orange);margin-bottom:5px;">Different outcomes:</div>
+                    <div style="font-size:13px;color:var(--bar-orange-dark);line-height:1.6;">be open to different outcomes and measures of success than the ones originally conceived</div>
                   </div>
                   <div style="background:#fdf2f2;border-radius:8px;padding:12px 14px;">
-                    <div style="font-size:13px;font-weight:700;color:#C62828;margin-bottom:5px;">Values:</div>
-                    <div style="font-size:13px;color:#7a0000;line-height:1.6;">establish formal structure with agreed upon values, commitments, roles, power, and permission</div>
+                    <div style="font-size:13px;font-weight:700;color:var(--bar-red);margin-bottom:5px;">Values:</div>
+                    <div style="font-size:13px;color:var(--bar-red-dark);line-height:1.6;">establish formal structure with agreed upon values, commitments, roles, power, and permission</div>
                   </div>
                 </div>
               </div>
@@ -1599,23 +1662,23 @@
                   </div>
                   <div style="padding:14px;">
                     <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7fa;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-blue);margin-bottom:6px;">Overall</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Overall</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We need to make a strategic outreach plan for the entire summer, using unique outreach strategies and meeting people where they are already gathering, to ensure we have a great turnout for the kickoff and that Buckeye residents understand the context of EVB and feel welcomed and empowered to share their input.</div>
                     </div>
                     <div style="margin-bottom:16px;padding:12px 14px;background:#f5f0fb;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#7B3FA0;margin-bottom:6px;">Residents set priorities</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Residents set priorities</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">Every outreach touchpoint with the community is an opportunity to share about the EVB process and have the community share their own goals. We need to innovate the way we do this outreach, focusing beyond door knocking and instead build a strategy for neighboring in unique ways that invite in those who traditionally don't participate (like youth).</div>
                     </div>
                     <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7f1;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#2E7D32;margin-bottom:6px;">Space to disagree</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Space to disagree</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We acknowledge that disagreement is a common part of any process, but the way we respond to disagreement is important. We need to establish a process that makes sure that everyone involved feels heard and that their contribution is valued. Our response needs to remind everyone that we are on the same team and have shared goals.</div>
                     </div>
                     <div style="margin-bottom:16px;padding:12px 14px;background:#fdf7f0;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#E65100;margin-bottom:6px;">Different outcomes</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Different outcomes</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">To get to different outcomes (high turnout and consistent engagement) we need to meet and invite the community at places and times where they are already gathering and where trust is established. We hope this will help us recruit people who are excited and ready to participate and take on the EVB work.</div>
                     </div>
                     <div style="padding:12px 14px;background:#fdf2f2;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#C62828;margin-bottom:6px;">Values</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Values</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We need to remind ourselves and the community at large what our shared values are and why we have set them to be that. The way we engage with each other and the community need to bring these values to life.</div>
                     </div>
                   </div>
@@ -1685,8 +1748,7 @@
               <div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">Steering Committee Work</span></div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
-              <button id="act-link-btn-2" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(2,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">🔗 Set as default</button>
-              <span id="res-act-2-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>
+                            <span id="res-act-2-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>
             </div>
           </div>
           <div id="res-act-2-body" style="border:1px solid rgba(30,42,60,0.2);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">
@@ -1698,9 +1760,9 @@
               <div style="margin-top:16px;padding:16px;background:white;border-radius:10px;border:1px solid var(--border);">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">The roles we are playing include:</div>
                 <div style="display:flex;flex-direction:column;gap:8px;">
-                  <div style="background:#EBF6FB;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:var(--vip-blue);">Setting Up Green Spaces &amp; the Pod</div></div>
-                  <div style="background:#f5f0fb;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:#7B3FA0;">Storytelling</div></div>
-                  <div style="background:#f0f7f1;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:#2E7D32;">Establishing Resident-Derived Priorities</div></div>
+                  <div style="background:#EBF6FB;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Setting Up Green Spaces &amp; the Pod</div></div>
+                  <div style="background:#f5f0fb;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Storytelling</div></div>
+                  <div style="background:#f0f7f1;border-radius:8px;padding:10px 14px;"><div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Establishing Resident-Derived Priorities</div></div>
                 </div>
               </div>
             </div>
@@ -1717,15 +1779,15 @@
                   </div>
                   <div style="padding:14px;">
                     <div style="margin-bottom:12px;padding:12px 14px;background:#EBF6FB;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-blue);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
                     <div style="margin-bottom:12px;padding:12px 14px;background:#f5f0fb;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#7B3FA0;margin-bottom:8px;">Storytelling</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Storytelling</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
                     <div style="padding:12px 14px;background:#f0f7f1;border-radius:8px;">
-                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#2E7D32;margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
                   </div>
@@ -1790,7 +1852,6 @@
               <div style="font-size:11px;opacity:0.85;">Photovoice</div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
-              <button id="act-link-btn-3" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(3,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#128279; Set as default</button>
               <span id="res-act-3-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
             </div>
           </div>
@@ -1800,7 +1861,7 @@
             <div style="background:#FEF8EC;padding:20px 22px;border-bottom:1px solid var(--vip-amber-light);">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:10px;">Activity Type</div>
               <div style="font-size:18px;font-weight:700;color:var(--vip-midnight);">Photovoice</div>
-              <div style="margin-top:12px;font-size:14px;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Tasty</strong> in your community. Every submission helps us understand what food, flavor, and nourishment mean here.</div>
+              <div style="margin-top:12px;font-size:13px;font-weight:400;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Tasty</strong> in your community.</div>
             </div>
 
             <!-- Submission form -->
@@ -1839,8 +1900,8 @@
 
               <!-- Code -->
               <div style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Code <span style="font-weight:400;font-style:italic;">(write in a code for this submission)</span></label>
-                <input type="text" id="act3-code" placeholder="e.g. TAS-01" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;font-style:italic;">(Refer back to our construct map)</span></label>
+                <input type="text" id="act3-code" placeholder="e.g. Access, Trust, Belonging…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
               </div>
 
               <!-- Description -->
@@ -1893,7 +1954,6 @@
               <div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">The Model</span></div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
-              <button id="act-link-btn-4" class="eval-only act-link-btn" onclick="event.stopPropagation();setActiveActivity(4,this);" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#128279; Set as default</button>
               <span id="res-act-4-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
             </div>
           </div>
@@ -1904,7 +1964,7 @@
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:10px;">Activity Type</div>
               <div style="font-size:18px;font-weight:700;color:var(--vip-midnight);">Photovoice</div>
               <div style="margin-top:6px;display:inline-block;padding:4px 12px;background:var(--vip-amber-light);border-radius:20px;font-size:12px;font-weight:600;color:var(--vip-amber);">The Model</div>
-              <div style="margin-top:12px;font-size:14px;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Trust</strong> in your community. What does trust look like, feel like, or mean to you here?</div>
+              <div style="margin-top:12px;font-size:13px;font-weight:400;color:var(--vip-midnight-soft);line-height:1.6;">Share photos, videos, written stories, or audio recordings related to <strong>Trust</strong> in your community.</div>
             </div>
 
             <!-- Submission form -->
@@ -1943,8 +2003,8 @@
 
               <!-- Code -->
               <div style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Code <span style="font-weight:400;font-style:italic;">(write in a code for this submission)</span></label>
-                <input type="text" id="act4-code" placeholder="e.g. TRU-01" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;font-style:italic;">(Refer back to our construct map)</span></label>
+                <input type="text" id="act4-code" placeholder="e.g. Access, Trust, Belonging…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
               </div>
 
               <!-- Description -->
@@ -2672,7 +2732,7 @@ function showView(name, navEl) {
     evaluator: 'Project Planning', home: 'Project Planning', guide: 'Platform Guide', overview: 'Overview', stories: 'Stories', photos: 'Photovoice',
     survey: 'Survey & forms', kii: 'Key informant notes', reflections: 'Reflection logs',
     coding: 'Coding studio', themes: 'Theme map', ai: 'AI sensemaking',
-    ehw: null, village: null,
+    ehw: null, village: null, 'village-experience': 'Village Experience',
     questions: 'Questions & design', community: null
   };
   const titleText = titles[name];
@@ -2713,8 +2773,9 @@ function setMode(mode) {
       if (window._updateActiveNav) window._updateActiveNav();
     }, 150);
   } else if (mode === 'residents') {
+    // Apply activity state BEFORE showing the view to avoid visible flash
+    if (activeActivityId) applyActiveActivity(activeActivityId, true);
     showView('village', null);
-    if (activeActivityId) setTimeout(function(){ applyActiveActivity(activeActivityId); }, 150);
     var _pb3 = document.getElementById('phaseBadge'); if(_pb3) _pb3.style.display = 'none';
     var projCycle = document.querySelector('.proj-cycle'); if(projCycle) projCycle.style.display = 'none';
     document.getElementById('residentsNav').style.display = 'block';
@@ -3993,6 +4054,7 @@ function restorePublishedState() {
 }
 
 function _applyPublishedState() {
+  _restoreActivityVisibility();
   // Restore themes publish state
   ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(actId) {
     var key = actId + '-themes';
@@ -4010,10 +4072,10 @@ function _applyPublishedState() {
   var savedAct = publishedWidgets['activeActivity'];
   if (savedAct) {
     activeActivityId = savedAct;
-    // Apply on village page
-    if (currentMode === 'residents') applyActiveActivity(savedAct);
-    // Update button state on evaluator page
-    var btn = document.getElementById('act-link-btn-' + savedAct);
+    // Always pre-apply silently so state is ready when Village mode is entered
+    applyActiveActivity(savedAct, true);
+    // Update VE default button state
+    var btn = document.getElementById('ve-default-btn-' + savedAct);
     if (btn) { btn.innerHTML = '✓ Default activity'; btn.style.background = 'rgba(255,255,255,0.35)'; }
   }
   if (publishedWidgets['titleWidget']) {
@@ -4901,12 +4963,21 @@ function scrollToVillageTop() {
   if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function pvScrollTo(el, smooth) {
+  if (!el) return;
+  var container = document.getElementById('mainContentArea');
+  var isMobile = !container || getComputedStyle(container).overflowY !== 'auto';
+  if (isMobile) {
+    var rect = el.getBoundingClientRect();
+    window.scrollTo({ top: window.scrollY + rect.top - 20, behavior: smooth ? 'smooth' : 'instant' });
+  } else {
+    container.scrollTo({ top: el.offsetTop - 20, behavior: smooth ? 'smooth' : 'instant' });
+  }
+}
+
 function scrollToResActivity(id) {
   var el = document.getElementById(id);
-  var container = document.getElementById('mainContentArea');
-  if (el && container) {
-    container.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
-  }
+  pvScrollTo(el, true);
 }
 
 function toggleResActivity(id) {
@@ -4936,20 +5007,28 @@ function setActiveActivity(actNum, btnEl) {
   if (currentMode === 'residents') {
     applyActiveActivity(actNum);
   }
-  // Update button states on evaluator page
-  document.querySelectorAll('.act-link-btn').forEach(function(b) {
-    b.innerHTML = '🔗 Set as default';
-    b.style.background = 'rgba(255,255,255,0.15)';
+  // Update VE default buttons
+  [1,2,3,4].forEach(function(n) {
+    var b = document.getElementById('ve-default-btn-' + n);
+    if (!b) return;
+    if (n === actNum) {
+      b.textContent = '&#10003; Default';
+      b.innerHTML = '&#10003; Default';
+      b.style.background = 'var(--vip-blue)';
+      b.style.borderColor = 'var(--vip-blue)';
+      b.style.color = 'white';
+    } else {
+      b.textContent = 'Set as default';
+      b.style.background = 'white';
+      b.style.borderColor = 'var(--border)';
+      b.style.color = 'var(--vip-midnight-muted)';
+    }
   });
-  if (btnEl) {
-    btnEl.innerHTML = '✓ Default activity';
-    btnEl.style.background = 'rgba(255,255,255,0.35)';
-  }
 }
 
-function applyActiveActivity(actNum) {
+function applyActiveActivity(actNum, silent) {
   if (!actNum) return;
-  // Close all activities
+  // Close all activities instantly (no transition)
   ['res-act-1','res-act-2','res-act-3','res-act-4'].forEach(function(id) {
     var body = document.getElementById(id + '-body');
     var chev = document.getElementById(id + '-chevron');
@@ -4962,12 +5041,12 @@ function applyActiveActivity(actNum) {
   var chev = document.getElementById(targetId + '-chevron');
   if (body) body.style.display = 'block';
   if (chev) chev.style.transform = 'rotate(180deg)';
-  // Scroll to it
-  setTimeout(function() {
-    var el = document.getElementById(targetId);
-    var container = document.getElementById('mainContentArea');
-    if (el && container) container.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
-  }, 200);
+  // Only scroll if explicitly requested (not on initial page load)
+  if (!silent) {
+    setTimeout(function() {
+      pvScrollTo(document.getElementById(targetId), true);
+    }, 200);
+  }
   // Update button states
   document.querySelectorAll('.act-link-btn').forEach(function(b) {
     b.innerHTML = '🔗 Set as default';
@@ -5252,6 +5331,59 @@ function pvResetForm(actId) {
   }
   var c = document.getElementById(actId+'-code'); if(c) c.value='';
   var d = document.getElementById(actId+'-description'); if(d) d.value='';
+}
+
+
+// ── VILLAGE ACTIVITY VISIBILITY ───────────────────────────────────────────────
+
+function toggleActivityVisibility(actNum) {
+  var key = 'act-' + actNum + '-visible';
+  // Default all acts to visible except act4 which starts hidden
+  var current = (key in publishedWidgets) ? publishedWidgets[key] : (actNum !== 4);
+  var next = !current;
+  publishedWidgets[key] = next;
+  savePublishState();
+  _applyActivityVisibility(actNum, next);
+  showToast(next ? 'Activity visible to Village' : 'Activity hidden from Village');
+}
+
+function _applyActivityVisibility(actNum, visible) {
+  // Show/hide the activity card in village view
+  var card = document.getElementById('res-act-' + actNum);
+  if (card) card.style.display = visible ? 'block' : 'none';
+
+  // Show/hide the nav item in residents sidebar
+  var navDots = document.querySelectorAll('#residentsNav .nav-item');
+  navDots.forEach(function(item) {
+    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + actNum + "'")) {
+      item.style.display = visible ? '' : 'none';
+    }
+  });
+
+  // Update the visibility button in the evaluator panel
+  var btn = document.getElementById('vis-btn-act' + actNum);
+  if (btn) {
+    if (visible) {
+      btn.innerHTML = '&#9679; Published';
+      btn.style.background = 'var(--vip-blue)';
+      btn.style.borderColor = 'var(--vip-blue)';
+      btn.style.color = 'white';
+    } else {
+      btn.innerHTML = '&#9675; Hidden';
+      btn.style.background = 'white';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.color = 'var(--vip-midnight-muted)';
+    }
+  }
+}
+
+function _restoreActivityVisibility() {
+  [1, 2, 3, 4].forEach(function(actNum) {
+    var key = 'act-' + actNum + '-visible';
+    // Default: acts 1-3 visible, act 4 hidden
+    var visible = (key in publishedWidgets) ? publishedWidgets[key] : (actNum !== 4);
+    _applyActivityVisibility(actNum, visible);
+  });
 }
 
 </script>
