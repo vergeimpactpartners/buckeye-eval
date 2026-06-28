@@ -4220,20 +4220,32 @@ const publishedWidgets = loadPublishState();
 
 // Restore all published widgets on page load
 function restorePublishedState() {
-  // Try Drive first, fall back to localStorage
   showDriveStatus('saving');
   drivePost('load_publish', {}).then(function(driveState) {
     if (driveState && Object.keys(driveState).length > 0) {
+      // Drive has data — it is authoritative, overwrite local
       Object.assign(publishedWidgets, driveState);
-      // Also update localStorage to keep in sync
       try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
       showDriveStatus('ok');
     } else {
-      showDriveStatus('fail');
+      // Drive is empty — seed it with current local state (first-time setup)
+      showDriveStatus('ok');
+      if (Object.keys(publishedWidgets).length > 0) {
+        // Seed Drive with what we have locally
+        drivePost('save_publish', publishedWidgets);
+      } else {
+        // Truly first load — seed with activity visibility defaults
+        ACTIVITIES.forEach(function(act) {
+          publishedWidgets['act-' + act.num + '-visible'] = act.defaultVisible;
+        });
+        drivePost('save_publish', publishedWidgets);
+        try { localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishedWidgets)); } catch(e) {}
+      }
     }
     _applyPublishedState();
     loadPhotovoiceGalleries();
   }).catch(function() {
+    // Drive unreachable — use localStorage as-is
     showDriveStatus('fail');
     _applyPublishedState();
     loadPhotovoiceGalleries();
@@ -4260,10 +4272,18 @@ function _applyPublishedState() {
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
     var vv = document.getElementById('view-village');
     if (vv) {
+      // Reveal first, then use requestAnimationFrame to scroll after layout is complete
+      // This ensures the browser has calculated element positions before scrolling
       vv.style.opacity = '';
-      // Scroll to very top so default activity is at top of page
-      // Scroll handled by applyActiveActivity
-      // Re-render timeline and update nav visibility
+      // Use double rAF to guarantee layout is complete before scroll
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          if (activeActivityId) {
+            var targetEl = document.getElementById('res-act-' + activeActivityId);
+            if (targetEl) pvScrollTo(targetEl, false);
+          }
+        });
+      });
       renderTimeline();
       ACTIVITIES.forEach(function(act) {
         var key = 'act-' + act.num + '-visible';
@@ -5282,10 +5302,7 @@ function applyActiveActivity(actNum, silent) {
       pvScrollTo(document.getElementById(targetId), true);
     }, 200);
   } else {
-    // Silent apply — scroll instantly to default activity card (no animation)
-    setTimeout(function() {
-      pvScrollTo(document.getElementById(targetId), false);
-    }, 50);
+    // Silent apply — scroll is handled by the village reveal block before opacity is set
   }
   // Update button states
   document.querySelectorAll('.act-link-btn').forEach(function(b) {
