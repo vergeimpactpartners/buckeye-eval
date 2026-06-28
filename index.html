@@ -570,347 +570,385 @@
           <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Sprint planning, meeting timeline, and process documentation for the Buckeye EcoVillage evaluation.</div>
         </div>
 
-<!-- OUR PROCESS: vertical scrollable timeline -->
-        <div id="ev-our-process" style="margin-bottom:8px;">
 
-          <!-- SPRINT 1 -->
-          <div style="margin-bottom:32px;">
-
-            <!-- Collapse / Expand all -->
-            <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:10px;gap:8px;">
-              <button onclick="expandAllSteps()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1px solid var(--border-strong);background:white;color:var(--ink-soft);cursor:pointer;">Expand all</button>
-              <button onclick="collapseAllSteps()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1px solid var(--border-strong);background:white;color:var(--ink-soft);cursor:pointer;">Collapse all</button>
-            </div>
-
-            <!-- Sprint label -->
-            <div style="display:inline-flex;align-items:center;gap:8px;background:var(--vip-blue);color:white;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:20px;padding:5px 16px;margin-bottom:14px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.6);"></div>
-              Sprint 1
-            </div>
-
-            <!-- Steps stacked vertically -->
-            <div style="display:flex;flex-direction:column;gap:12px;border-left:3px solid var(--vip-blue);padding-left:18px;">
-
-            <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
-
-              <!-- Step 1: Set up &amp; Design (DONE) -->
-              <div style="border:1px solid #b3e5cc;border-radius:12px;overflow:hidden;">
-                <div style="background:#e8f8f0;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="1" data-side="eval" onclick="toggleStep('ev-step1-body', this)">
-                  <div style="width:22px;height:22px;border-radius:50%;background:#1a6b3e;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
-                  <div>
-                    <div style="font-size:16px;font-weight:600;color:#1a6b3e;">Set up &amp; Design</div>
-                    <div style="font-size:13px;color:#1a6b3e;margin-top:2px;opacity:0.75;">Establishing the evaluation design and learning framework</div>
-                  </div>
-                  <button onclick="event.stopPropagation();cycleStepStatus(1)" style="margin-left:auto;background:#1a6b3e;color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.04em;cursor:pointer;border:none;font-family:var(--sans);">DONE</button>
-                  <span class="step-chevron" style="color:#1a6b3e;font-size:14px;margin-left:4px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-                </div>
-                <div id="ev-step1-body" style="background:var(--vip-blue-pale);padding:16px 18px;border-top:1px solid var(--vip-blue-light);">
-<div style="margin-bottom:16px;">
-                    <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Sprint Phases</div>
-                    <div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 0</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(0)" style="background:#1a6b3e;color:white;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">DONE</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Readiness, Fit & Set Up</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;"><strong>Formal DE Fit & Readiness Check</strong> — explicit readiness screen before sprint is approved</li><li style="margin-bottom:6px;line-height:1.6;">DE Fit Memo (internal + client-facing excerpt)</li><li style="margin-bottom:6px;line-height:1.6;">Platform Spine for DE Process</li></ul>
-                  </div><div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 1</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(1)" style="background:#1a6b3e;color:white;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">DONE</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Framing the Learning</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;"><strong>Explicit Learning Question Reframing Gate</strong> — mandatory reframing and prioritization of developmental questions using 4 tests: time, authority, emergence, plausibility AND right-sizing of well-fit formative questions</li><li style="margin-bottom:6px;line-height:1.6;">Learning Question Brief: original → reframed to fit 90 days → decisions → non-goals</li></ul>
-                    
-
-                    <div style="margin-top:16px;background:var(--vip-magenta-pale);border:1px solid var(--vip-magenta-light);border-radius:10px;padding:16px;">
-                      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                        <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.07em;" id="ev-learning-questions">Our Learning Questions</div>
-                        <div style="display:flex;align-items:center;gap:8px;">
-                          <span id="lq-publish-status" style="font-size:10px;font-weight:600;color:var(--vip-midnight-muted);"></span>
-                          <button id="lq-publish-btn" onclick="toggleLQPublish()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1.5px solid var(--vip-magenta);background:white;color:var(--vip-magenta);cursor:pointer;transition:all 0.15s;">Publish to Village</button>
-                        </div>
-                      </div>
-                      <!-- Q1 -->
-                  <div style="background:white;border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q1</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">Sprint 1</span>
-                      </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">The model</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">What are the key inputs, practices, enablers, and barriers that enable the EVB resident-led approach to mitigating environmental harms and building community resilience?</div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Q2 -->
-                  <div style="background:white;border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q2</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">S1 &amp; S2</span>
-                      </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">How we work</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">How are we (or are we not) holding fidelity to resident-derived definitions of resilience and contribution to community-endorsed priorities for mitigation of environmental harms? What enables or stops us from doing so?</div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Q3 -->
-                  <div style="background:white;border-radius:8px;padding:18px 18px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q3</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">Sprint 2</span>
-                      </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">Lessons learned</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">What are the key lessons learned from this phase that demonstrate the power of EHW's strategy AND will help us do this work even "better" in the next phase?</div>
-                      </div>
-                    </div>
-                  </div>
-                    </div>
-              </div>
-                  <div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 2</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(2)" style="background:#1a6b3e;color:white;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">DONE</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Designing Participation & Power</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Clear core team role plan for different points in the process and for products (internal and external): listener, interpreter, decision-maker</li><li style="margin-bottom:6px;line-height:1.6;">Clear participation plan for participants</li></ul>
-                  </div><div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 3</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(3)" style="background:#1a6b3e;color:white;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">DONE</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Method Selection & Design</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Linking learning question to observation indicator (what are we collecting data about)</li><li style="margin-bottom:6px;line-height:1.6;"><strong>Method-to-Decision Map</strong> — forced Method → Decision → Product chain</li></ul>
-                  </div>
-              </div>
-              </div>
-              </div>
-                
-
-              <!-- Step 2: Learning Loop -->
-              <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;background:white;">
-                <div style="padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="2" data-side="eval" onclick="toggleStep('ev-step2-body', this)">
-                  <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-                  <div>
-                    <div style="font-size:16px;font-weight:600;color:var(--ink-soft);">Learning Loop</div>
-                    <div style="font-size:13px;color:var(--vip-midnight-muted);margin-top:2px;">Data collection &amp; real-time sensemaking</div>
-                  </div>
-                  <button onclick="event.stopPropagation();cycleStepStatus(2)" style="margin-left:auto;background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.04em;cursor:pointer;border:none;font-family:var(--sans);">ACTIVE</button>
-                  <span class="step-chevron" style="color:var(--vip-midnight-muted);font-size:14px;margin-left:4px;transition:transform 0.2s;">▲</span>
-                </div>
-                <div id="ev-step2-body" style="padding:18px 18px;border-top:1px solid var(--vip-blue-light);background:var(--vip-blue-pale);">
-                  <div style="margin-bottom:16px;">
-                    <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Sprint Phase</div>
-                    <div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 4</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(4)" style="background:var(--vip-blue);color:white;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">ACTIVE</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Learning Input Collection (Ongoing)</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Continuous, low-burden inputs</li><li style="margin-bottom:6px;line-height:1.6;">Voice stories + short reflections prioritized</li></ul>
-                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--vip-blue-light);display:flex;gap:8px;">
-                      <button onclick="event.stopPropagation();showView('stories',document.querySelector('[onclick*=\'stories\']'))" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;background:var(--vip-orange-pale);color:var(--vip-orange);border:1px solid var(--vip-orange-light);cursor:pointer;">Go to Stories →</button>
-                      <button onclick="event.stopPropagation();showView('reflections',document.querySelector('[onclick*=\'reflections\']'))" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;background:var(--vip-orange-pale);color:var(--vip-orange);border:1px solid var(--vip-orange-light);cursor:pointer;">Go to Reflections →</button>
-                    </div>
-                  </div>
-                  </div>
-                  
-                  <div style="margin-top:16px;background:var(--vip-magenta-pale);border:1px solid var(--vip-magenta-light);border-radius:10px;overflow:hidden;">
-                      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                        <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.07em;" id="ev-lw-s2">Example Learning Widget</div>
-                        <div style="display:flex;align-items:center;gap:8px;">
-                          <span id="title-widget-publish-status" style="font-size:10px;font-weight:600;color:var(--vip-midnight-muted);"></span>
-                          <button id="title-widget-publish-btn" onclick="toggleTitleWidgetPublish()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1.5px solid var(--vip-magenta);background:white;color:var(--vip-magenta);cursor:pointer;transition:all 0.15s;">Publish to Village</button>
-                        </div>
-                      </div>
-                      <div style="padding:14px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-magenta);margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-magenta);display:inline-block;flex-shrink:0;"></span>What we are testing</div>
-                        <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Nothing recorded yet.</div>
-                      </div>
-                      <div style="padding:14px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-orange);margin-bottom:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-orange);display:inline-block;flex-shrink:0;"></span>How we are testing it</div>
-                        <div style="background:var(--vip-orange-pale);border:1px solid var(--vip-orange-light);border-radius:10px;padding:16px;">
-                  <!-- STORY WIDGET INTRO -->
-                  <div style="margin-bottom:12px;">
-                    <div style="font-size:12px;font-weight:700;color:var(--vip-orange);text-transform:uppercase;letter-spacing:0.07em;">Voice Story Collection</div>
-                  </div>
-                  <div style="margin-bottom:18px;">
-                    <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Your story matters here</div>
-                    <div style="font-size:14px;color:var(--ink-soft);line-height:1.7;">Every story shared here helps us understand what's really happening in the Buckeye EcoVillage process — what's working, what's hard, and what matters most to the people living it. What you share stays confidential and is used only to strengthen this work.</div>
-                  </div>
-
-                  <!-- VOICE STORY WIDGET -->
-                  <div id="ev-storyWidget" style="background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;">
-
-                    <!-- State: READY -->
-                    <div id="ev-sw-ready" style="padding:24px;text-align:center;">
-                      <div style="width:64px;height:64px;border-radius:50%;background:var(--vip-magenta);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s;" onclick="startVoiceStory()" id="ev-sw-start-btn" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="9" y="2" width="6" height="13" rx="3" fill="white"/>
-                          <path d="M5 11C5 14.866 8.13401 18 12 18C15.866 18 19 14.866 19 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                          <line x1="12" y1="18" x2="12" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                          <line x1="9" y1="22" x2="15" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                      <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Ready when you are</div>
-                      <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;">We'll ask you a few gentle questions.<br>Just speak naturally — there are no right or wrong answers.</div>
-                    </div>
-
-                    <!-- State: CONVERSATION (hidden initially) -->
-                    <div id="ev-sw-convo" style="display:none;">
-
-                      <!-- Recording indicator bar -->
-                      <div id="ev-sw-rec-bar" style="background:var(--vip-magenta);padding:8px 16px;display:flex;align-items:center;gap:10px;">
-                        <div id="ev-sw-rec-dot" style="width:8px;height:8px;border-radius:50%;background:white;animation:recPulse 1.2s infinite;flex-shrink:0;"></div>
-                        <span style="font-size:11px;font-weight:700;color:white;letter-spacing:0.06em;text-transform:uppercase;">Recording</span>
-                        <span id="ev-sw-timer" style="font-size:11px;color:rgba(255,255,255,0.8);margin-left:auto;font-variant-numeric:tabular-nums;">0:00</span>
-                      </div>
-
-                      <!-- Conversation area -->
-                      <div style="padding:20px 20px 0;">
-                        <!-- Question bubble -->
-                        <div id="ev-sw-question-bubble" style="background:var(--vip-blue-pale);border-radius:12px 12px 12px 3px;padding:14px 16px;margin-bottom:16px;max-width:85%;">
-                          <div style="font-size:10px;color:var(--vip-blue);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">A question for you</div>
-                          <div id="ev-sw-question-text" style="font-size:15px;color:var(--vip-midnight);font-weight:600;line-height:1.5;"></div>
-                        </div>
-
-                        <!-- Live transcript -->
-                        <div id="ev-sw-transcript-area" style="min-height:60px;margin-bottom:16px;">
-                          <div id="ev-sw-transcript-text" style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-style:italic;padding:10px 12px;background:var(--paper-warm);border-radius:8px;min-height:48px;"></div>
-                          <div id="ev-sw-transcript-hint" style="font-size:11px;color:var(--vip-midnight-muted);margin-top:5px;text-align:center;">Take your time — we're listening whenever you're ready</div>
-                        </div>
-                      </div>
-
-                      <!-- Controls -->
-                      <div style="padding:0 20px 18px;display:flex;gap:10px;align-items:center;">
-                        <button id="ev-sw-next-btn" onclick="voiceNext()" style="flex:1;background:var(--vip-blue);color:white;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity 0.15s;" disabled>Continue ›</button>
-                        <button onclick="cancelVoiceStory()" style="background:none;border:1px solid var(--border-strong);color:var(--ink-muted);border-radius:8px;padding:11px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">Cancel</button>
-                      </div>
-                    </div>
-
-                    <!-- State: SAVED (hidden initially) -->
-                    <div id="ev-sw-saved" style="display:none;padding:28px;text-align:center;">
-                      <div style="width:52px;height:52px;border-radius:50%;background:var(--vip-blue-pale);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#1890BA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </div>
-                      <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">What a gift, <span id="ev-sw-saved-name"></span> — thank you.</div>
-                      <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:16px;">Your story has been saved and will help us better understand and strengthen the Buckeye EcoVillage work. We're glad you took the time.</div>
-                      <button onclick="resetVoiceStory()" style="background:var(--vip-magenta);color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;">Share another</button>
-                    </div>
-
-                  </div>
-                  <!-- end story widget -->
-                  </div>
-                      </div>
-                      <div style="padding:14px 16px;">
-                        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-soft);margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-midnight-soft);display:inline-block;flex-shrink:0;"></span>What we are learning</div>
-                        <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Nothing recorded yet.</div>
-                      </div>
-                    </div>
-                </div>
-                </div>
-              </div>
-
-              <!-- Step 3: Adapt & Document -->
-              <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;background:white;">
-                <div style="padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="3" data-side="eval" onclick="toggleStep('ev-step3-body', this)">
-                  <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-                  <div>
-                    <div style="font-size:16px;font-weight:600;color:var(--ink-soft);">Adapt &amp; Document</div>
-                    <div style="font-size:13px;color:var(--vip-midnight-muted);margin-top:2px;">Reflect, adjust, and capture what we're learning</div>
-                  </div>
-                  <button onclick="event.stopPropagation();cycleStepStatus(3)" style="margin-left:auto;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;cursor:pointer;border:none;font-family:var(--sans);">UPCOMING</button>
-                  <span class="step-chevron" style="color:var(--vip-midnight-muted);font-size:14px;margin-left:4px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-                </div>
-                <div id="ev-step3-body" style="display:none;padding:16px 18px;border-top:1px solid var(--border);background:var(--paper-warm);">
-                  <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Sprint Phases</div>
-                  <div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 5</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(5)" style="background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">UPCOMING</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Analysis & Sensemaking</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Validated insights + tensions with participatory sensemaking</li></ul>
-                  </div><div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 6</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(6)" style="background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">UPCOMING</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Learning → Decision → Adaptation</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Decisions + tests in motion (+ the things we will look for and track about that decision)</li></ul>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Step 4: Close / Prep Next Sprint -->
-              <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;background:white;">
-                <div style="padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="4" data-side="eval" onclick="toggleStep('ev-step4-body', this)">
-                  <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-                  <div>
-                    <div style="font-size:16px;font-weight:600;color:var(--ink-soft);">Close / Prep Next Sprint</div>
-                    <div style="font-size:13px;color:var(--vip-midnight-muted);margin-top:2px;">Synthesis, handoff, and sprint retrospective</div>
-                  </div>
-                  <button onclick="event.stopPropagation();cycleStepStatus(4)" style="margin-left:auto;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;cursor:pointer;border:none;font-family:var(--sans);">UPCOMING</button>
-                  <span class="step-chevron" style="color:var(--vip-midnight-muted);font-size:14px;margin-left:4px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-                </div>
-                <div id="ev-step4-body" style="display:none;padding:16px 18px;border-top:1px solid var(--border);background:var(--paper-warm);">
-                  <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Sprint Phases</div>
-                  <div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 7</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(7)" style="background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">UPCOMING</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Accountability & Transparency</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Learning product menu clarifies purpose</li><li style="margin-bottom:6px;line-height:1.6;">Create decision briefs, learning memos, community summaries</li></ul>
-                  </div><div style="background:white;border-radius:8px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--vip-blue);">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                      <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.04em;">Phase 8</span>
-                      <button onclick="event.stopPropagation();cyclePhaseStatus(8)" style="background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;font-family:var(--sans);white-space:nowrap;">UPCOMING</button>
-                      <span style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Reflection & Transition</span>
-                    </div>
-                    <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);"><li style="margin-bottom:6px;line-height:1.6;">Explicit learning handoff</li><li style="margin-bottom:6px;line-height:1.6;">Information + Learning system left behind</li></ul>
-                  </div>
-                </div>
-              </div>
-
-            
+        <!-- Sprint 1 -->
+        <div style="margin-bottom:28px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--vip-blue);">
+            <div style="font-size:18px;font-weight:800;color:var(--vip-midnight);">Sprint 1</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="font-size:12px;color:var(--vip-midnight-muted);" id="sprint1-count">0/17 tasks complete</div>
+              <div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="sprint1-bar" style="height:100%;width:0%;background:var(--vip-blue);border-radius:3px;transition:width 0.3s;"></div></div>
             </div>
           </div>
-
-                    <!-- SPRINT 2 -->
-          <div style="margin-bottom:16px;">
-            <div style="display:inline-flex;align-items:center;gap:8px;background:var(--vip-midnight);color:white;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:20px;padding:5px 16px;margin-bottom:14px;opacity:0.6;">
-              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);"></div>
-              Sprint 2
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s1step1')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Set up & Design</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Establishing the evaluation design and learning framework</div>
+              </div>
+              <div id="pp-s1step1-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/9 tasks</div>
+              <span id="pp-s1step1-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
             </div>
-            <div style="display:flex;flex-direction:column;gap:12px;border-left:3px solid var(--paper-mid);padding-left:18px;">
-              <div style="border:1px dashed var(--border);border-radius:12px;padding:14px 16px;background:var(--paper-warm);display:flex;align-items:center;gap:12px;">
-                <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-                <div style="font-size:16px;font-weight:500;color:var(--vip-midnight-muted);">Set up &amp; Design</div>
-              </div>
-              <div style="border:1px dashed var(--border);border-radius:12px;padding:14px 16px;background:var(--paper-warm);display:flex;align-items:center;gap:12px;">
-                <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-                <div style="font-size:16px;font-weight:500;color:var(--vip-midnight-muted);">Learning Loop</div>
-              </div>
-              <div style="border:1px dashed var(--border);border-radius:12px;padding:14px 16px;background:var(--paper-warm);display:flex;align-items:center;gap:12px;">
-                <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-                <div style="font-size:16px;font-weight:500;color:var(--vip-midnight-muted);">Adapt &amp; Document</div>
-              </div>
-              <div style="border:1px dashed var(--border);border-radius:12px;padding:14px 16px;background:var(--paper-warm);display:flex;align-items:center;gap:12px;">
-                <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-                <div style="font-size:16px;font-weight:500;color:var(--vip-midnight-muted);">Close / Prep Next Sprint</div>
-              </div>
+            <div id="pp-s1step1-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+                <div id="pp-phase-0" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(0)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 0</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Readiness, Fit & Set Up</span>
+                    <span id="pp-phase-0-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/3</span>
+                    <span id="pp-phase-0-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-0-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p0t0" onclick="toggleTask('p0t0',0)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p0t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Formal DE Fit & Readiness Check — explicit readiness screen before sprint is approved</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p0t1" onclick="toggleTask('p0t1',0)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p0t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">DE Fit Memo (internal + client-facing excerpt)</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p0t2" onclick="toggleTask('p0t2',0)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p0t2" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Platform Spine for DE Process</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-0-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(0)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-0-notes" onblur="savePhaseNotes(0)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div id="pp-phase-1" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(1)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 1</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Framing the Learning</span>
+                    <span id="pp-phase-1-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-1-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-1-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p1t0" onclick="toggleTask('p1t0',1)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p1t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Explicit Learning Question Reframing Gate — mandatory reframing and prioritization using 4 tests: time, authority, emergence, plausibility AND right-sizing of well-fit formative questions</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p1t1" onclick="toggleTask('p1t1',1)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p1t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Learning Question Brief: original → reframed to fit 90 days → decisions → non-goals</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-1-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(1)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-1-notes" onblur="savePhaseNotes(1)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div id="pp-phase-2" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(2)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 2</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Designing Participation & Power</span>
+                    <span id="pp-phase-2-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-2-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-2-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p2t0" onclick="toggleTask('p2t0',2)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p2t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Clear core team role plan for different points in the process and for products (internal and external): listener, interpreter, decision-maker</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p2t1" onclick="toggleTask('p2t1',2)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p2t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Clear participation plan for participants</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-2-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(2)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-2-notes" onblur="savePhaseNotes(2)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div id="pp-phase-3" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(3)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 3</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Method Selection & Design</span>
+                    <span id="pp-phase-3-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-3-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-3-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p3t0" onclick="toggleTask('p3t0',3)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p3t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Linking learning question to observation indicator (what are we collecting data about)</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p3t1" onclick="toggleTask('p3t1',3)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p3t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Method-to-Decision Map — forced Method → Decision → Product chain</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-3-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(3)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-3-notes" onblur="savePhaseNotes(3)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
-
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s1step2')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Learning Loop</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Data collection & real-time sensemaking</div>
+              </div>
+              <div id="pp-s1step2-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/2 tasks</div>
+              <span id="pp-s1step2-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s1step2-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+                <div id="pp-phase-4" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(4)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 4</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Learning Input Collection (Ongoing)</span>
+                    <span id="pp-phase-4-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-4-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-4-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p4t0" onclick="toggleTask('p4t0',4)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p4t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Continuous, low-burden inputs established</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p4t1" onclick="toggleTask('p4t1',4)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p4t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Voice stories + short reflections prioritized</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-4-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(4)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-4-notes" onblur="savePhaseNotes(4)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s1step3')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Adapt & Document</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Reflect, adjust, and capture what we're learning</div>
+              </div>
+              <div id="pp-s1step3-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/2 tasks</div>
+              <span id="pp-s1step3-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s1step3-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+                <div id="pp-phase-5" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(5)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 5</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Analysis & Sensemaking</span>
+                    <span id="pp-phase-5-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/1</span>
+                    <span id="pp-phase-5-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-5-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p5t0" onclick="toggleTask('p5t0',5)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p5t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Validated insights + tensions with participatory sensemaking</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-5-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(5)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-5-notes" onblur="savePhaseNotes(5)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div id="pp-phase-6" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(6)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 6</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Learning → Decision → Adaptation</span>
+                    <span id="pp-phase-6-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/1</span>
+                    <span id="pp-phase-6-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-6-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p6t0" onclick="toggleTask('p6t0',6)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p6t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Decisions + tests in motion (+ the things we will look for and track about that decision)</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-6-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(6)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-6-notes" onblur="savePhaseNotes(6)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s1step4')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Close / Prep Next Sprint</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Synthesis, handoff, and sprint retrospective</div>
+              </div>
+              <div id="pp-s1step4-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/4 tasks</div>
+              <span id="pp-s1step4-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s1step4-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+                <div id="pp-phase-7" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(7)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 7</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Accountability & Transparency</span>
+                    <span id="pp-phase-7-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-7-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-7-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p7t0" onclick="toggleTask('p7t0',7)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p7t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Learning product menu clarifies purpose</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p7t1" onclick="toggleTask('p7t1',7)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p7t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Create decision briefs, learning memos, community summaries</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-7-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(7)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-7-notes" onblur="savePhaseNotes(7)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div id="pp-phase-8" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">
+                  <div onclick="ppTogglePhase(8)" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">
+                    <span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE 8</span>
+                    <span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">Reflection & Transition</span>
+                    <span id="pp-phase-8-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/2</span>
+                    <span id="pp-phase-8-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+                  </div>
+                  <div id="pp-phase-8-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">
+                    <div style="margin:12px 0 4px;">
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p8t0" onclick="toggleTask('p8t0',8)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p8t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Explicit learning handoff completed</span>
+                          </div>
+                          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            <button id="task-p8t1" onclick="toggleTask('p8t1',8)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
+                            <span id="task-text-p8t1" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Information + Learning system left behind</span>
+                          </div>
+                    </div>
+                    <!-- Content cards -->
+                    <div id="pp-phase-8-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>
+                    <button onclick="ppShowAddCard(8)" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>
+                    <!-- Phase notes -->
+                    <div style="margin-top:14px;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>
+                      <textarea id="pp-phase-8-notes" onblur="savePhaseNotes(8)" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
         </div>
-      </div>
+        <!-- Sprint 2 -->
+        <div style="margin-bottom:28px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--vip-blue);">
+            <div style="font-size:18px;font-weight:800;color:var(--vip-midnight);">Sprint 2</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="font-size:12px;color:var(--vip-midnight-muted);" id="sprint2-count">0/0 tasks complete</div>
+              <div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="sprint2-bar" style="height:100%;width:0%;background:var(--vip-blue);border-radius:3px;transition:width 0.3s;"></div></div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s2step1')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Set up & Design</div>
+                
+              </div>
+              <div id="pp-s2step1-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
+              <span id="pp-s2step1-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s2step1-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s2step2')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Learning Loop</div>
+                
+              </div>
+              <div id="pp-s2step2-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
+              <span id="pp-s2step2-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s2step2-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s2step3')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Adapt & Document</div>
+                
+              </div>
+              <div id="pp-s2step3-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
+              <span id="pp-s2step3-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s2step3-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+            <div onclick="ppToggleStep('s2step4')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+              <div style="flex:1;">
+                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Close / Prep Next Sprint</div>
+                
+              </div>
+              <div id="pp-s2step4-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
+              <span id="pp-s2step4-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+            </div>
+            <div id="pp-s2step4-body" style="padding:14px 16px;border-top:1px solid var(--border);">
+              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
+            </div>
+          </div>
+        </div>
 
+      
       <div id="view-guide" class="view">
 
         <!-- Header -->
@@ -954,17 +992,17 @@
             <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
               <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
                 <span style="font-weight:700;color:var(--vip-midnight);">Evaluator</span> &nbsp;—&nbsp;
-                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/</code>
+                <a href="https://vergeimpactpartners.github.io/buckeye-eval/" target="_blank" style="font-size:12px;color:var(--vip-blue);text-decoration:underline;font-family:monospace;">vergeimpactpartners.github.io/buckeye-eval/</a>
                 <div style="color:var(--vip-midnight-muted);margin-top:4px;">Full workspace. All views available. Village Experience and publish controls visible.</div>
               </div>
               <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
                 <span style="font-weight:700;color:var(--vip-midnight);">EHW</span> &nbsp;—&nbsp;
-                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/?mode=ehw</code>
+                <a href="https://vergeimpactpartners.github.io/buckeye-eval/?mode=ehw" target="_blank" style="font-size:12px;color:var(--vip-blue);text-decoration:underline;font-family:monospace;">vergeimpactpartners.github.io/buckeye-eval/?mode=ehw</a>
                 <div style="color:var(--vip-midnight-muted);margin-top:4px;">Shared view for EVB partners. Shows published learning content. Read-only.</div>
               </div>
               <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
                 <span style="font-weight:700;color:var(--vip-midnight);">Village</span> &nbsp;—&nbsp;
-                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/?mode=village</code>
+                <a href="https://vergeimpactpartners.github.io/buckeye-eval/?mode=village" target="_blank" style="font-size:12px;color:var(--vip-blue);text-decoration:underline;font-family:monospace;">vergeimpactpartners.github.io/buckeye-eval/?mode=village</a>
                 <div style="color:var(--vip-midnight-muted);margin-top:4px;">Resident-facing page. No evaluator controls visible. Opens to the default activity automatically.</div>
               </div>
             </div>
@@ -1068,7 +1106,7 @@
             <div style="display:flex;flex-direction:column;gap:6px;">
               <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span><span style="color:var(--vip-midnight-soft);">Make changes with Claude — share the current file and describe what you need</span></div>
               <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span><span style="color:var(--vip-midnight-soft);">Download the updated file from Claude</span></div>
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span><span style="color:var(--vip-midnight-soft);">Go to <code>github.com → vergeimpactpartners → buckeye-eval → index.html</code></span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span><span style="color:var(--vip-midnight-soft);">Go to <a href="https://github.com/vergeimpactpartners/buckeye-eval/blob/main/index.html" target="_blank" style="font-size:13px;color:var(--vip-blue);text-decoration:underline;font-family:monospace;">github.com → vergeimpactpartners → buckeye-eval → index.html</a></span></div>
               <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span><span style="color:var(--vip-midnight-soft);">Click the pencil icon → Select all (Cmd+A) → Paste the new file (Cmd+V) → Commit changes</span></div>
               <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">5</span><span style="color:var(--vip-midnight-soft);">GitHub Pages auto-deploys within 60 seconds</span></div>
             </div>
@@ -1547,6 +1585,7 @@
           <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
           <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Experience</div>
           <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Manage what residents see and where they land when they open the Village view.</div>
+          <div style="margin-top:12px;"><a href="https://vergeimpactpartners.github.io/buckeye-eval/?mode=village" target="_blank" style="display:inline-flex;align-items:center;gap:6px;color:white;font-size:12px;font-weight:600;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 14px;text-decoration:none;letter-spacing:0.03em;">&#127760; Open Village Page</a></div>
         </div>
 
 
@@ -4319,6 +4358,9 @@ function _applyPublishedState() {
       }
     });
   }
+  // Restore project planning state
+  if (typeof ppRestoreState === 'function') ppRestoreState();
+
   if (publishedWidgets['titleWidget']) {
     var w = document.getElementById('comm-title-widget');
     if (w) w.style.display = 'block';
@@ -5998,7 +6040,7 @@ async function abGenerate(genMode) {
   outputTextEl.style.display = 'none';
   outputTextEl.textContent = '';
 
-  var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (BEV) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language.\n\nThe platform uses a BAR (Before Action Review) + AAR (After Action Review) structure.\n\nBAR columns: Overall | Residents Set Priorities | Space to Disagree | Different Outcomes | Values\nAAR columns: What were our intended results? | How did we do? | What caused our results? | What is our next opportunity to test what we learned?\n\nConstruct map themes: Community Power, Resident Voice, Trust, Access, Belonging, Governance, Collective Action, Health Equity, Space & Place, Economic Stability.';
+  var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language.\n\nThe platform uses a BAR (Before Action Review) + AAR (After Action Review) structure.\n\nBAR columns: Overall | Residents Set Priorities | Space to Disagree | Different Outcomes | Values\nAAR columns: What were our intended results? | How did we do? | What caused our results? | What is our next opportunity to test what we learned?\n\nConstruct map themes: Community Power, Resident Voice, Trust, Access, Belonging, Governance, Collective Action, Health Equity, Space & Place, Economic Stability.';
 
   var userMsg = 'SOURCE MATERIAL:\n' + sourceText + '\n\n';
   if (actName)  userMsg += 'Activity name: ' + actName + '\n';
@@ -6094,6 +6136,309 @@ function abCopyOutput() {
     showToast('Copy failed — select and copy manually');
   });
 }
+
+// ── PROJECT PLANNING ──────────────────────────────────────────────────────────
+
+var ppTaskCounts = {0: 3, 1: 2, 2: 2, 3: 2, 4: 2, 5: 1, 6: 1, 7: 2, 8: 2};
+var ppStepPhases = {"s1step1": [0, 1, 2, 3], "s1step2": [4], "s1step3": [5, 6], "s1step4": [7, 8], "s2step1": [], "s2step2": [], "s2step3": [], "s2step4": []};
+
+function ppTogglePhase(phaseIdx) {
+  var body = document.getElementById('pp-phase-' + phaseIdx + '-body');
+  var chev = document.getElementById('pp-phase-' + phaseIdx + '-chev');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function ppToggleStep(sid) {
+  var body = document.getElementById('pp-' + sid + '-body');
+  var chev = document.getElementById('pp-' + sid + '-chev');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function toggleTask(tid, phaseIdx) {
+  var btn = document.getElementById('task-' + tid);
+  var textEl = document.getElementById('task-text-' + tid);
+  if (!btn) return;
+  var done = btn.getAttribute('data-done') === '1';
+  var newDone = !done;
+  btn.setAttribute('data-done', newDone ? '1' : '0');
+  btn.style.background = newDone ? 'var(--vip-blue)' : 'white';
+  btn.style.borderColor = newDone ? 'var(--vip-blue)' : 'var(--border)';
+  btn.innerHTML = newDone ? '&#10003;' : '';
+  if (textEl) textEl.style.textDecoration = newDone ? 'line-through' : '';
+  if (textEl) textEl.style.opacity = newDone ? '0.5' : '';
+  ppSaveTask(tid, newDone);
+  ppUpdatePhaseProgress(phaseIdx);
+}
+
+function ppUpdatePhaseProgress(phaseIdx) {
+  var total = ppTaskCounts[phaseIdx] || 0;
+  var done = 0;
+  for (var ti = 0; ti < total; ti++) {
+    var btn = document.getElementById('task-p' + phaseIdx + 't' + ti);
+    if (btn && btn.getAttribute('data-done') === '1') done++;
+  }
+  var pill = document.getElementById('pp-phase-' + phaseIdx + '-pill');
+  if (pill) {
+    if (done === total && total > 0) {
+      pill.textContent = '✓ Done';
+      pill.style.background = '#1a6b3e';
+      pill.style.color = 'white';
+      pill.style.borderColor = '#1a6b3e';
+    } else {
+      pill.textContent = done + '/' + total;
+      pill.style.background = 'var(--paper-mid)';
+      pill.style.color = 'var(--vip-midnight-muted)';
+      pill.style.borderColor = 'var(--border)';
+    }
+  }
+  // Update step and sprint progress
+  ppUpdateAllProgress();
+}
+
+function ppUpdateAllProgress() {
+  // Steps
+  Object.keys(ppStepPhases).forEach(function(sid) {
+    var phases = ppStepPhases[sid];
+    var total = 0, done = 0;
+    phases.forEach(function(pi) {
+      var n = ppTaskCounts[pi] || 0;
+      total += n;
+      for (var ti = 0; ti < n; ti++) {
+        var btn = document.getElementById('task-p' + pi + 't' + ti);
+        if (btn && btn.getAttribute('data-done') === '1') done++;
+      }
+    });
+    var prog = document.getElementById('pp-' + sid + '-progress');
+    if (prog) prog.textContent = done + '/' + total + ' tasks';
+  });
+  // Sprints
+  [1].forEach(function(sn) {
+    var phases = [0,1,2,3,4,5,6,7,8];
+    var total = 0, done = 0;
+    phases.forEach(function(pi) {
+      var n = ppTaskCounts[pi] || 0;
+      total += n;
+      for (var ti = 0; ti < n; ti++) {
+        var btn = document.getElementById('task-p' + pi + 't' + ti);
+        if (btn && btn.getAttribute('data-done') === '1') done++;
+      }
+    });
+    var count = document.getElementById('sprint' + sn + '-count');
+    var bar = document.getElementById('sprint' + sn + '-bar');
+    if (count) count.textContent = done + '/' + total + ' tasks complete';
+    if (bar) bar.style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+  });
+}
+
+function ppSaveTask(tid, done) {
+  var key = 'pp_task_' + tid;
+  publishedWidgets[key] = done;
+  savePublishState();
+}
+
+function savePhaseNotes(phaseIdx) {
+  var el = document.getElementById('pp-phase-' + phaseIdx + '-notes');
+  if (!el) return;
+  publishedWidgets['pp_notes_' + phaseIdx] = el.value;
+  savePublishState();
+}
+
+function ppRestoreState() {
+  // Restore tasks
+  Object.keys(ppTaskCounts).forEach(function(pi) {
+    pi = parseInt(pi);
+    var n = ppTaskCounts[pi];
+    for (var ti = 0; ti < n; ti++) {
+      var tid = 'p' + pi + 't' + ti;
+      var key = 'pp_task_' + tid;
+      if (publishedWidgets[key]) {
+        var btn = document.getElementById('task-' + tid);
+        var textEl = document.getElementById('task-text-' + tid);
+        if (btn) {
+          btn.setAttribute('data-done', '1');
+          btn.style.background = 'var(--vip-blue)';
+          btn.style.borderColor = 'var(--vip-blue)';
+          btn.innerHTML = '&#10003;';
+        }
+        if (textEl) { textEl.style.textDecoration = 'line-through'; textEl.style.opacity = '0.5'; }
+      }
+    }
+    // Restore notes
+    var notesEl = document.getElementById('pp-phase-' + pi + '-notes');
+    if (notesEl && publishedWidgets['pp_notes_' + pi]) notesEl.value = publishedWidgets['pp_notes_' + pi];
+    ppUpdatePhaseProgress(pi);
+  });
+  // Restore content cards
+  ppRestoreCards();
+}
+
+// ── CONTENT CARDS ─────────────────────────────────────────────────────────────
+
+function ppShowAddCard(phaseIdx) {
+  var existing = document.getElementById('pp-add-card-modal');
+  if (existing) existing.remove();
+  var modal = document.createElement('div');
+  modal.id = 'pp-add-card-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:white;border-radius:14px;padding:24px;width:500px;max-width:92vw;box-shadow:0 8px 32px rgba(0,0,0,0.2);';
+
+  // Title
+  var titleLabel = document.createElement('div');
+  titleLabel.style.cssText = 'font-size:15px;font-weight:700;color:var(--vip-midnight);margin-bottom:16px;';
+  titleLabel.textContent = 'Add content to Phase ' + phaseIdx;
+  box.appendChild(titleLabel);
+
+  // Title input
+  var tWrap = document.createElement('div'); tWrap.style.marginBottom = '12px';
+  var tLabel = document.createElement('label');
+  tLabel.style.cssText = 'font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;';
+  tLabel.textContent = 'Title';
+  var tInput = document.createElement('input');
+  tInput.id = 'pp-card-title'; tInput.type = 'text'; tInput.placeholder = 'e.g. Our Learning Questions';
+  tInput.style.cssText = 'width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;';
+  tWrap.appendChild(tLabel); tWrap.appendChild(tInput);
+  box.appendChild(tWrap);
+
+  // Content with formatting toolbar
+  var cWrap = document.createElement('div'); cWrap.style.marginBottom = '12px';
+  var cLabel = document.createElement('label');
+  cLabel.style.cssText = 'font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;';
+  cLabel.innerHTML = 'Content <span style="font-weight:400;font-style:italic;">(optional)</span>';
+  
+  // Toolbar
+  var toolbar = document.createElement('div');
+  toolbar.style.cssText = 'display:flex;gap:4px;margin-bottom:4px;padding:4px 6px;background:var(--paper-mid);border:1.5px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;';
+  var fmtBtns = [
+    { cmd: 'bold',          label: '<strong>B</strong>',  title: 'Bold' },
+    { cmd: 'italic',        label: '<em>I</em>',          title: 'Italic' },
+    { cmd: 'underline',     label: '<u>U</u>',            title: 'Underline' },
+    { cmd: 'insertUnorderedList', label: '&#8226; List',  title: 'Bullet list' }
+  ];
+  fmtBtns.forEach(function(fb) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.innerHTML = fb.label;
+    btn.title = fb.title;
+    btn.style.cssText = 'padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);';
+    btn.onmousedown = function(e) {
+      e.preventDefault(); // keep focus in editor
+      document.execCommand(fb.cmd, false, null);
+    };
+    toolbar.appendChild(btn);
+  });
+
+  // Contenteditable editor
+  var editor = document.createElement('div');
+  editor.id = 'pp-card-text';
+  editor.contentEditable = 'true';
+  editor.setAttribute('data-placeholder', 'Add text, notes, or summary…');
+  editor.style.cssText = 'min-height:80px;padding:8px 12px;border:1.5px solid var(--border);border-radius:0 0 8px 8px;font-size:13px;font-family:var(--sans);line-height:1.6;color:var(--vip-midnight);outline:none;';
+  editor.addEventListener('focus', function() { editor.style.borderColor = 'var(--vip-blue)'; toolbar.style.borderColor = 'var(--vip-blue)'; });
+  editor.addEventListener('blur',  function() { editor.style.borderColor = 'var(--border)';   toolbar.style.borderColor = 'var(--border)'; });
+
+  cWrap.appendChild(cLabel);
+  cWrap.appendChild(toolbar);
+  cWrap.appendChild(editor);
+  box.appendChild(cWrap);
+
+  // Drive link
+  var dWrap = document.createElement('div'); dWrap.style.marginBottom = '16px';
+  var dLabel = document.createElement('label');
+  dLabel.style.cssText = 'font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;';
+  dLabel.innerHTML = 'Google Drive link <span style="font-weight:400;font-style:italic;">(optional)</span>';
+  var dUrl = document.createElement('input');
+  dUrl.id = 'pp-card-url'; dUrl.type = 'text'; dUrl.placeholder = 'https://drive.google.com/…';
+  dUrl.style.cssText = 'width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;margin-bottom:6px;';
+  var dLbl = document.createElement('input');
+  dLbl.id = 'pp-card-url-label'; dLbl.type = 'text'; dLbl.placeholder = 'Link label (e.g. DE Fit Memo)';
+  dLbl.style.cssText = 'width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;';
+  dWrap.appendChild(dLabel); dWrap.appendChild(dUrl); dWrap.appendChild(dLbl);
+  box.appendChild(dWrap);
+
+  // Buttons
+  var btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;';
+  var cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = 'padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);';
+  cancelBtn.onclick = function() { modal.remove(); };
+  var saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Save card';
+  saveBtn.style.cssText = 'padding:8px 18px;border-radius:20px;border:none;background:var(--vip-blue);color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);';
+  saveBtn.onclick = function() { ppSaveCard(phaseIdx); };
+  btnRow.appendChild(cancelBtn); btnRow.appendChild(saveBtn);
+  box.appendChild(btnRow);
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+  tInput.focus();
+}
+
+function ppSaveCard(phaseIdx) {
+  var title  = (document.getElementById('pp-card-title').value || '').trim();
+  var editor = document.getElementById('pp-card-text');
+  var html   = editor ? editor.innerHTML.trim() : '';
+  // Strip empty editor placeholder
+  if (html === '<br>' || html === '&nbsp;') html = '';
+  var url   = (document.getElementById('pp-card-url').value   || '').trim();
+  var label = (document.getElementById('pp-card-url-label').value || '').trim() || 'Open in Drive';
+  if (!title && !html && !url) { showToast('Add a title, content, or link'); return; }
+  var key = 'pp_cards_' + phaseIdx;
+  var cards = publishedWidgets[key] ? JSON.parse(JSON.stringify(publishedWidgets[key])) : [];
+  var card = { id: Date.now(), title: title, html: html, url: url, label: label };
+  cards.push(card);
+  publishedWidgets[key] = cards;
+  savePublishState();
+  ppRenderCard(phaseIdx, card);
+  document.getElementById('pp-add-card-modal').remove();
+  showToast('Content card saved');
+}
+
+function ppRenderCard(phaseIdx, card) {
+  var container = document.getElementById('pp-phase-' + phaseIdx + '-cards');
+  if (!container) return;
+  var div = document.createElement('div');
+  div.id = 'pp-card-' + card.id;
+  div.style.cssText = 'background:var(--vip-magenta-pale);border:1px solid rgba(158,31,99,0.2);border-radius:10px;padding:12px 14px;position:relative;border-left:3px solid var(--vip-magenta);';
+  var html = '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">';
+  html += '<div style="flex:1;">';
+  if (card.title) html += '<div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">' + pvEscape(card.title) + '</div>';
+  // Support both old card.text (plain) and new card.html (rich)
+  var body = card.html || (card.text ? pvEscape(card.text).replace(/\n/g,'<br>') : '');
+  if (body) html += '<div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;margin-bottom:6px;">' + body + '</div>';
+  if (card.url) html += '<a href="' + card.url + '" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--vip-magenta);text-decoration:underline;">&#128196; ' + pvEscape(card.label) + '</a>';
+  html += '</div>';
+  html += '<button onclick="ppDeleteCard(' + phaseIdx + ',' + card.id + ')" style="color:var(--vip-midnight-muted);background:none;border:none;cursor:pointer;font-size:16px;padding:0 2px;flex-shrink:0;" title="Remove">&times;</button>';
+  html += '</div>';
+  div.innerHTML = html;
+  container.appendChild(div);
+}
+
+function ppDeleteCard(phaseIdx, cardId) {
+  var key = 'pp_cards_' + phaseIdx;
+  var cards = publishedWidgets[key] || [];
+  publishedWidgets[key] = cards.filter(function(c) { return c.id !== cardId; });
+  savePublishState();
+  var el = document.getElementById('pp-card-' + cardId);
+  if (el) el.remove();
+  showToast('Card removed');
+}
+
+function ppRestoreCards() {
+  [0,1,2,3,4,5,6,7,8].forEach(function(pi) {
+    var key = 'pp_cards_' + pi;
+    var cards = publishedWidgets[key] || [];
+    cards.forEach(function(card) { ppRenderCard(pi, card); });
+  });
+}
+
 </script>
 </div><!-- /app -->
 </body>
