@@ -4065,7 +4065,7 @@ if (urlMode === 'ehw') {
   document.getElementById('evalModeBtn').style.display = 'none';
 } else if (urlMode === 'village') {
   setMode('residents');
-  // Hide mode switcher permanently via CSS (also done via JS for belt+suspenders)
+  // Hide mode switcher
   var smEl = document.querySelector('.sidebar-mode'); if(smEl) smEl.style.display = 'none';
   document.body.classList.add('hide-eval');
   // Hide evalNav, show residentsNav
@@ -4077,20 +4077,9 @@ if (urlMode === 'ehw') {
   // Scroll container
   var ca = document.getElementById('mainContentArea');
   if (ca) { ca.style.overflowY = 'scroll'; ca.style.maxHeight = 'calc(100vh - 60px)'; }
-  // After publish state loads, re-render timeline, apply default activity and nav
-  setTimeout(function() {
-    renderTimeline();
-    if (activeActivityId) applyActiveActivity(activeActivityId, false);
-    // Apply correct visibility to nav items
-    ACTIVITIES.forEach(function(act) {
-      var key = 'act-' + act.num + '-visible';
-      var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
-      document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
-        if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + act.num + "'"))
-          item.style.display = visible ? '' : 'none';
-      });
-    });
-  }, 400);
+  // Hide village content until Drive state is applied — prevents flash of wrong state
+  var vv = document.getElementById('view-village');
+  if (vv) vv.style.opacity = '0';
 } else if (urlMode === 'eval') {
   setMode('eval');
 }
@@ -4266,6 +4255,28 @@ function _applyPublishedState() {
   });
 
   restoreMeetingData();
+
+  // If on village URL, reveal content now that state is correct and scroll to top
+  if (typeof urlMode !== 'undefined' && urlMode === 'village') {
+    var vv = document.getElementById('view-village');
+    if (vv) {
+      vv.style.opacity = '';
+      // Scroll to very top so default activity is at top of page
+      var ca2 = document.getElementById('mainContentArea');
+      if (ca2) ca2.scrollTop = 0;
+      window.scrollTo(0, 0);
+      // Re-render timeline and update nav visibility
+      renderTimeline();
+      ACTIVITIES.forEach(function(act) {
+        var key = 'act-' + act.num + '-visible';
+        var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
+        document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
+          if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + act.num + "'"))
+            item.style.display = visible ? '' : 'none';
+        });
+      });
+    }
+  }
 
   // Restore active activity
   var savedAct = publishedWidgets['activeActivity'];
@@ -5272,6 +5283,11 @@ function applyActiveActivity(actNum, silent) {
     setTimeout(function() {
       pvScrollTo(document.getElementById(targetId), true);
     }, 200);
+  } else {
+    // Silent apply — scroll container to top so default activity appears at top
+    var ca3 = document.getElementById('mainContentArea');
+    if (ca3) ca3.scrollTop = 0;
+    window.scrollTo(0, 0);
   }
   // Update button states
   document.querySelectorAll('.act-link-btn').forEach(function(b) {
@@ -5690,17 +5706,13 @@ function _removeHiddenBadge(actNum) {
 }
 
 function _restoreActivityVisibility() {
-  var needsSave = false;
   ACTIVITIES.forEach(function(act) {
     var key = 'act-' + act.num + '-visible';
-    if (!(key in publishedWidgets)) {
-      // Key not in Drive — write default explicitly so it persists
-      publishedWidgets[key] = act.defaultVisible;
-      needsSave = true;
-    }
-    _applyActivityVisibility(act.num, publishedWidgets[key]);
+    // Use Drive/localStorage value if present, otherwise use defaultVisible
+    // Do NOT write back to Drive — that would override intentional changes
+    var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
+    _applyActivityVisibility(act.num, visible);
   });
-  if (needsSave) savePublishState();
 }
 
 function loadPhotovoiceGalleries() {
@@ -6065,5 +6077,6 @@ function abCopyOutput() {
   });
 }
 </script>
+</div><!-- /app -->
 </body>
 </html>
