@@ -80,6 +80,7 @@
   .view.active { display: block; position: relative; max-width: 100%; }
   .eval-only { display: inline-block; }
   body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
+  body.hide-eval .sidebar-mode { display: none !important; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
   /* True village URL only: hide unpublished themes from residents */
   body.mode-residents.hide-eval .themes-panel-unpublished,
@@ -911,6 +912,7 @@
       </div>
 
       <div id="view-guide" class="view">
+
         <!-- Header -->
         <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
           <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
@@ -919,159 +921,163 @@
           <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">How this platform is structured, what each page is for, and how to use it.</div>
         </div>
 
-        <!-- What is EvalCommons -->
-        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--vip-midnight);">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">What is VIPIlluminate?</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px;">VIPIlluminate is the evaluation workspace for the Buckeye EcoVillage Developmental Evaluation, built and managed by Verge Impact Partners. It is a single platform with three distinct pages, each serving a different audience and purpose.</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="padding:10px 14px;background:var(--paper-mid);border-radius:8px;display:flex;gap:12px;align-items:flex-start;">
-              <span style="background:var(--vip-midnight);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">Evaluator</span>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">The full workspace for the evaluation team. Manage data collection, run AI sensemaking, track fidelity, and control what residents see. Only accessible to VIP team members.</div>
-            </div>
-            <div style="padding:10px 14px;background:var(--paper-mid);border-radius:8px;display:flex;gap:12px;align-items:flex-start;">
-              <span style="background:var(--vip-magenta);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">EHW</span>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">A shared page for EVB partners and EHW team members. Shows evaluation aims, learning questions, and sprint progress. Read-only — no editing or publishing from this page.</div>
-            </div>
-            <div style="padding:10px 14px;background:var(--paper-mid);border-radius:8px;display:flex;gap:12px;align-items:flex-start;">
-              <span style="background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;margin-top:2px;">Village</span>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">A resident-facing record of the evaluation in progress. Shows the meeting timeline, BAR/AAR activity records, and emerging themes. Content only appears here when an evaluator explicitly publishes it.</div>
-            </div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- What is VIPIlluminate -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">What is VIPIlluminate?</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0;">VIPIlluminate is the evaluation workspace for the Buckeye EcoVillage Developmental Evaluation, built and managed by Verge Impact Partners. It is a single HTML file with three distinct access modes, each serving a different audience and purpose.</p>
           </div>
-        </div>
 
-        <!-- Three URLs -->
-        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--vip-blue);">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Three URLs, three audiences</div>
-          <div style="display:flex;flex-direction:column;gap:12px;">
-
-            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-              <div style="background:var(--vip-midnight);color:white;padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Evaluator — <span style="font-family:monospace;font-weight:400;font-size:11px;"><a href="https://buckeye-eval.netlify.app" target="_blank" style="color:rgba(255,255,255,0.7);">buckeye-eval.netlify.app</a></span></div>
-              <div style="padding:12px 14px;">
-                <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;">Full evaluator workspace. All 14 views available. Publish controls visible throughout.</div>
-                <div style="font-size:12px;font-weight:600;color:var(--vip-midnight);margin-bottom:4px;">Publish features available:</div>
-                <ul style="margin:0;padding-left:18px;font-size:12px;color:var(--ink-soft);line-height:1.8;">
-                  <li><strong>Publish to EHW</strong> — pushes learning widgets (title, learning questions, fidelity tracker) to the EHW page</li>
-                  <li><strong>Set as default</strong> — controls which Village activity opens automatically when residents arrive</li>
-                  <li><strong>Publish to Village</strong> — makes emerging themes visible on the Village page. Once published, stays published permanently</li>
-                </ul>
+          <!-- Three modes -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;">Three modes, three audiences</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="padding:12px 16px;border-radius:10px;background:var(--vip-blue-pale);border:1px solid var(--vip-blue-light);">
+                <div style="font-size:13px;font-weight:700;color:var(--vip-blue);margin-bottom:4px;">Evaluator</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">The full workspace for the evaluation team. Includes Project Planning, Village Experience, data collection views, AI sensemaking, and fidelity tracking. Controls what residents see. Only accessible to VIP team members.</div>
               </div>
-            </div>
-
-            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-              <div style="background:var(--vip-magenta);color:white;padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">EHW — <span style="font-family:monospace;font-weight:400;font-size:11px;"><a href="https://buckeye-eval.netlify.app?mode=ehw" target="_blank" style="color:rgba(255,255,255,0.7);">buckeye-eval.netlify.app?mode=ehw</a></span></div>
-              <div style="padding:12px 14px;">
-                <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;">Shared view for EVB partners and EHW team. Shows published learning content and sprint progress. Includes a button to switch to the Village page. Read-only — no publish controls.</div>
+              <div style="padding:12px 16px;border-radius:10px;background:var(--vip-magenta-pale);border:1px solid rgba(158,31,99,0.15);">
+                <div style="font-size:13px;font-weight:700;color:var(--vip-magenta);margin-bottom:4px;">EHW</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">A shared page for EVB partners and EHW team members. Shows evaluation aims, learning questions, and sprint progress. Read-only — no editing or publishing.</div>
               </div>
-            </div>
-
-            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-              <div style="background:var(--vip-blue);color:white;padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">Village — <span style="font-family:monospace;font-weight:400;font-size:11px;"><a href="https://buckeye-eval.netlify.app?mode=village" target="_blank" style="color:rgba(255,255,255,0.7);">buckeye-eval.netlify.app?mode=village</a></span></div>
-              <div style="padding:12px 14px;">
-                <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;">Resident-facing page. Shows the meeting timeline, activity records (BAR/AAR), and emerging themes when published. No evaluator controls visible. Always opens with the default activity set by the evaluator.</div>
-                <div style="font-size:12px;font-weight:600;color:var(--vip-blue);margin-bottom:4px;">Set as default:</div>
-                <div style="font-size:12px;color:var(--ink-soft);line-height:1.7;">Each activity has a <strong>Set as default</strong> button in its header (evaluator view only). Clicking it saves to Drive — when any resident opens the Village link, that activity opens automatically and all others collapse.</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Templates -->
-        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--vip-orange);">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-orange);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Templates</div>
-
-          <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Activity template (Village page)</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;">Every activity on the Village page follows the same four-section structure:</div>
-          <ol style="margin:0 0 14px;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:1.9;">
-            <li><strong>Header bar</strong> — activity name, subtitle, Set as default button, collapse toggle</li>
-            <li><strong>Blue-pale banner</strong> — framing question + any context cards (e.g. EVB Way)</li>
-            <li><strong>White content area</strong> — BAR → action bubble → AAR, horizontally scrollable</li>
-            <li><strong>Magenta themes panel</strong> — emerging themes, hidden from residents until published</li>
-          </ol>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px;">To add a new activity, say <strong>"new BAR/AAR"</strong> to Claude — you'll be prompted for the framing question, subcategories, and content for each BAR question before anything is built.</div>
-
-          <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Learning widget template (EHW page)</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;">Learning widgets are the core unit of the evaluator workspace. Each has three sections:</div>
-          <ol style="margin:0 0 14px;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:1.9;">
-            <li><strong>What we are testing</strong> — the learning question or hypothesis</li>
-            <li><strong>How we are testing it</strong> — the embedded data collection action</li>
-            <li><strong>What we are learning</strong> — findings as they emerge</li>
-          </ol>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Published widgets appear on the EHW page in the same structure. Unpublishing removes them immediately.</div>
-        </div>
-
-        <!-- Color system -->
-        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--vip-midnight);">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">Color system</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:12px;">Colors are used consistently across the platform to signal function, not decoration. When adding new elements, use this as a guide:</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="padding:10px 12px;background:var(--vip-blue-pale);border-left:3px solid var(--vip-blue);border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:var(--vip-blue);margin-bottom:3px;">Blue</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Process, structure, navigation, meeting timeline</div>
-            </div>
-            <div style="padding:10px 12px;background:var(--vip-magenta-pale);border-left:3px solid var(--vip-magenta);border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:var(--vip-magenta);margin-bottom:3px;">Magenta</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Learning — widgets, questions, findings, emerging themes</div>
-            </div>
-            <div style="padding:10px 12px;background:var(--vip-orange-pale);border-left:3px solid var(--vip-orange);border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:var(--vip-orange);margin-bottom:3px;">Orange</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Action — data collection, BAR/AAR activity headers</div>
-            </div>
-            <div style="padding:10px 12px;background:#ece9e2;border-left:3px solid var(--vip-midnight-soft);border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:var(--vip-midnight-soft);margin-bottom:3px;">Midnight</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Sensemaking — coding, AI analysis, activity structure</div>
-            </div>
-            <div style="padding:10px 12px;background:#e8f8f0;border-left:3px solid #1a6b3e;border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:#1a6b3e;margin-bottom:3px;">Green</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Completion — done meetings, published states</div>
-            </div>
-            <div style="padding:10px 12px;background:#fffbf0;border-left:3px solid #f5a623;border-radius:6px;">
-              <div style="font-size:11px;font-weight:700;color:#f5a623;margin-bottom:3px;">Amber</div>
-              <div style="font-size:12px;color:var(--ink-soft);">Up next — upcoming meetings, pending states</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Current build status -->
-        <div style="background:var(--paper-mid);border-radius:10px;padding:16px 18px;margin-bottom:16px;">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Current build status</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px;">The platform is live at <a href="https://buckeye-eval.netlify.app" target="_blank" style="color:var(--vip-blue);">buckeye-eval.netlify.app</a>. Data syncs to Google Drive via César's account — publish state, fidelity assessments, and stories are shared across all evaluator devices. The voice story widget and AI Sensemaking require HTTPS, which Netlify provides automatically.</div>
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border-radius:8px;border:1px solid var(--border);">
-            <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:12px;font-weight:700;color:#1a6b3e;">● Drive</span>
-                <span style="font-size:12px;color:var(--ink-soft);">Data syncing to Google Drive — all evaluators see the same state</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:12px;font-weight:700;color:var(--vip-midnight-muted);">○ Local</span>
-                <span style="font-size:12px;color:var(--ink-soft);">Drive temporarily unavailable — data saved locally and will sync when reconnected</span>
+              <div style="padding:12px 16px;border-radius:10px;background:#FEF8EC;border:1px solid var(--vip-amber-light);">
+                <div style="font-size:13px;font-weight:700;color:var(--vip-amber);margin-bottom:4px;">Village</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">A resident-facing record of the evaluation in progress. Shows the meeting timeline, activity records, and emerging themes. Content only appears here when explicitly published. Always opens to the default activity set by the evaluator.</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- How to update -->
-        <div class="card" style="margin-bottom:16px;border-left:4px solid var(--vip-midnight);">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">How to update the platform</div>
-          <div style="font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:12px;">The platform is a single HTML file deployed via GitHub and Netlify. To update:</div>
-          <ol style="margin:0 0 14px;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:2;">
-            <li>Make changes with Claude — share the current file and describe what you need</li>
-            <li>Download the updated file from Claude</li>
-            <li>Go to <strong>github.com</strong> → <strong>buckeye-evalcommons</strong> → <strong>index.html</strong></li>
-            <li>Click the pencil icon → select all (<strong>Cmd+A</strong>) → paste the new file (<strong>Cmd+V</strong>)</li>
-            <li>Scroll down and click <strong>Commit changes</strong></li>
-            <li>Netlify auto-deploys within 60 seconds</li>
-          </ol>
-          <div style="padding:10px 12px;background:var(--vip-blue-pale);border-radius:8px;font-size:12px;color:var(--ink-soft);line-height:1.7;"><strong style="color:var(--vip-blue);">Village page continuity.</strong> Before uploading any update, confirm that changes to the Village page are intentional. Published content stays published across deploys — the only way to remove it is to explicitly unpublish.</div>
-          <div style="margin-top:10px;padding:10px 12px;background:var(--paper-mid);border-radius:8px;">
-            <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Tip — continuity across sessions</div>
-            <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Claude remembers the platform's history, structure, and your preferences across conversations. If starting a new chat, mention this is the VIPIlluminate platform for Buckeye EcoVillage DE and share the current file — Claude will pick up right where you left off.</div>
+          <!-- URLs -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;">Three URLs, three audiences</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+              <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);">Evaluator</span> &nbsp;—&nbsp;
+                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/</code>
+                <div style="color:var(--vip-midnight-muted);margin-top:4px;">Full workspace. All views available. Village Experience and publish controls visible.</div>
+              </div>
+              <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);">EHW</span> &nbsp;—&nbsp;
+                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/?mode=ehw</code>
+                <div style="color:var(--vip-midnight-muted);margin-top:4px;">Shared view for EVB partners. Shows published learning content. Read-only.</div>
+              </div>
+              <div style="padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);">Village</span> &nbsp;—&nbsp;
+                <code style="font-size:12px;color:var(--vip-blue);">vergeimpactpartners.github.io/buckeye-eval/?mode=village</code>
+                <div style="color:var(--vip-midnight-muted);margin-top:4px;">Resident-facing page. No evaluator controls visible. Opens to the default activity automatically.</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Evaluator nav -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;">Evaluator navigation</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Project Planning</span>
+                <span style="color:var(--vip-midnight-soft);">Sprint timeline, phase steps, and process documentation.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Village Experience</span>
+                <span style="color:var(--vip-midnight-soft);">Control panel for the Village page. Set the meeting timeline, choose the default activity, control which activities are visible to residents, publish/unpublish emerging themes, and use the Activity Builder to create new content with AI assistance.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Data Collection</span>
+                <span style="color:var(--vip-midnight-soft);">Overview, Stories, Photovoice, Survey &amp; forms, Key informant notes, Reflection logs.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
+                <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Sensemaking</span>
+                <span style="color:var(--vip-midnight-soft);">Coding studio, Theme map, Fidelity tracker, AI sensemaking.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;">
+                <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Platform Guide</span>
+                <span style="color:var(--vip-midnight-soft);">This page.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Village Experience -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Village Experience — control panel</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">All controls for the resident-facing page live here. Never need to go to the Village page itself to manage it.</p>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Meeting Timeline</span> — Set and advance the current meeting. Edit and advance using the ✏ Edit button on the Up Next meeting.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activities table</span> — Three columns per activity: Default (which activity opens first for residents), Visibility (Published/Hidden), Themes (Unpublished/✓ Published). Changes save to Drive immediately.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity Builder</span> — Build new BAR/AAR or Photovoice activities, add AAR content to existing activities, or fill in emerging themes — using AI synthesis from a transcript or Google Doc, or by typing themes directly.</div>
+            </div>
+          </div>
+
+          <!-- Activity types -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;">Activity types</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="padding:12px 16px;border-radius:10px;background:var(--vip-blue-pale);border-left:4px solid var(--vip-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--vip-blue);margin-bottom:4px;">BAR / AAR — blue header</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">Data collection activities with a Before Action Review and After Action Review structure. Four sections: framing question, role pills, BAR columns (horizontally scrollable), action bubble, AAR, and emerging themes panel.</div>
+              </div>
+              <div style="padding:12px 16px;border-radius:10px;background:#FEF8EC;border-left:4px solid var(--vip-amber);">
+                <div style="font-size:13px;font-weight:700;color:var(--vip-amber);margin-bottom:4px;">Photovoice — amber header</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">Resident submission activities. Residents submit photos, videos, written stories, or audio recordings. Each submission includes a theme tag and description. Submissions appear in a horizontal gallery and are saved to Google Drive. Evaluator can add emerging themes to these activities as well.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Publish system -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Publish system</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity visibility</span> — Toggle Published/Hidden per activity in the Village Experience table. Hidden activities are invisible to residents on the Village URL. In evaluator Village mode they appear dimmed with a "Publish to Village" button.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Emerging themes</span> — Each activity has a magenta themes panel. Toggle Unpublished/Published in the Village Experience table, or use the "Publish to Village" button on the panel itself. Unpublished themes are hidden from residents; visible to evaluators at 50% opacity.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Default activity</span> — The activity residents land on when opening the Village link. Set in the Village Experience table. Persists to Drive.</div>
+            </div>
+          </div>
+
+          <!-- Color system -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;">Color system</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:var(--vip-blue);flex-shrink:0;"></span><span><strong>Blue</strong> — process, navigation, BAR/AAR activity headers</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:var(--vip-magenta);flex-shrink:0;"></span><span><strong>Magenta</strong> — learning, themes, sensemaking</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:var(--vip-amber);flex-shrink:0;"></span><span><strong>Amber</strong> — Photovoice activities, up next</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:var(--vip-midnight);flex-shrink:0;"></span><span><strong>Midnight</strong> — sensemaking, coding, AI</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:#1a6b3e;flex-shrink:0;"></span><span><strong>Green</strong> — completion, published states</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);border-radius:8px;"><span style="width:12px;height:12px;border-radius:50%;background:var(--vip-blue-light);flex-shrink:0;"></span><span><strong>Blue-pale</strong> — structure, framing sections</span></div>
+            </div>
+          </div>
+
+          <!-- Drive sync -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Drive sync</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 10px;">Data syncs to Google Drive via César's <code>vergeimpactpartners.com</code> account through a Google Apps Script. The following are synced across all evaluator devices:</p>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Publish state — activity visibility, default activity, theme publish status</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Photovoice submissions — saved to a Google Sheet with links to media files in Drive</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Fidelity assessments, stories, reflections, KII notes</div>
+            </div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;"><span style="color:#1a6b3e;font-weight:600;">● Drive</span> — Data syncing to Google Drive. All evaluators see the same state.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="color:var(--vip-midnight-muted);font-weight:600;">○ Local retry</span> — Drive temporarily unavailable. Data saved locally. Click retry to reconnect.</div>
+            </div>
+          </div>
+
+          <!-- How to update -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">How to update the platform</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The platform is a single HTML file deployed via GitHub Pages (managed by César under the <code>vergeimpactpartners</code> org).</p>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span><span style="color:var(--vip-midnight-soft);">Make changes with Claude — share the current file and describe what you need</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span><span style="color:var(--vip-midnight-soft);">Download the updated file from Claude</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span><span style="color:var(--vip-midnight-soft);">Go to <code>github.com → vergeimpactpartners → buckeye-eval → index.html</code></span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span><span style="color:var(--vip-midnight-soft);">Click the pencil icon → Select all (Cmd+A) → Paste the new file (Cmd+V) → Commit changes</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">5</span><span style="color:var(--vip-midnight-soft);">GitHub Pages auto-deploys within 60 seconds</span></div>
+            </div>
+            <div style="margin-top:12px;padding:10px 14px;background:var(--vip-blue-pale);border-radius:8px;font-size:13px;color:var(--vip-midnight-soft);border:1px solid var(--vip-blue-light);"><strong>Tip — continuity across sessions:</strong> Claude remembers the platform's history and structure. If starting a new chat, mention this is the VIPIlluminate platform for Buckeye EcoVillage DE and share the current file — Claude will pick up right where you left off.</div>
+          </div>
+
         </div>
 
-      </div>
-
-
+      
       <div id="view-overview" class="view">
 <div class="phase-strip">
           <div class="phase-card" onclick="activatePhase(this, 'Sprint 1 · Set up &amp; Design')"><div class="phase-num">Sprint 1</div><div class="phase-title">Set up &amp; Design</div></div>
@@ -1900,7 +1906,7 @@
 
 <!-- Activity 2: Building the Village -->
         <div id="res-act-2" style="padding:0 28px 28px;">
-          <div onclick="toggleResActivity('res-act-2')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-midnight);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">
+          <div onclick="toggleResActivity('res-act-2')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-blue);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">
             <div style="display:flex;flex-direction:column;gap:3px;">
               <div style="font-size:15px;font-weight:700;">Data Collection: Group and Individual Roles in the Village</div>
               <div style="font-size:11px;opacity:0.8;">Before Action Review + After Action Review</div>
@@ -2903,6 +2909,10 @@ function showView(name, navEl) {
     // Remove active from ALL nav items across all groups
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     navEl.classList.add('active');
+  }
+  // Re-render timeline when navigating to views that contain it
+  if (name === 'village-experience' || name === 'village') {
+    setTimeout(function() { if (typeof renderTimeline === 'function') renderTimeline(); }, 50);
   }
 }
 
@@ -4055,13 +4065,28 @@ if (urlMode === 'ehw') {
   document.getElementById('evalModeBtn').style.display = 'none';
 } else if (urlMode === 'village') {
   setMode('residents');
-  document.querySelector('.sidebar-mode').style.display = 'none';
+  var smEl = document.querySelector('.sidebar-mode'); if(smEl) smEl.style.display = 'none';
   document.body.classList.add('hide-eval');
   var ca = document.getElementById('mainContentArea');
   if (ca) {
     ca.style.overflowY = 'scroll';
     ca.style.maxHeight = 'calc(100vh - 60px)';
   }
+  // Re-render timeline and nav after mode switch
+  setTimeout(function() {
+    renderTimeline();
+    // Re-apply default activity now that view-village is active
+    if (activeActivityId) applyActiveActivity(activeActivityId, false);
+    // Ensure nav items match publish state
+    ACTIVITIES.forEach(function(act) {
+      var key = 'act-' + act.num + '-visible';
+      var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
+      document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
+        if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + act.num + "'"))
+          item.style.display = visible ? '' : 'none';
+      });
+    });
+  }, 300);
 } else if (urlMode === 'eval') {
   setMode('eval');
 }
@@ -4244,9 +4269,22 @@ function _applyPublishedState() {
     activeActivityId = savedAct;
     // Always pre-apply silently so state is ready when Village mode is entered
     applyActiveActivity(savedAct, true);
-    // Update VE default button state
-    var btn = document.getElementById('ve-default-btn-' + savedAct);
-    if (btn) { btn.innerHTML = '✓ Default activity'; btn.style.background = 'rgba(255,255,255,0.35)'; }
+    // Update VE default button state — reset all then highlight active
+    [1,2,3,4].forEach(function(n) {
+      var b = document.getElementById('ve-default-btn-' + n);
+      if (!b) return;
+      if (String(n) === String(savedAct)) {
+        b.innerHTML = '&#10003; Default';
+        b.style.background = 'var(--vip-blue)';
+        b.style.borderColor = 'var(--vip-blue)';
+        b.style.color = 'white';
+      } else {
+        b.textContent = 'Set as default';
+        b.style.background = 'white';
+        b.style.borderColor = 'var(--border)';
+        b.style.color = 'var(--vip-midnight-muted)';
+      }
+    });
   }
   if (publishedWidgets['titleWidget']) {
     var w = document.getElementById('comm-title-widget');
@@ -5648,11 +5686,17 @@ function _removeHiddenBadge(actNum) {
 }
 
 function _restoreActivityVisibility() {
+  var needsSave = false;
   ACTIVITIES.forEach(function(act) {
     var key = 'act-' + act.num + '-visible';
-    var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
-    _applyActivityVisibility(act.num, visible);
+    if (!(key in publishedWidgets)) {
+      // Key not in Drive — write default explicitly so it persists
+      publishedWidgets[key] = act.defaultVisible;
+      needsSave = true;
+    }
+    _applyActivityVisibility(act.num, publishedWidgets[key]);
   });
+  if (needsSave) savePublishState();
 }
 
 function loadPhotovoiceGalleries() {
