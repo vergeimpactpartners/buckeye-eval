@@ -5207,12 +5207,15 @@ function scrollToVillageTop() {
 function pvScrollTo(el, smooth) {
   if (!el) return;
   var container = document.getElementById('mainContentArea');
-  var isMobile = !container || getComputedStyle(container).overflowY !== 'auto';
-  if (isMobile) {
+  // If container has overflow set (scroll or auto), use it directly
+  // Otherwise fall back to window scroll (mobile)
+  var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
+  var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
+  if (useContainer) {
+    container.scrollTo({ top: el.offsetTop - 20, behavior: smooth ? 'smooth' : 'instant' });
+  } else {
     var rect = el.getBoundingClientRect();
     window.scrollTo({ top: window.scrollY + rect.top - 20, behavior: smooth ? 'smooth' : 'instant' });
-  } else {
-    container.scrollTo({ top: el.offsetTop - 20, behavior: smooth ? 'smooth' : 'instant' });
   }
 }
 
