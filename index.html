@@ -4262,9 +4262,7 @@ function _applyPublishedState() {
     if (vv) {
       vv.style.opacity = '';
       // Scroll to very top so default activity is at top of page
-      var ca2 = document.getElementById('mainContentArea');
-      if (ca2) ca2.scrollTop = 0;
-      window.scrollTo(0, 0);
+      // Scroll handled by applyActiveActivity
       // Re-render timeline and update nav visibility
       renderTimeline();
       ACTIVITIES.forEach(function(act) {
@@ -5284,10 +5282,10 @@ function applyActiveActivity(actNum, silent) {
       pvScrollTo(document.getElementById(targetId), true);
     }, 200);
   } else {
-    // Silent apply — scroll container to top so default activity appears at top
-    var ca3 = document.getElementById('mainContentArea');
-    if (ca3) ca3.scrollTop = 0;
-    window.scrollTo(0, 0);
+    // Silent apply — scroll instantly to default activity card (no animation)
+    setTimeout(function() {
+      pvScrollTo(document.getElementById(targetId), false);
+    }, 50);
   }
   // Update button states
   document.querySelectorAll('.act-link-btn').forEach(function(b) {
