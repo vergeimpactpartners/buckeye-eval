@@ -81,6 +81,7 @@
   .eval-only { display: inline-block; }
   body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
   body.hide-eval .sidebar-mode { display: none !important; }
+  body.hide-eval #view-village { opacity: 0; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
   /* True village URL only: hide unpublished themes from residents */
   body.mode-residents.hide-eval .themes-panel-unpublished,
@@ -4119,7 +4120,6 @@ if (urlMode === 'ehw') {
   if (ca) { ca.style.overflowY = 'scroll'; ca.style.maxHeight = 'calc(100vh - 60px)'; }
   // Hide village content until Drive state is applied — prevents flash of wrong state
   var vv = document.getElementById('view-village');
-  if (vv) vv.style.opacity = '0';
 } else if (urlMode === 'eval') {
   setMode('eval');
 }
