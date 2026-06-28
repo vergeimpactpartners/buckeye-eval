@@ -2949,7 +2949,6 @@ function setMode(mode) {
     // Apply activity state BEFORE showing the view to avoid visible flash
     if (activeActivityId) applyActiveActivity(activeActivityId, true);
     showView('village', null);
-    if (typeof _restoreActivityVisibility === 'function') _restoreActivityVisibility();
     var _pb3 = document.getElementById('phaseBadge'); if(_pb3) _pb3.style.display = 'none';
     var projCycle = document.querySelector('.proj-cycle'); if(projCycle) projCycle.style.display = 'none';
     document.getElementById('residentsNav').style.display = 'block';
@@ -4066,19 +4065,23 @@ if (urlMode === 'ehw') {
   document.getElementById('evalModeBtn').style.display = 'none';
 } else if (urlMode === 'village') {
   setMode('residents');
+  // Hide mode switcher permanently via CSS (also done via JS for belt+suspenders)
   var smEl = document.querySelector('.sidebar-mode'); if(smEl) smEl.style.display = 'none';
   document.body.classList.add('hide-eval');
+  // Hide evalNav, show residentsNav
+  var en = document.getElementById('evalNav'); if(en) en.style.display = 'none';
+  var rn = document.getElementById('residentsNav'); if(rn) rn.style.display = 'block';
+  // Set correct page title
+  var ptEl = document.getElementById('pageTitle');
+  if (ptEl) ptEl.innerHTML = '<span style="color:var(--vip-blue);font-weight:800;">Buckeye EcoVillage</span> <span style="color:var(--vip-midnight);font-weight:600;">Developmental Evaluation</span>';
+  // Scroll container
   var ca = document.getElementById('mainContentArea');
-  if (ca) {
-    ca.style.overflowY = 'scroll';
-    ca.style.maxHeight = 'calc(100vh - 60px)';
-  }
-  // Re-render timeline and nav after mode switch
+  if (ca) { ca.style.overflowY = 'scroll'; ca.style.maxHeight = 'calc(100vh - 60px)'; }
+  // After publish state loads, re-render timeline, apply default activity and nav
   setTimeout(function() {
     renderTimeline();
-    // Re-apply default activity now that view-village is active
     if (activeActivityId) applyActiveActivity(activeActivityId, false);
-    // Ensure nav items match publish state
+    // Apply correct visibility to nav items
     ACTIVITIES.forEach(function(act) {
       var key = 'act-' + act.num + '-visible';
       var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
@@ -4087,7 +4090,7 @@ if (urlMode === 'ehw') {
           item.style.display = visible ? '' : 'none';
       });
     });
-  }, 300);
+  }, 400);
 } else if (urlMode === 'eval') {
   setMode('eval');
 }
