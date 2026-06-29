@@ -90,6 +90,59 @@
   #view-village .themes-panel-unpublished { opacity: 0.5; }
   body.mode-residents.hide-eval #view-village .themes-panel-unpublished { display: none !important; }
 
+  /* INLINE EDITING — evaluator only */
+  body:not(.mode-village):not(.mode-residents) .inline-editable {
+    position: relative;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  body:not(.mode-village):not(.mode-residents) .inline-editable:hover {
+    background: rgba(24,144,186,0.08);
+    outline: 1.5px dashed var(--vip-blue);
+  }
+  body:not(.mode-village):not(.mode-residents) .inline-editable::after {
+    content: '✏️';
+    font-size: 10px;
+    margin-left: 5px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+  body:not(.mode-village):not(.mode-residents) .inline-editable:hover::after {
+    opacity: 1;
+  }
+  /* Edit popover */
+  #inline-edit-popover {
+    position: fixed;
+    z-index: 9999;
+    background: white;
+    border: 1.5px solid var(--vip-blue);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(15,35,40,0.18);
+    padding: 14px 16px;
+    min-width: 320px;
+    max-width: 480px;
+    display: none;
+  }
+  #inline-edit-popover textarea, #inline-edit-popover input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: var(--sans);
+    resize: vertical;
+    margin-top: 6px;
+    color: var(--vip-midnight);
+    line-height: 1.6;
+  }
+  #inline-edit-popover textarea:focus, #inline-edit-popover input:focus {
+    outline: none;
+    border-color: var(--vip-blue);
+  }
+
 
   /* PHASE STRIP */
   .phase-strip { display: flex; gap: 10px; margin-bottom: 28px; }
@@ -417,11 +470,9 @@
       <div class="nav-item" data-color="blue" onclick="showView('guide', this)"><span class="nav-dot" style="background:var(--vip-blue);"></span> Platform Guide</div>
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-orange);">Data collection</div>
       <div class="nav-item" data-color="orange" onclick="showView('overview', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Overview</span></div>
-      <div class="nav-item" data-color="orange" onclick="showView('stories', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Stories</span></div>
-      <div class="nav-item" data-color="orange" onclick="showView('photos', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Photovoice</span></div>
-      <div class="nav-item" data-color="orange" onclick="showView('survey', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Survey &amp; forms</span></div>
-      <div class="nav-item" data-color="orange" onclick="showView('kii', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Key informant notes</span></div>
-      <div class="nav-item" data-color="orange" onclick="showView('reflections', this)"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Reflection logs</span></div>
+      <div id="dc-nav-items">
+        <!-- Populated dynamically from ACTIVITIES (photovoice only) -->
+      </div>
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-midnight);">Sensemaking</div>
       <div class="nav-item" data-color="midnight" onclick="showView('coding', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Coding studio</span></div>
       <div class="nav-item" data-color="midnight" onclick="showView('themes', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Theme map</span></div>
@@ -502,53 +553,27 @@
     <!-- SPRINT PROGRESS BAR -->
     <div id="sprintProgressBarWrap" style="overflow:hidden;transition:none;"><div id="sprintProgressBar" style="background:var(--white);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:0;overflow:hidden;">
 
-      <!-- Sprint 1 -->
-      <div style="display:flex;align-items:center;gap:0;flex:1;">
-        <div style="font-size:10px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;">Sprint 1</div>
+      <!-- Sprint indicator (Sprint X of Y) -->
+      <div id="pb-sprint-indicator" style="font-size:10px;font-weight:700;color:var(--vip-midnight-muted);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:16px;display:none;">Sprint 1 of 1</div>
+
+      <!-- Active sprint steps (replaced dynamically) -->
+      <div id="pb-active-sprint" style="display:flex;align-items:center;gap:0;flex:1;">
+        <!-- Sprint 1 label + steps (default) -->
+        <div style="font-size:10px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;" id="pb-active-label">Sprint 1</div>
         <div style="display:flex;align-items:center;gap:0;flex:1;">
-          <!-- Step 1: DONE -->
           <div class="sprint-step sprint-step-done" id="pb-s1-step1" onclick="navigateToStep(1)" title="Step 1 · Set up &amp; Design" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
             <div style="width:100%;height:4px;background:#1a6b3e;border-radius:2px 0 0 2px;"></div>
             <div style="font-size:10px;font-weight:600;color:#1a6b3e;white-space:nowrap;">✓ Set up</div>
           </div>
-          <!-- Step 2: ACTIVE -->
           <div class="sprint-step sprint-step-active" id="pb-s1-step2" onclick="navigateToStep(2)" title="Step 2 · Learning Loop" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
             <div style="width:100%;height:4px;background:var(--vip-blue);border-radius:0;position:relative;"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--vip-blue);border:2px solid white;box-shadow:0 0 0 2px var(--vip-blue);"></div></div>
             <div style="font-size:10px;font-weight:700;color:var(--vip-blue);white-space:nowrap;">Learning Loop</div>
           </div>
-          <!-- Step 3: UPCOMING -->
           <div class="sprint-step sprint-step-upcoming" id="pb-s1-step3" onclick="navigateToStep(3)" title="Step 3 · Adapt &amp; Document" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
             <div style="width:100%;height:4px;background:var(--border);border-radius:0;"></div>
             <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Adapt</div>
           </div>
-          <!-- Step 4: UPCOMING -->
           <div class="sprint-step sprint-step-upcoming" id="pb-s1-step4" onclick="navigateToStep(4)" title="Step 4 · Close / Prep Next Sprint" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
-            <div style="width:100%;height:4px;background:var(--border);border-radius:0 2px 2px 0;"></div>
-            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Close</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Divider -->
-      <div style="width:1px;height:32px;background:var(--border);margin:0 16px;flex-shrink:0;"></div>
-
-      <!-- Sprint 2 -->
-      <div style="display:flex;align-items:center;gap:0;flex:1;">
-        <div style="font-size:10px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;">Sprint 2</div>
-        <div style="display:flex;align-items:center;gap:0;flex:1;opacity:0.4;">
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-            <div style="width:100%;height:4px;background:var(--border);border-radius:2px 0 0 2px;"></div>
-            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Set up</div>
-          </div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-            <div style="width:100%;height:4px;background:var(--border);"></div>
-            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Learning Loop</div>
-          </div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-            <div style="width:100%;height:4px;background:var(--border);"></div>
-            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Adapt</div>
-          </div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
             <div style="width:100%;height:4px;background:var(--border);border-radius:0 2px 2px 0;"></div>
             <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Close</div>
           </div>
@@ -883,68 +908,65 @@
           </div>
         </div>
         <!-- Sprint 2 -->
-        <div style="margin-bottom:28px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--vip-blue);">
-            <div style="font-size:18px;font-weight:800;color:var(--vip-midnight);">Sprint 2</div>
+        <div style="margin-bottom:28px;" id="pp-sprint2-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div>
+              <div style="font-size:18px;font-weight:800;color:var(--vip-midnight-muted);">Sprint 2</div>
+              <div id="sprint2-upcoming-label" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:3px;font-style:italic;">⏳ Upcoming</div>
+            </div>
             <div style="display:flex;align-items:center;gap:10px;">
               <div style="font-size:12px;color:var(--vip-midnight-muted);" id="sprint2-count">0/0 tasks complete</div>
               <div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="sprint2-bar" style="height:100%;width:0%;background:var(--vip-blue);border-radius:3px;transition:width 0.3s;"></div></div>
             </div>
           </div>
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div onclick="ppToggleStep('s2step1')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
-              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-              <div style="flex:1;">
-                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Set up & Design</div>
-                
-              </div>
-              <div id="pp-s2step1-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
-              <span id="pp-s2step1-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+          <!-- Launch Sprint 2 prompt — shown until launched -->
+          <div id="launch-sprint2-wrap" class="eval-only" style="margin-bottom:16px;padding:16px;background:var(--vip-blue-pale);border-radius:12px;border:1.5px solid var(--vip-blue-light);display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Ready to begin Sprint 2?</div>
+              <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:2px;">This will populate Sprint 2 with the same phase and task structure as Sprint 1 and switch the progress bar to Sprint 2.</div>
             </div>
-            <div id="pp-s2step1-body" style="padding:14px 16px;border-top:1px solid var(--border);">
-              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
-            </div>
+            <button onclick="ppLaunchSprint(2)" style="padding:8px 20px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;">Launch Sprint 2 →</button>
           </div>
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div onclick="ppToggleStep('s2step2')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
-              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-              <div style="flex:1;">
-                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Learning Loop</div>
-                
-              </div>
-              <div id="pp-s2step2-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
-              <span id="pp-s2step2-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+          <div style="border-bottom:2px solid var(--border);margin-bottom:16px;"></div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step1-wrap">
+            <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Set up & Design</div></div>
+              <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
-            <div id="pp-s2step2-body" style="padding:14px 16px;border-top:1px solid var(--border);">
-              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
-            </div>
+            <div id="pp-s2step1-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
           </div>
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div onclick="ppToggleStep('s2step3')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
-              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-              <div style="flex:1;">
-                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Adapt & Document</div>
-                
-              </div>
-              <div id="pp-s2step3-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
-              <span id="pp-s2step3-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step2-wrap">
+            <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Learning Loop</div></div>
+              <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
-            <div id="pp-s2step3-body" style="padding:14px 16px;border-top:1px solid var(--border);">
-              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
-            </div>
+            <div id="pp-s2step2-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
           </div>
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div onclick="ppToggleStep('s2step4')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">
-              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-              <div style="flex:1;">
-                <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Close / Prep Next Sprint</div>
-                
-              </div>
-              <div id="pp-s2step4-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>
-              <span id="pp-s2step4-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step3-wrap">
+            <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Adapt & Document</div></div>
+              <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
-            <div id="pp-s2step4-body" style="padding:14px 16px;border-top:1px solid var(--border);">
-              <div style="padding:10px 4px;font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Phases will be defined during sprint planning.</div>
+            <div id="pp-s2step3-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step4-wrap">
+            <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Close / Prep Next Sprint</div></div>
+              <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
+            </div>
+            <div id="pp-s2step4-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);">
+              <!-- Launch Sprint 3+ button — shown after sprint 2 is active -->
+              <div id="launch-sprint3-wrap" class="eval-only" style="display:none;padding:16px;background:var(--vip-blue-pale);border-radius:12px;border:1.5px solid var(--vip-blue-light);align-items:center;justify-content:space-between;gap:16px;">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Ready to begin the next learning loop?</div>
+                  <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:2px;">This will generate a new sprint with the same phase and task structure.</div>
+                </div>
+                <button id="launch-next-sprint-btn" onclick="ppLaunchNextSprint()" style="padding:8px 20px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;">Launch next loop →</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1120,261 +1142,22 @@
       </div><!-- /view-guide -->
 
       <div id="view-overview" class="view">
-<div class="phase-strip">
-          <div class="phase-card" onclick="activatePhase(this, 'Sprint 1 · Set up &amp; Design')"><div class="phase-num">Sprint 1</div><div class="phase-title">Set up &amp; Design</div></div>
-          <div class="phase-card active" onclick="activatePhase(this, 'Sprint 1 · Learning Loop')"><div class="phase-num">Sprint 1 · active</div><div class="phase-title">Learning Loop</div></div>
-          <div class="phase-card" onclick="activatePhase(this, 'Sprint 1 · Adapt &amp; Document')"><div class="phase-num">Sprint 1</div><div class="phase-title">Adapt &amp; Document</div></div>
-          <div class="phase-card" onclick="activatePhase(this, 'Sprint 1 · Close')"><div class="phase-num">Sprint 1</div><div class="phase-title">Close / Prep Next</div></div>
+        <!-- Header -->
+        <div style="background:var(--vip-orange);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Data Collection</div>
+          <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:6px;">Submissions Overview</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Resident submissions across all active data collection activities.</div>
         </div>
-
-        <div class="grid-3">
-          <div class="stat-card"><div class="stat-label">Stories collected</div><div class="stat-value" id="storyCount">0</div><div class="stat-sub">no entries yet</div></div>
-          <div class="stat-card"><div class="stat-label">Themes emerging</div><div class="stat-value">—</div><div class="stat-sub">none yet</div></div>
-          <div class="stat-card"><div class="stat-label">Data completeness</div><div class="stat-value">0%</div><div class="stat-sub">of cycle 1 targets</div></div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Recent stories <span class="badge badge-sage" id="storyBadge">0 collected</span></div>
-              <button class="btn" style="font-size:11px;padding:4px 10px" onclick="showView('stories', document.querySelector('[onclick*=stories]'))">View all</button>
-            </div>
-            <div id="storyList"><div class="empty-state"><div class="empty-state-title">No stories yet</div><div class="empty-state-sub">Add entries using the + Add entry button</div></div></div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Emerging themes <span class="badge badge-plum">AI assisted</span></div>
-            </div>
-            <div class="theme-row"><div class="theme-name">Belonging</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-blue)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Governance fluency</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-magenta)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Onboarding challenges</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-amber)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Relational trust</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-orange)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Sustainability commitment</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-amber)"></div></div><div class="theme-count">0</div></div>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Collection progress</div></div>
-            <div class="prog-row"><div class="prog-label">Community circles</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-blue)"></div></div><div class="prog-val">0/0</div></div>
-            <div class="prog-row"><div class="prog-label">Key informants</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-magenta)"></div></div><div class="prog-val">0/0</div></div>
-            <div class="prog-row"><div class="prog-label">Intake survey</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-blue)"></div></div><div class="prog-val">0/0</div></div>
-            <div class="prog-row"><div class="prog-label">Photovoice</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-orange)"></div></div><div class="prog-val">0/0</div></div>
-            <div class="prog-row"><div class="prog-label">Reflection logs</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-amber)"></div></div><div class="prog-val">0/0</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Latest AI synthesis <span class="badge badge-plum">Auto</span></div></div>
-            <div class="ai-panel">
-              <div class="ai-label"><span class="ai-dot"></span> Sensemaking · Cycle 1</div>
-              <div class="ai-text" id="overviewSynthesisStatic">No synthesis yet — add data entries and run AI sensemaking to generate insights.</div>
-            </div>
-          </div>
+        <!-- Activity cards — populated by dcBuildOverview() -->
+        <div id="dc-overview-cards" style="display:flex;flex-direction:column;gap:16px;">
+          <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">Loading activities…</div>
         </div>
       </div>
 
 
-      <div id="view-stories" class="view">
-<div class="section-header">
-          <div><div class="section-title">Stories</div><div class="section-sub">Narratives, quotes, and Village testimony</div></div>
-        </div>
-        <!-- ACTION WIDGET: Voice Story Collection (Stories page) -->
-        <!-- ACTION WIDGET: Voice Story Collection -->
-        <div style="background:var(--vip-orange-pale);border:1px solid var(--vip-orange-light);border-radius:10px;padding:16px;">
-        <!-- STORY WIDGET INTRO -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <div style="font-size:12px;font-weight:700;color:var(--vip-orange);text-transform:uppercase;letter-spacing:0.07em;">Voice Story Collection</div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span id="st-sw-publish-status" style="font-size:10px;font-weight:600;color:var(--vip-midnight-muted);"></span>
-            <button id="st-sw-publish-btn" onclick="toggleStoriesPagePublish()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1.5px solid var(--vip-orange);background:white;color:var(--vip-orange);cursor:pointer;transition:all 0.15s;">Publish to Village</button>
-          </div>
-        </div>
-        <div style="margin-bottom:18px;">
-          <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Your story matters here</div>
-          <div style="font-size:14px;color:var(--ink-soft);line-height:1.7;">Every story shared here helps us understand what's really happening in the Buckeye EcoVillage process — what's working, what's hard, and what matters most to the people living it. What you share stays confidential and is used only to strengthen this work.</div>
-        </div>
-         <!-- VOICE STORY WIDGET -->
-        <div id="st-storyWidget" style="background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;">
-           <!-- State: READY -->
-          <div id="st-sw-ready" style="padding:24px;text-align:center;">
-            <div style="width:64px;height:64px;border-radius:50%;background:var(--vip-magenta);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s;" onclick="startStoryPageVoice()" id="st-sw-start-btn" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="9" y="2" width="6" height="13" rx="3" fill="white"/>
-                <path d="M5 11C5 14.866 8.13401 18 12 18C15.866 18 19 14.866 19 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                <line x1="12" y1="18" x2="12" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                <line x1="9" y1="22" x2="15" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Ready when you are</div>
-            <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;">We'll ask you a few gentle questions.<br>Just speak naturally — there are no right or wrong answers.</div>
-          </div>
-           <!-- State: CONVERSATION (hidden initially) -->
-          <div id="st-sw-convo" style="display:none;">
-             <!-- Recording indicator bar -->
-            <div id="st-sw-rec-bar" style="background:var(--vip-magenta);padding:8px 16px;display:flex;align-items:center;gap:10px;">
-              <div id="st-sw-rec-dot" style="width:8px;height:8px;border-radius:50%;background:white;animation:recPulse 1.2s infinite;flex-shrink:0;"></div>
-              <span style="font-size:11px;font-weight:700;color:white;letter-spacing:0.06em;text-transform:uppercase;">Recording</span>
-              <span id="st-sw-timer" style="font-size:11px;color:rgba(255,255,255,0.8);margin-left:auto;font-variant-numeric:tabular-nums;">0:00</span>
-            </div>
-             <!-- Conversation area -->
-            <div style="padding:20px 20px 0;">
-              <!-- Question bubble -->
-              <div id="st-sw-question-bubble" style="background:var(--vip-blue-pale);border-radius:12px 12px 12px 3px;padding:14px 16px;margin-bottom:16px;max-width:85%;">
-                <div style="font-size:10px;color:var(--vip-blue);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">A question for you</div>
-                <div id="st-sw-question-text" style="font-size:15px;color:var(--vip-midnight);font-weight:600;line-height:1.5;"></div>
-              </div>
-               <!-- Live transcript -->
-              <div id="st-sw-transcript-area" style="min-height:60px;margin-bottom:16px;">
-                <div id="st-sw-transcript-text" style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-style:italic;padding:10px 12px;background:var(--paper-warm);border-radius:8px;min-height:48px;"></div>
-                <div id="st-sw-transcript-hint" style="font-size:11px;color:var(--vip-midnight-muted);margin-top:5px;text-align:center;">Take your time — we're listening whenever you're ready</div>
-              </div>
-            </div>
-             <!-- Controls -->
-            <div style="padding:0 20px 18px;display:flex;gap:10px;align-items:center;">
-              <button id="st-sw-next-btn" onclick="stVoiceNext()" style="flex:1;background:var(--vip-blue);color:white;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity 0.15s;" disabled>Continue ›</button>
-              <button onclick="stCancelVoice()" style="background:none;border:1px solid var(--border-strong);color:var(--ink-muted);border-radius:8px;padding:11px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">Cancel</button>
-            </div>
-          </div>
-           <!-- State: SAVED (hidden initially) -->
-          <div id="st-sw-saved" style="display:none;padding:28px;text-align:center;">
-            <div style="width:52px;height:52px;border-radius:50%;background:var(--vip-blue-pale);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#1890BA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">What a gift, <span id="st-sw-saved-name"></span> — thank you.</div>
-            <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:16px;">Your story has been saved and will help us better understand and strengthen the Buckeye EcoVillage work. We're glad you took the time.</div>
-            <button onclick="stResetVoice()" style="background:var(--vip-magenta);color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;">Share another</button>
-          </div>
-         </div>
-        <!-- end story widget -->
-        </div><!-- end action widget -->
-
-        <div class="card" id="stories-all">
-          <div id="allStoriesList">
-            <div class="empty-state">
-              <div class="empty-state-title">No stories yet</div>
-              <div class="empty-state-sub">Stories collected from the Village will appear here</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="view-photos" class="view">
-<div class="section-header">
-          <div><div class="section-title">Photovoice</div><div class="section-sub">Community-submitted images with captions</div></div>
-          <button class="btn btn-primary" onclick="openModal('photoModal')">+ Add photo</button>
-        </div>
-        <div class="card" style="margin-bottom:18px;">
-          <div style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6;">Photovoice invites Village members to document their lives through photography and use these images to tell stories, spark discussion, and inform decisions. Each photo submitted includes a caption and optional tags.</div>
-          <div class="upload-area" onclick="openModal('photoModal')">
-            <div class="upload-icon">📷</div>
-            <div class="upload-label">Upload a photo</div>
-            <div class="upload-sub">Add a caption, location, and tags — your image contributes to the collective story</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="view-survey" class="view">
-<div class="section-header">
-          <div><div class="section-title">Survey & forms</div><div class="section-sub">Structured data collection</div></div>
-          <button class="btn btn-primary" onclick="openModal('surveyModal')">+ New form</button>
-        </div>
-        <div class="grid-2">
-          <div class="card" style="border-left:3px solid var(--sage);">
-            <div class="card-header"><div class="card-title">Buckeye EcoVillage intake survey <span class="badge badge-sage">18 responses</span></div></div>
-            <div style="font-size:12px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6;">Baseline survey measuring residents' sense of belonging, readiness for shared governance, and sustainability values alignment. Currently in the field.</div>
-            <div class="prog-row"><div class="prog-label">Target: 24</div><div class="prog-track"><div class="prog-fill" style="width:0%;background:var(--vip-blue)"></div></div><div class="prog-val">88%</div></div>
-            <div style="display:flex;gap:8px;margin-top:12px;">
-              <button class="btn" style="font-size:11px;" onclick="showToast('Opening survey preview...')">Preview</button>
-              <button class="btn" style="font-size:11px;" onclick="showToast('Copying share link...')">Share link</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Create new form</div></div>
-            <div class="form-group"><label>Form title</label><input type="text" placeholder="e.g. Neighborhood wellness check-in"></div>
-            <div class="form-group"><label>Collection method</label><select><option>Intake survey (anonymous)</option><option>Named participant form</option><option>Post-meeting reflection</option></select></div>
-            <div style="display:flex;gap:8px;"><button class="btn btn-primary" onclick="showToast('Form builder coming soon!')">Build form</button></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="view-kii" class="view">
-<div class="section-header">
-          <div><div class="section-title">Key informant notes</div><div class="section-sub">Interview notes and field observations</div></div>
-          <button class="btn btn-primary" onclick="openModal('kiiModal')">+ Add notes</button>
-        </div>
-        <div class="card">
-          <div class="empty-state"><div class="empty-state-title">No notes yet</div><div class="empty-state-sub">Use the + Add notes button to log key informant interviews</div></div>
-        </div>
-      </div>
-
-      <div id="view-reflections" class="view">
-<div class="section-header">
-          <div><div class="section-title">Reflection logs</div><div class="section-sub">Evaluator field notes, observations, and developmental memos</div></div>
-          <button class="btn btn-primary" onclick="openModal('reflectionModal')">+ Add log</button>
-        </div>
-        <div class="card">
-          <div class="empty-state"><div class="empty-state-title">No logs yet</div><div class="empty-state-sub">Use the + Add log button to record field observations and reflections</div></div>
-        </div>
-      </div>
-
-      <div id="view-coding" class="view">
-<div class="section-header">
-          <div><div class="section-title">Coding studio</div><div class="section-sub">Apply codes to passages; edit, filter, and link to source entries</div></div>
-          <button class="btn btn-ai" id="aiSuggestBtn" onclick="aiSuggestCodes()">✦ AI suggest codes</button>
-        </div>
-
-        <!-- Code frame bar -->
-        <div class="card" style="margin-bottom:16px;padding:14px 16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div style="font-size:12px;font-weight:500;color:var(--ink-soft);">Code frame</div>
-            <button class="btn" style="font-size:11px;padding:4px 10px" onclick="openModal('codeFrameModal')">Edit frame</button>
-          </div>
-          <div id="codingToolbar" class="coding-toolbar"></div>
-        </div>
-
-        <div class="grid-2">
-          <!-- LEFT: Input -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Passage input</div>
-              <select id="sourceStorySelect" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--white);color:var(--ink-soft);max-width:160px;">
-                <option value="">— link to a story —</option>
-              </select>
-            </div>
-            <textarea id="codingInput" placeholder="Paste a story, quote, or field note here — then click codes to tag it, or use AI suggest..." style="min-height:130px;width:100%;margin-bottom:10px;"></textarea>
-
-            <div style="font-size:11px;color:var(--ink-muted);margin-bottom:8px;">Active codes: <span id="activeCodesDisplay" style="color:var(--plum);font-weight:500;">none</span></div>
-
-            <div id="aiSuggestionBox" style="display:none;background:var(--vip-magenta-pale);border:1px solid var(--vip-magenta-light);border-radius:8px;padding:10px 12px;margin-bottom:10px;">
-              <div style="font-size:10px;color:var(--vip-magenta);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">✦ AI suggested codes</div>
-              <div id="aiSuggestionList" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;"></div>
-              <div id="aiSuggestionReason" style="font-size:11px;color:var(--ink-soft);line-height:1.5;"></div>
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <button class="btn btn-ai" style="font-size:11px;padding:4px 10px;" onclick="acceptAISuggestions()">Accept all</button>
-                <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="dismissAISuggestion()">Dismiss</button>
-              </div>
-            </div>
-
-            <div style="display:flex;gap:8px;">
-              <button class="btn btn-primary" onclick="saveCode()">Save coded passage</button>
-              <button class="btn" onclick="clearCoding()">Clear</button>
-            </div>
-          </div>
-
-          <!-- RIGHT: Coded passages list -->
-          <div class="card" style="display:flex;flex-direction:column;">
-            <div class="card-header" style="flex-shrink:0;">
-              <div class="card-title">Coded passages <span class="badge badge-plum" id="codedCount">6 coded</span></div>
-              <div style="display:flex;gap:6px;align-items:center;">
-                <select id="filterCode" onchange="filterCoded()" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-strong);background:var(--white);color:var(--ink-soft);">
-                  <option value="">All codes</option>
-                </select>
-                <input type="text" id="searchCoded" placeholder="Search…" oninput="filterCoded()" style="font-size:11px;padding:4px 8px;width:90px;border-radius:6px;">
-              </div>
-            </div>
-            <div id="codedList" style="flex:1;overflow-y:auto;max-height:360px;"></div>
-          </div>
-        </div>
-      </div>
+      <!-- Per-activity data collection views injected here by dcInit() -->
+      <div id="dc-activity-views"></div>
 
       <div id="view-themes" class="view">
 <div class="section-header">
@@ -1652,6 +1435,8 @@
               <button id="ve-themes-btn-4" onclick="toggleThemesPublish('res-act-4')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
           </div>
+          <!-- Generated activities rows injected here -->
+          <div id="ve-generated-activity-rows" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;"></div>
         </div>
 
         <!-- Activity Builder -->
@@ -1684,6 +1469,10 @@
                 <div style="font-size:14px;margin-bottom:2px;">Fill themes box</div>
                 <div style="font-size:11px;opacity:0.6;font-weight:400;">Add emerging themes via AI or direct input</div>
               </button>
+              <button onclick="abSetMode('edit-existing')" id="ab-mode-edit-existing" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;grid-column:1/-1;">
+                <div style="font-size:14px;margin-bottom:2px;">✏️ Edit existing activity</div>
+                <div style="font-size:11px;opacity:0.6;font-weight:400;">Update BAR content, framing question, or action label — with AI or manual input</div>
+              </button>
             </div>
           </div>
 
@@ -1702,12 +1491,31 @@
                   <input type="text" id="ab-act-label" placeholder="e.g. Steering Committee Work" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
                 </div>
               </div>
-              <div>
+              <div style="margin-bottom:10px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Framing / learning question <span style="font-weight:400;font-style:italic;">(optional)</span></label>
                 <textarea id="ab-framing" rows="2" placeholder="e.g. Over the months of May and June, what would it take for us to successfully carry out our specific roles?" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
               </div>
+              <!-- Subcategories (shown only for new-bar) -->
+              <div id="ab-subcats-wrap" style="display:none;margin-top:4px;padding:14px;background:var(--vip-blue-pale);border-radius:10px;border:1px solid var(--vip-blue-light);">
+                <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">Does this activity have subcategories?
+                  <span style="font-weight:400;font-style:italic;color:var(--vip-midnight-muted);"> (e.g. EVB Ways of Working, Resident Roles)</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-bottom:10px;">
+                  <button onclick="abToggleSubcats(true)" id="ab-subcats-yes" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Yes</button>
+                  <button onclick="abToggleSubcats(false)" id="ab-subcats-no" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">No</button>
+                </div>
+                <div id="ab-subcats-fields" style="display:none;">
+                  <div style="margin-bottom:8px;">
+                    <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Subcategory block header <span style="font-weight:400;font-style:italic;">(optional)</span></label>
+                    <input type="text" id="ab-subcat-header" placeholder='e.g. "There are four ways of working that came up during our evaluation kickoff. They are:"' style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                  </div>
+                  <div style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);margin-bottom:6px;">Subcategory names <span style="font-weight:400;font-style:italic;">(these appear in both the framing banner and BAR table rows)</span></div>
+                  <div id="ab-subcat-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+                  <button onclick="abAddSubcat()" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:white;color:var(--vip-blue);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add subcategory</button>
+                </div>
+              </div>
             </div>
-            <!-- For add-aar and fill-themes: pick existing activity -->
+            <!-- For add-aar, fill-themes, edit-existing: pick existing activity -->
             <div id="ab-ctx-existing" style="display:none;">
               <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Which activity?</label>
               <div style="display:flex;flex-direction:column;gap:6px;" id="ab-activity-picker">
@@ -1724,6 +1532,23 @@
                   <input type="radio" name="ab-existing-act" value="res-act-4"> Submit Data: Trust
                 </label>
               </div>
+            </div>
+            <!-- Edit existing: inline field editor (shown after activity selected) -->
+            <div id="ab-ctx-edit-fields" style="display:none;margin-top:12px;padding:14px;background:var(--paper);border-radius:10px;border:1px solid var(--border);">
+              <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Edit fields</div>
+              <div style="margin-bottom:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Activity name</label>
+                <input type="text" id="ab-edit-name" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+              </div>
+              <div style="margin-bottom:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Framing question</label>
+                <textarea id="ab-edit-framing" rows="2" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+              <div style="margin-bottom:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Action label <span style="font-weight:400;font-style:italic;">(the dark bubble)</span></label>
+                <input type="text" id="ab-edit-action" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+              </div>
+              <div id="ab-edit-bar-fields" style="margin-bottom:10px;"></div>
             </div>
             <!-- For fill-themes: also show input method -->
             <div id="ab-ctx-themes-method" style="display:none;margin-top:12px;">
@@ -2254,6 +2079,8 @@
           </div><!-- /res-act-4-body -->
         </div><!-- /res-act-4 -->
 
+        <!-- GENERATED ACTIVITIES — injected by Activity Builder -->
+        <div id="generated-activities-container"></div>
 
       </div><!-- /view-village -->
 
@@ -4294,19 +4121,48 @@ function restorePublishedState() {
 
 function _applyPublishedState() {
   _restoreActivityVisibility();
-  // Restore themes publish state
+  // Restore themes publish state AND theme card content
   ACTIVITY_IDS.forEach(function(actId) {
     var key = actId + '-themes';
+    var dataKey = actId + '-theme-data';
+    // Restore theme card content first (so panel has content before being revealed)
+    if (publishedWidgets[dataKey]) {
+      try {
+        var themes = JSON.parse(publishedWidgets[dataKey]);
+        var container = document.getElementById(actId + '-theme-cards');
+        if (container && themes && themes.length) {
+          container.innerHTML = '';
+          var placeholder = container.previousElementSibling;
+          if (placeholder && placeholder.textContent.includes('Themes will emerge')) placeholder.style.display = 'none';
+          themes.forEach(function(theme) {
+            var card = document.createElement('div');
+            card.style.cssText = 'background:white;border:1.5px solid rgba(158,31,99,0.2);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;';
+            card.innerHTML =
+              '<div style="width:32px;height:4px;background:var(--vip-magenta);border-radius:2px;opacity:0.5;"></div>' +
+              '<div style="font-size:14px;font-weight:700;color:var(--vip-midnight);">' + pvEscape(theme.name) + '</div>' +
+              (theme.note ? '<div style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(theme.note) + '</div>' : '');
+            container.appendChild(card);
+          });
+        }
+      } catch(e) {}
+    }
+    // Restore published state
     if (publishedWidgets[key]) {
       var panel = document.getElementById(key);
       if (panel) panel.classList.remove('themes-panel-unpublished');
       var btn = document.getElementById(key + '-pub-btn');
-      if (btn) { btn.textContent = '✓ Published to Village'; btn.style.background = 'rgba(255,255,255,0.35)'; }
+      if (btn) { btn.textContent = '✓ Published to Village'; btn.style.background = 'rgba(255,255,255,0.35)'; btn.style.cursor = 'default'; btn.onclick = null; }
     }
     _updateVeThemesBtn(actId, !!publishedWidgets[key]);
   });
 
   restoreMeetingData();
+  // Restore generated activities and AAR content from Drive
+  if (typeof abRestoreAll === 'function') abRestoreAll();
+  // Restore sprint launch state
+  if (typeof ppRestoreSprintState === 'function') ppRestoreSprintState();
+  // Restore inline text edits
+  if (typeof ieRestoreEdits === 'function') ieRestoreEdits();
 
   // If on village URL, reveal content now that state is correct and scroll to top
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
@@ -4314,7 +4170,7 @@ function _applyPublishedState() {
     if (vv) {
       // Reveal first, then use requestAnimationFrame to scroll after layout is complete
       // This ensures the browser has calculated element positions before scrolling
-      vv.style.opacity = '';
+      vv.style.opacity = '1';
       // Use double rAF to guarantee layout is complete before scroll
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
@@ -5023,6 +4879,12 @@ restorePublishedState();
 renderTimeline();
 
 initScrollSpy();
+
+// Init inline editing immediately — does not require Drive
+setTimeout(function() {
+  if (typeof initInlineEditing === 'function') initInlineEditing();
+  if (typeof dcInit === 'function') dcInit();
+}, 300);
 
 
 // ── FIDELITY TRACKER ─────────────────────────────────────────────────────────
@@ -5777,13 +5639,24 @@ function _restoreActivityVisibility() {
 }
 
 function loadPhotovoiceGalleries() {
-  ['tasty', 'trust'].forEach(function(topic) {
-    var actId = topic === 'tasty' ? 'act3' : 'act4';
+  // Map topic → actId for hardcoded activities
+  var topicMap = { tasty: 'res-act-3', trust: 'res-act-4' };
+  // Also load any generated photovoice activities
+  ACTIVITIES.forEach(function(act) {
+    var actEl = document.getElementById(act.id);
+    if (!actEl) return;
+    if (!actEl.querySelector('[style*="background:var(--vip-amber)"]')) return; // not photovoice
+    // Derive topic from activity id for generated ones
+    var topic = Object.keys(topicMap).find(function(k) { return topicMap[k] === act.id; });
+    if (!topic) topic = act.id.replace('res-act-', 'activity_');
     drivePost('load_photovoice', { topic: topic }).then(function(result) {
       if (!result || !result.ok || !result.submissions || result.submissions.length === 0) return;
+      var legacyActId = act.id === 'res-act-3' ? 'act3' : act.id === 'res-act-4' ? 'act4' : act.id;
       result.submissions.forEach(function(meta) {
-        pvAddToGalleryFromMeta(actId, meta);
+        pvAddToGalleryFromMeta(legacyActId, meta); // village gallery
+        dcAddToGallery(act.id, meta);              // evaluator dc gallery
       });
+      dcUpdateStats(act.id, result.submissions);
     }).catch(function() {});
   });
 }
@@ -6018,8 +5891,9 @@ function abRenderThemesInActivity(actId, themes) {
       (theme.note ? '<div style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(theme.note) + '</div>' : '');
     container.appendChild(card);
   });
-  // Auto-save to Drive
+  // Auto-save to Drive — store both published flag AND theme content
   publishedWidgets[actId + '-themes'] = true;
+  publishedWidgets[actId + '-theme-data'] = JSON.stringify(themes);
   savePublishState();
 }
 
@@ -6135,6 +6009,1078 @@ function abCopyOutput() {
     showToast('Output copied — includes full BAR table');
   }).catch(function() {
     showToast('Copy failed — select and copy manually');
+  });
+}
+
+// ── ACTIVITY BUILDER — SUBCATEGORY HANDLING ───────────────────────────────────
+
+var abSubcatsEnabled = false;
+var abSubcatCount = 0;
+
+function abToggleSubcats(enabled) {
+  abSubcatsEnabled = enabled;
+  document.getElementById('ab-subcats-yes').style.background = enabled ? 'var(--vip-blue)' : 'white';
+  document.getElementById('ab-subcats-yes').style.color = enabled ? 'white' : 'var(--vip-midnight)';
+  document.getElementById('ab-subcats-yes').style.borderColor = enabled ? 'var(--vip-blue)' : 'var(--border)';
+  document.getElementById('ab-subcats-no').style.background = !enabled ? 'var(--vip-blue)' : 'white';
+  document.getElementById('ab-subcats-no').style.color = !enabled ? 'white' : 'var(--vip-midnight)';
+  document.getElementById('ab-subcats-no').style.borderColor = !enabled ? 'var(--vip-blue)' : 'var(--border)';
+  document.getElementById('ab-subcats-fields').style.display = enabled ? 'block' : 'none';
+  if (enabled && abSubcatCount === 0) abAddSubcat();
+}
+
+function abAddSubcat() {
+  abSubcatCount++;
+  var list = document.getElementById('ab-subcat-list');
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML =
+    '<input type="text" placeholder="Subcategory name" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
+    '<button onclick="this.parentElement.remove();abSubcatCount--;" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;font-family:var(--sans);">✕</button>';
+  list.appendChild(row);
+}
+
+function abGetSubcats() {
+  if (!abSubcatsEnabled) return [];
+  var inputs = document.querySelectorAll('#ab-subcat-list input');
+  var result = [];
+  inputs.forEach(function(inp) {
+    var v = (inp.value || '').trim();
+    if (v) result.push(v);
+  });
+  return result;
+}
+
+// ── ACTIVITY BUILDER — LIVE ACTIVITY PIPELINE ─────────────────────────────────
+
+// Next available activity number (beyond the 4 hardcoded ones)
+function abNextActNum() {
+  return ACTIVITIES.reduce(function(max, a) { return Math.max(max, a.num); }, 0) + 1;
+}
+
+// Register a new activity in ACTIVITIES array + VE panel + sidebar nav
+function abRegisterActivity(num, id, name, type, label) {
+  // Push to ACTIVITIES array
+  ACTIVITIES.push({ num: num, id: id, defaultVisible: true });
+  ACTIVITY_IDS.push(id);
+  ACTIVITY_NUMS.push(num);
+
+  // Add VE row
+  var veContainer = document.getElementById('ve-generated-activity-rows');
+  if (veContainer) {
+    var typeLabel = type === 'photovoice' ? 'Photovoice' : 'Before Action Review + After Action Review';
+    var row = document.createElement('div');
+    row.id = 've-row-' + id;
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;';
+    row.innerHTML =
+      '<div>' +
+        '<div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">' + pvEscape(name) + '</div>' +
+        '<div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:2px;">' + pvEscape(typeLabel) + '</div>' +
+        (label ? '<span style="display:inline-block;margin-top:4px;font-size:10px;font-weight:600;background:rgba(0,0,0,0.07);color:var(--vip-midnight);padding:2px 8px;border-radius:20px;letter-spacing:0.03em;">' + pvEscape(label) + '</span>' : '') +
+      '</div>' +
+      '<button id="ve-default-btn-' + num + '" onclick="setActiveActivity(' + num + ', this)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Set as default</button>' +
+      '<button id="vis-btn-act' + num + '" onclick="toggleActivityVisibility(' + num + ')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;white-space:nowrap;width:100%;text-align:center;">&#9679; Published</button>' +
+      '<button id="ve-themes-btn-' + num + '" onclick="toggleThemesPublish(\'' + id + '\')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>';
+    veContainer.appendChild(row);
+  }
+
+  // Add to sidebar nav
+  var nav = document.getElementById('residentsNav');
+  if (nav) {
+    var navItem = document.createElement('div');
+    navItem.className = 'nav-item';
+    navItem.setAttribute('data-color', 'vip-blue');
+    navItem.setAttribute('onclick', "scrollToResActivity('" + id + "')");
+    navItem.innerHTML = '<span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">' + pvEscape(name) + '</span>';
+    nav.appendChild(navItem);
+  }
+
+  // Seed visibility in publishedWidgets
+  publishedWidgets['act-' + num + '-visible'] = true;
+  savePublishState();
+
+  // Wire inline editing for this new activity
+  setTimeout(function() {
+    if (typeof ieInitActivity === 'function') ieInitActivity(id, num);
+    if (typeof dcInit === 'function') dcInit(); // refresh dc nav + overview
+  }, 200);
+}
+
+// Build a BAR/AAR activity card HTML string
+function abBuildBarCardHtml(id, num, name, label, framing, actionLabel, subcats, subcatHeader, barContent) {
+  var accentColor = 'var(--vip-blue)';
+  var accentLight = 'var(--vip-blue-light)';
+  var accentPale = 'var(--vip-blue-pale)';
+
+  // Framing banner
+  var framingHtml = '';
+  if (framing) {
+    framingHtml += '<div style="background:' + accentPale + ';padding:20px 22px;border-bottom:1px solid ' + accentLight + ';">';
+    framingHtml += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:' + accentColor + ';margin-bottom:10px;">Framing Question</div>';
+    framingHtml += '<div style="font-size:20px;font-weight:700;color:var(--vip-midnight);font-style:italic;line-height:1.5;">' + pvEscape(framing) + '</div>';
+    if (subcats && subcats.length) {
+      framingHtml += '<div style="margin-top:16px;padding:16px;background:white;border-radius:10px;border:1px solid var(--border);">';
+      if (subcatHeader) {
+        framingHtml += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">' + pvEscape(subcatHeader) + '</div>';
+      }
+      var subcatColors = ['#EBF6FB','#f5f0fb','#f0f7f1','#fdf7f0','#fdf2f2','#f0f4ff'];
+      framingHtml += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+      subcats.forEach(function(sc, i) {
+        var bg = subcatColors[i % subcatColors.length];
+        framingHtml += '<div style="background:' + bg + ';border-radius:8px;padding:12px 14px;"><div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">' + pvEscape(sc) + '</div></div>';
+      });
+      framingHtml += '</div></div>';
+    }
+    framingHtml += '</div>';
+  }
+
+  // BAR table rows
+  var barRows = '';
+  if (subcats && subcats.length) {
+    var rowColors = ['#f0f7fa','#f5f0fb','#f0f7f1','#fdf7f0','#fdf2f2','#f0f4ff'];
+    subcats.forEach(function(sc, i) {
+      var bg = rowColors[i % rowColors.length];
+      var content = (barContent && barContent[sc]) ? pvEscape(barContent[sc]) : '<span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>';
+      barRows +=
+        '<div style="margin-bottom:12px;padding:12px 14px;background:' + bg + ';border-radius:8px;" data-bar-row="' + pvEscape(sc) + '">' +
+          '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">' + pvEscape(sc) + '</div>' +
+          '<div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">' + content + '</div>' +
+        '</div>';
+    });
+  } else {
+    // Default single overall row
+    var overallContent = (barContent && barContent['Overall']) ? pvEscape(barContent['Overall']) : '<span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>';
+    barRows =
+      '<div style="padding:12px 14px;background:#f0f7fa;border-radius:8px;" data-bar-row="Overall">' +
+        '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Overall</div>' +
+        '<div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">' + overallContent + '</div>' +
+      '</div>';
+  }
+
+  var html =
+    '<div id="' + id + '" style="padding:0 28px 28px;">' +
+      '<div onclick="toggleResActivity(\'' + id + '\')" style="display:flex;align-items:center;justify-content:space-between;background:' + accentColor + ';color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">' +
+        '<div style="display:flex;flex-direction:column;gap:3px;">' +
+          '<div style="font-size:15px;font-weight:700;">' + pvEscape(name) + '</div>' +
+          '<div style="font-size:11px;opacity:0.8;">Before Action Review + After Action Review</div>' +
+          (label ? '<div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">' + pvEscape(label) + '</span></div>' : '') +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<button class="act-link-btn eval-only" id="act-link-btn-' + num + '" onclick="event.stopPropagation();setActiveActivity(' + num + ',this)" style="font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);cursor:pointer;font-family:var(--sans);font-weight:600;">🔗 Set as default</button>' +
+          '<span id="' + id + '-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>' +
+        '</div>' +
+      '</div>' +
+      '<div id="' + id + '-body" style="border:1px solid ' + accentLight + ';border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">' +
+        framingHtml +
+        '<div style="margin:20px 28px 0;border-top:2px solid var(--border);position:relative;">' +
+          '<span style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:white;padding:0 14px;font-size:11px;font-weight:700;color:var(--vip-midnight-muted);text-transform:uppercase;letter-spacing:0.08em;">Activities</span>' +
+        '</div>' +
+        '<div style="padding:20px;background:white;overflow-x:auto;">' +
+          '<div style="display:flex;gap:0;align-items:flex-start;width:max-content;">' +
+            '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;width:500px;flex-shrink:0;">' +
+              '<div style="background:#f2f2f2;padding:10px 14px;border-bottom:1px solid var(--border);">' +
+                '<div style="font-size:15px;font-weight:700;color:var(--vip-midnight);">What will make us successful?</div>' +
+              '</div>' +
+              '<div style="padding:14px;">' + barRows + '</div>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;min-width:120px;align-self:flex-start;margin-top:60px;">' +
+              '<div style="width:2px;height:40px;background:var(--border);"></div>' +
+              '<div style="background:var(--vip-midnight);color:white;border-radius:20px;padding:10px 18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);">' +
+                '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.6);margin-bottom:4px;">Action</div>' +
+                '<div style="font-size:12px;font-weight:700;text-align:center;line-height:1.4;">' + pvEscape(actionLabel || name) + '</div>' +
+              '</div>' +
+              '<div style="width:2px;height:40px;background:var(--border);"></div>' +
+            '</div>' +
+            '<div id="' + id + '-aar" style="border:2px solid ' + accentColor + ';border-radius:12px;overflow:hidden;width:900px;flex-shrink:0;opacity:0.5;pointer-events:none;">' +
+              '<div style="background:' + accentColor + ';color:white;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:10px;">' +
+                '<span>After Action Review</span>' +
+                '<span style="font-size:10px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:10px;font-weight:600;">We\'ll return to this</span>' +
+              '</div>' +
+              '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);">' +
+                '<div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our intended results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="intended">—</span></div>' +
+                '<div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">How did we think we would know?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="know">—</span></div>' +
+                '<div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What were our ACTUAL results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="actual">—</span></div>' +
+              '</div>' +
+              '<div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">' +
+                '<div style="padding:12px 14px;background:white;border-right:1px solid var(--border);"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What caused our results?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="caused">—</span></div>' +
+                '<div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What will we sustain/improve?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="sustain">—</span></div>' +
+              '</div>' +
+              '<div style="padding:12px 14px;background:white;"><div style="font-size:15px;font-weight:700;color:var(--vip-midnight);background:#f2f2f2;padding:8px 10px;border-radius:6px;margin-bottom:10px;">What is our next opportunity to test what we learned?</div><span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;" data-aar-cell="next">—</span></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div id="' + id + '-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">' +
+            '<div>' +
+              '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>' +
+              '<div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:10px;">' +
+              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">' +
+            '<span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>' +
+          '</div>' +
+          '<div id="' + id + '-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  return html;
+}
+
+// Publish a new BAR activity from builder output
+function abPublishBarActivity(name, label, framing, actionLabel, subcats, subcatHeader, barContent) {
+  var num = abNextActNum();
+  var id = 'res-act-' + num;
+  var html = abBuildBarCardHtml(id, num, name, label, framing, actionLabel, subcats, subcatHeader, barContent);
+  var container = document.getElementById('generated-activities-container');
+  if (!container) { showToast('Could not find activities container'); return; }
+  var wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper.firstElementChild);
+  abRegisterActivity(num, id, name, 'bar', label);
+  // Persist to Drive + GitHub
+  abSaveGeneratedActivity(num, id, name, label, 'bar', framing, actionLabel, subcats, subcatHeader, barContent);
+  showToast('✓ Activity published to Village');
+}
+
+// Build and publish a new Photovoice activity
+function abPublishPhotovoiceActivity(name, label, framing, topic) {
+  var num = abNextActNum();
+  var id = 'res-act-' + num;
+  var safeId = id.replace('-', '_');
+  var topicKey = topic || name.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 20);
+  var html =
+    '<div id="' + id + '" style="padding:0 28px 28px;">' +
+      '<div onclick="toggleResActivity(\'' + id + '\')" style="display:flex;align-items:center;justify-content:space-between;background:var(--vip-amber);color:white;border-radius:12px 12px 0 0;padding:14px 18px;cursor:pointer;">' +
+        '<div style="display:flex;flex-direction:column;gap:3px;">' +
+          '<div style="font-size:15px;font-weight:700;">' + pvEscape(name) + '</div>' +
+          '<div style="font-size:11px;opacity:0.8;">Photovoice</div>' +
+          (label ? '<div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">' + pvEscape(label) + '</span></div>' : '') +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<button class="act-link-btn eval-only" id="act-link-btn-' + num + '" onclick="event.stopPropagation();setActiveActivity(' + num + ',this)" style="font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);cursor:pointer;font-family:var(--sans);font-weight:600;">🔗 Set as default</button>' +
+          '<span id="' + id + '-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">▲</span>' +
+        '</div>' +
+      '</div>' +
+      '<div id="' + id + '-body" style="border:1px solid var(--vip-amber-light);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">' +
+        (framing ? '<div style="background:var(--vip-orange-pale);padding:20px 22px;border-bottom:1px solid var(--vip-amber-light);font-size:14px;color:var(--vip-midnight);line-height:1.7;">' + pvEscape(framing) + '</div>' : '') +
+        '<div id="' + id + '-form-wrap" style="background:white;padding:22px;">' +
+          '<div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:16px;">Share your submission</div>' +
+          '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">' +
+            '<button onclick="pvSetInputType(\'' + id + '\',\'photo\')" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--vip-amber);background:var(--vip-amber);color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">📷 Photo</button>' +
+            '<button onclick="pvSetInputType(\'' + id + '\',\'video\')" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">🎥 Video</button>' +
+            '<button onclick="pvSetInputType(\'' + id + '\',\'audio\')" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">🎙 Audio</button>' +
+            '<button onclick="pvSetInputType(\'' + id + '\',\'story\')" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✍️ Story</button>' +
+          '</div>' +
+          '<div id="' + id + '-input-photo" class="pv-input-section" style="margin-bottom:14px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Photo</label>' +
+            '<input type="file" id="' + id + '-file-photo" accept="image/*" style="font-size:12px;">' +
+          '</div>' +
+          '<div id="' + id + '-input-video" class="pv-input-section" style="display:none;margin-bottom:14px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Video</label>' +
+            '<input type="file" id="' + id + '-file-video" accept="video/*" style="font-size:12px;">' +
+          '</div>' +
+          '<div id="' + id + '-input-story" class="pv-input-section" style="display:none;margin-bottom:14px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Write Your Story</label>' +
+            '<textarea id="' + id + '-story-text" rows="4" placeholder="Share your story here..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>' +
+          '</div>' +
+          '<div id="' + id + '-input-audio" class="pv-input-section" style="display:none;margin-bottom:14px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Record or Upload Audio</label>' +
+            '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+              '<button onclick="pvToggleRecord(\'' + id + '\')" id="' + id + '-record-btn" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--vip-amber);background:white;color:var(--vip-amber);font-size:12px;font-weight:600;cursor:pointer;">&#9679; Start Recording</button>' +
+              '<input type="file" id="' + id + '-file-audio" accept="audio/*" style="font-size:12px;flex:1;">' +
+            '</div>' +
+            '<div id="' + id + '-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>' +
+          '</div>' +
+          '<div style="margin-bottom:14px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up?</label>' +
+            '<input type="text" id="' + id + '-code" placeholder="e.g. Access, Trust, Belonging…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">' +
+          '</div>' +
+          '<div style="margin-bottom:18px;">' +
+            '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Anything else we should know?</label>' +
+            '<textarea id="' + id + '-description" rows="3" placeholder="Description, location, context, etc." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>' +
+          '</div>' +
+          '<button onclick="pvSubmit(\'' + id + '\',\'' + topicKey + '\')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>' +
+          '<div id="' + id + '-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>' +
+        '</div>' +
+        '<div style="background:#FFFBF2;border-top:2px solid var(--vip-amber-light);padding:20px 22px;">' +
+          '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>' +
+          '<div id="' + id + '-gallery" style="display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;">' +
+            '<div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;padding:20px 0;" id="' + id + '-gallery-empty">No submissions yet — be the first!</div>' +
+          '</div>' +
+        '</div>' +
+        '<div id="' + id + '-themes" class="themes-panel-unpublished" style="border-top:2px solid var(--vip-magenta);background:var(--vip-magenta-pale);padding:24px 22px;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">' +
+            '<div>' +
+              '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>' +
+              '<div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:10px;">' +
+              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>' +
+            '</div>' +
+          '</div>' +
+          '<div id="' + id + '-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  var container = document.getElementById('generated-activities-container');
+  var wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper.firstElementChild);
+  abRegisterActivity(num, id, name, 'photovoice', label);
+  abSaveGeneratedActivity(num, id, name, label, 'photovoice', framing, null, null, null, null);
+  showToast('✓ Photovoice activity published to Village');
+}
+
+// Persist a generated activity to Drive and trigger GitHub commit
+function abSaveGeneratedActivity(num, id, name, label, type, framing, actionLabel, subcats, subcatHeader, barContent) {
+  var key = 'generated_activity_' + num;
+  var data = { num: num, id: id, name: name, label: label, type: type, framing: framing, actionLabel: actionLabel, subcats: subcats, subcatHeader: subcatHeader, barContent: barContent };
+  publishedWidgets[key] = JSON.stringify(data);
+  savePublishState();
+  // Trigger GitHub commit (structural change)
+  abCommitToGitHub('New activity: ' + name);
+}
+
+// Restore all generated activities from Drive on page load
+function abRestoreGeneratedActivities() {
+  var keys = Object.keys(publishedWidgets).filter(function(k) { return k.startsWith('generated_activity_'); });
+  keys.sort(); // ensure correct order
+  keys.forEach(function(key) {
+    try {
+      var data = JSON.parse(publishedWidgets[key]);
+      if (!data || !data.id || document.getElementById(data.id)) return; // skip if already in DOM
+      if (data.type === 'photovoice') {
+        abPublishPhotovoiceActivity(data.name, data.label, data.framing, null);
+      } else {
+        abPublishBarActivity(data.name, data.label, data.framing, data.actionLabel, data.subcats, data.subcatHeader, data.barContent);
+      }
+    } catch(e) {}
+  });
+}
+
+// ── ACTIVITY BUILDER — AAR FILL ───────────────────────────────────────────────
+
+// Apply parsed AAR content to an existing activity card
+function abApplyAarToActivity(actId, aarData) {
+  var aarEl = document.getElementById(actId + '-aar');
+  if (!aarEl) { showToast('Could not find AAR table for ' + actId); return; }
+  // Remove dimming
+  aarEl.style.opacity = '1';
+  aarEl.style.pointerEvents = '';
+  // Update "We'll return to this" badge
+  var badge = aarEl.querySelector('span[style*="rgba(255,255,255,0.15)"]');
+  if (badge) badge.style.display = 'none';
+  // Fill cells by data-aar-cell attribute
+  var cellMap = { intended: 'intended', know: 'know', actual: 'actual', caused: 'caused', sustain: 'sustain', next: 'next' };
+  Object.keys(cellMap).forEach(function(cellKey) {
+    var cell = aarEl.querySelector('[data-aar-cell="' + cellKey + '"]');
+    if (cell && aarData[cellKey]) {
+      cell.style.fontStyle = 'normal';
+      cell.textContent = aarData[cellKey];
+    }
+  });
+  // Save to Drive + GitHub
+  publishedWidgets[actId + '-aar'] = JSON.stringify(aarData);
+  savePublishState();
+  abCommitToGitHub('AAR filled: ' + actId);
+  showToast('✓ AAR content applied to ' + actId);
+}
+
+// Restore AAR content from Drive on page load
+function abRestoreAarContent() {
+  ACTIVITY_IDS.forEach(function(actId) {
+    var key = actId + '-aar';
+    if (!publishedWidgets[key]) return;
+    try {
+      var aarData = JSON.parse(publishedWidgets[key]);
+      abApplyAarToActivity(actId, aarData);
+    } catch(e) {}
+  });
+}
+
+// ── ACTIVITY BUILDER — EDIT EXISTING ──────────────────────────────────────────
+
+function abLoadEditFields(actId) {
+  var editPanel = document.getElementById('ab-ctx-edit-fields');
+  if (!editPanel) return;
+  editPanel.style.display = 'block';
+  // Load current values from DOM
+  var actEl = document.getElementById(actId);
+  if (!actEl) return;
+  // Name
+  var nameEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+  var nameInput = document.getElementById('ab-edit-name');
+  if (nameInput && nameEl) nameInput.value = nameEl.textContent;
+  // Framing
+  var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
+  var framingInput = document.getElementById('ab-edit-framing');
+  if (framingInput && framingEl) framingInput.value = framingEl.textContent;
+  // Action label
+  var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
+  var actionInput = document.getElementById('ab-edit-action');
+  if (actionInput && actionEl) actionInput.value = actionEl.textContent;
+  // BAR rows
+  var barFields = document.getElementById('ab-edit-bar-fields');
+  if (barFields) {
+    barFields.innerHTML = '';
+    var barRows = actEl.querySelectorAll('[data-bar-row]');
+    barRows.forEach(function(row) {
+      var rowName = row.getAttribute('data-bar-row');
+      var contentEl = row.querySelector('[style*="font-size:13px"]');
+      var currentText = (contentEl && contentEl.textContent !== '—') ? contentEl.textContent : '';
+      var field = document.createElement('div');
+      field.style.marginBottom = '10px';
+      field.innerHTML =
+        '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">' + pvEscape(rowName) + '</label>' +
+        '<textarea data-edit-bar-row="' + pvEscape(rowName) + '" rows="3" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(currentText) + '</textarea>';
+      barFields.appendChild(field);
+    });
+    if (barRows.length) {
+      var saveBtn = document.createElement('button');
+      saveBtn.textContent = 'Save changes to activity';
+      saveBtn.style.cssText = 'margin-top:8px;padding:7px 18px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);';
+      saveBtn.onclick = function() { abSaveEditedActivity(actId); };
+      barFields.appendChild(saveBtn);
+    }
+  }
+}
+
+function abSaveEditedActivity(actId) {
+  var actEl = document.getElementById(actId);
+  if (!actEl) return;
+  // Update name
+  var newName = (document.getElementById('ab-edit-name').value || '').trim();
+  if (newName) {
+    var nameEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+    if (nameEl) nameEl.textContent = newName;
+  }
+  // Update framing
+  var newFraming = (document.getElementById('ab-edit-framing').value || '').trim();
+  if (newFraming) {
+    var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
+    if (framingEl) framingEl.textContent = newFraming;
+  }
+  // Update action label
+  var newAction = (document.getElementById('ab-edit-action').value || '').trim();
+  if (newAction) {
+    var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
+    if (actionEl) actionEl.textContent = newAction;
+  }
+  // Update BAR rows
+  document.querySelectorAll('[data-edit-bar-row]').forEach(function(textarea) {
+    var rowName = textarea.getAttribute('data-edit-bar-row');
+    var newText = textarea.value.trim();
+    if (!newText) return;
+    var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
+    if (barRow) {
+      var contentEl = barRow.querySelector('[style*="font-size:13px"]');
+      if (contentEl) {
+        contentEl.textContent = newText;
+        contentEl.style.fontStyle = 'normal';
+      }
+    }
+  });
+  // Save edit data to Drive + GitHub
+  var editKey = actId + '-edits';
+  publishedWidgets[editKey] = JSON.stringify({
+    name: newName,
+    framing: newFraming,
+    action: newAction
+  });
+  savePublishState();
+  abCommitToGitHub('Activity edited: ' + actId);
+  showToast('✓ Changes saved to ' + actId);
+}
+
+// ── ACTIVITY BUILDER — GITHUB AUTO-COMMIT ─────────────────────────────────────
+
+var _githubCommitPending = false;
+var _githubCommitTimer = null;
+
+function abCommitToGitHub(message) {
+  // Debounce: wait 2s after last change before committing
+  if (_githubCommitTimer) clearTimeout(_githubCommitTimer);
+  _githubCommitTimer = setTimeout(function() {
+    _doGithubCommit(message);
+  }, 2000);
+}
+
+async function _doGithubCommit(message) {
+  if (_githubCommitPending) return;
+  _githubCommitPending = true;
+  showDriveStatus('saving');
+  try {
+    // Serialize current DOM as HTML string
+    var htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    var result = await drivePost('save_to_github', {
+      content: btoa(unescape(encodeURIComponent(htmlContent))),
+      message: message || 'Platform update via Activity Builder'
+    });
+    if (result && result.ok) {
+      showDriveStatus('ok');
+      showToast('✓ Saved to GitHub');
+    } else {
+      showDriveStatus('ok'); // Drive save still succeeded
+      console.warn('GitHub commit failed:', result);
+    }
+  } catch(e) {
+    console.warn('GitHub commit error:', e);
+  }
+  _githubCommitPending = false;
+}
+
+// ── ACTIVITY BUILDER — abSetMode EXTENSION ────────────────────────────────────
+
+// Patch abSetMode to handle new modes (edit-existing)
+var _abSetModeOriginal = abSetMode;
+abSetMode = function(mode) {
+  // Handle new mode
+  if (mode === 'edit-existing') {
+    abCurrentMode = mode;
+    document.querySelectorAll('.ab-mode-btn').forEach(function(btn) {
+      var isActive = btn.id === 'ab-mode-edit-existing';
+      btn.style.background = isActive ? 'var(--vip-midnight)' : 'white';
+      btn.style.color = isActive ? 'white' : 'var(--vip-midnight)';
+      btn.style.borderColor = isActive ? 'var(--vip-midnight)' : 'var(--border)';
+    });
+    var step2 = document.getElementById('ab-step2');
+    var step3 = document.getElementById('ab-step3');
+    var step4 = document.getElementById('ab-step4');
+    var ctxNew = document.getElementById('ab-ctx-new');
+    var ctxExisting = document.getElementById('ab-ctx-existing');
+    var ctxThemesMethod = document.getElementById('ab-ctx-themes-method');
+    var ctxEditFields = document.getElementById('ab-ctx-edit-fields');
+    document.getElementById('ab-output').style.display = 'none';
+    step2.style.display = 'block';
+    ctxNew.style.display = 'none';
+    ctxExisting.style.display = 'block';
+    if (ctxThemesMethod) ctxThemesMethod.style.display = 'none';
+    if (ctxEditFields) ctxEditFields.style.display = 'none';
+    step3.style.display = 'block';
+    step4.style.display = 'block';
+    document.getElementById('ab-generate-btns').innerHTML =
+      '<button onclick="abLoadEditFieldsFromPicker()" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Load activity fields</button>' +
+      '<button onclick="abGenerate(\'edit-bar\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ AI: Suggest BAR content</button>';
+    return;
+  }
+  // Show subcategory panel only for new-bar
+  var subcatsWrap = document.getElementById('ab-subcats-wrap');
+  if (subcatsWrap) subcatsWrap.style.display = (mode === 'new-bar') ? 'block' : 'none';
+  // Hide edit fields for other modes
+  var ctxEditFields2 = document.getElementById('ab-ctx-edit-fields');
+  if (ctxEditFields2) ctxEditFields2.style.display = 'none';
+  _abSetModeOriginal(mode);
+};
+
+function abLoadEditFieldsFromPicker() {
+  var actId = abGetSelectedActivity();
+  if (!actId) { showToast('Please select an activity first'); return; }
+  abLoadEditFields(actId);
+}
+
+// ── ACTIVITY BUILDER — abGenerate EXTENSION ───────────────────────────────────
+
+// After abGenerate runs for new-bar or new-photovoice, offer to publish as live card
+var _abGenerateOriginal = abGenerate;
+abGenerate = async function(genMode) {
+  // For edit-bar mode, use AI to suggest BAR content for the selected activity
+  if (genMode === 'edit-bar') {
+    var actId = abGetSelectedActivity();
+    var sourceText = abGetSourceText();
+    if (!sourceText) { showToast('Please add source text in Step 3 first'); return; }
+    var outputEl = document.getElementById('ab-output');
+    var thinkingEl = document.getElementById('ab-output-thinking');
+    var outputTextEl = document.getElementById('ab-output-text');
+    outputEl.style.display = 'block';
+    thinkingEl.style.display = 'block';
+    outputTextEl.style.display = 'none';
+    outputTextEl.textContent = '';
+    // Build system prompt for edit mode
+    var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language accessible to community members. Write in "we" voice. Each cell should be 2-3 narrative sentences explaining the why behind the point.';
+    // Detect subcategory rows from the selected activity
+    var actEl = actId ? document.getElementById(actId) : null;
+    var barRowNames = [];
+    if (actEl) {
+      actEl.querySelectorAll('[data-bar-row]').forEach(function(r) { barRowNames.push(r.getAttribute('data-bar-row')); });
+    }
+    var rowsInstruction = barRowNames.length
+      ? 'The BAR table has these rows: ' + barRowNames.join(', ') + '. For each row, write 2-3 narrative sentences.'
+      : 'Write 2-3 narrative sentences for an Overall row.';
+    var userMsg = 'SOURCE MATERIAL:\n' + sourceText + '\n\n' + rowsInstruction + '\n\nFormat as:\n' +
+      barRowNames.map(function(r) { return r.toUpperCase() + '\n[text]'; }).join('\n\n');
+    try {
+      var response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, system: systemPrompt, messages: [{ role: 'user', content: userMsg }] })
+      });
+      var data = await response.json();
+      var reply = data.content?.[0]?.text || 'Something went wrong.';
+      thinkingEl.style.display = 'none';
+      outputTextEl.style.display = 'block';
+      outputTextEl.textContent = reply;
+      // Offer to apply to activity
+      if (actId) {
+        var existing = document.getElementById('ab-apply-edit-btn');
+        if (existing) existing.remove();
+        var btn = document.createElement('button');
+        btn.id = 'ab-apply-edit-btn';
+        btn.textContent = 'Apply to ' + actId;
+        btn.style.cssText = 'margin-top:12px;padding:7px 18px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);display:block;';
+        btn.onclick = function() {
+          // Parse reply into row content
+          var parsed = {};
+          barRowNames.forEach(function(rowName) {
+            var re = new RegExp(rowName.toUpperCase() + '\\s*\\n([\\s\\S]*?)(?=' + barRowNames.map(function(r) { return r.toUpperCase(); }).join('|') + '|$)', 'i');
+            var m = reply.match(re);
+            if (m) parsed[rowName] = m[1].trim();
+          });
+          // Apply to BAR rows in DOM
+          barRowNames.forEach(function(rowName) {
+            if (!parsed[rowName]) return;
+            var barRow = document.getElementById(actId).querySelector('[data-bar-row="' + rowName + '"]');
+            if (barRow) {
+              var contentEl = barRow.querySelector('[style*="font-size:13px"]');
+              if (contentEl) { contentEl.textContent = parsed[rowName]; contentEl.style.fontStyle = 'normal'; }
+            }
+          });
+          publishedWidgets[actId + '-bar-edits'] = JSON.stringify(parsed);
+          savePublishState();
+          abCommitToGitHub('BAR content updated: ' + actId);
+          showToast('✓ BAR content applied to ' + actId);
+          btn.textContent = '✓ Applied';
+          btn.style.background = '#1a6b3e';
+        };
+        outputEl.appendChild(btn);
+      }
+    } catch(err) {
+      thinkingEl.style.display = 'none';
+      outputTextEl.style.display = 'block';
+      outputTextEl.textContent = 'Connection error. Please try again.';
+    }
+    return;
+  }
+
+  // Run original generate
+  await _abGenerateOriginal(genMode);
+
+  // After generation, offer to publish as live activity for new modes
+  if (genMode === 'bar' || genMode === 'both' || genMode === 'photovoice') {
+    var outputEl2 = document.getElementById('ab-output');
+    var outputTextEl2 = document.getElementById('ab-output-text');
+    var reply2 = outputTextEl2.getAttribute('data-full-reply') || outputTextEl2.textContent;
+    var actName = (document.getElementById('ab-act-name').value || '').trim();
+    var actLabel = (document.getElementById('ab-act-label').value || '').trim();
+    var framing = (document.getElementById('ab-framing').value || '').trim();
+    if (!actName) return; // can't publish without a name
+    var existingPublishBtn = document.getElementById('ab-publish-live-btn');
+    if (existingPublishBtn) existingPublishBtn.remove();
+    var btn2 = document.createElement('button');
+    btn2.id = 'ab-publish-live-btn';
+    btn2.style.cssText = 'margin-top:12px;padding:7px 18px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);display:block;border:none;color:white;';
+    if (genMode === 'photovoice') {
+      btn2.textContent = '+ Publish as live Photovoice activity';
+      btn2.style.background = 'var(--vip-amber)';
+      btn2.onclick = function() {
+        abPublishPhotovoiceActivity(actName, actLabel, framing, null);
+        btn2.textContent = '✓ Published to Village';
+        btn2.style.background = '#1a6b3e';
+        btn2.onclick = null;
+      };
+    } else {
+      btn2.textContent = '+ Publish as live BAR/AAR activity';
+      btn2.style.background = 'var(--vip-blue)';
+      btn2.onclick = function() {
+        var subcats = abGetSubcats();
+        var subcatHeader = (document.getElementById('ab-subcat-header').value || '').trim();
+        var actionLabel = actName; // default to activity name
+        // Parse BAR content from reply
+        var barContent = {};
+        if (subcats.length) {
+          subcats.forEach(function(sc) {
+            var re = new RegExp(sc.toUpperCase() + '\\s*\\n([\\s\\S]*?)(?=\\n[A-Z]{3,}\\s*\\n|FRAMING QUESTION SYNTHESIS|$)', 'i');
+            var m = (outputTextEl2.getAttribute('data-full-reply') || '').match(re);
+            if (m) barContent[sc] = m[1].trim();
+          });
+        } else {
+          var overallMatch = (outputTextEl2.getAttribute('data-full-reply') || '').match(/OVERALL\s*\n([\s\S]*?)(?=\n[A-Z]{3,}\s*\n|FRAMING QUESTION SYNTHESIS|$)/i);
+          if (overallMatch) barContent['Overall'] = overallMatch[1].trim();
+        }
+        abPublishBarActivity(actName, actLabel, framing, actionLabel, subcats, subcatHeader, barContent);
+        btn2.textContent = '✓ Published to Village';
+        btn2.style.background = '#1a6b3e';
+        btn2.onclick = null;
+      };
+    }
+    outputEl2.appendChild(btn2);
+  }
+};
+
+// ── ACTIVITY BUILDER — RESTORE ON LOAD ────────────────────────────────────────
+
+// Called after restorePublishedState completes
+function abRestoreAll() {
+  abRestoreGeneratedActivities();
+  abRestoreAarContent();
+}
+
+// ── SPRINT LAUNCH ─────────────────────────────────────────────────────────────
+
+// Sprint phase/task template — same structure as Sprint 1
+var SPRINT_PHASE_TEMPLATE = [
+  { name: 'Readiness, Fit & Set Up', step: 1, tasks: [
+    'Formal DE Fit & Readiness Check — explicit readiness screen before sprint is approved',
+    'DE Fit Memo (internal + client-facing excerpt)',
+    'Platform Spine for DE Process'
+  ]},
+  { name: 'Framing the Learning', step: 1, tasks: [
+    'Explicit Learning Question Reframing Gate — mandatory reframing and prioritization using 4 tests: time, authority, emergence, plausibility AND right-sizing of well-fit formative questions',
+    'Learning Question Brief: original → reframed to fit 90 days → decisions → non-goals'
+  ]},
+  { name: 'Design & Instrumentation', step: 1, tasks: [
+    'Data collection methods + instruments + schedule',
+    'Resident-centered data collection design'
+  ]},
+  { name: 'Stakeholder Alignment', step: 1, tasks: [
+    'Stakeholder map + engagement plan',
+    'Roles and permissions documented'
+  ]},
+  { name: 'Data Collection & Sensemaking', step: 2, tasks: [
+    'BAR completed before each learning session',
+    'AAR completed after each learning session'
+  ]},
+  { name: 'Analysis & Interpretation', step: 3, tasks: [
+    'Validated insights + tensions with participatory sensemaking'
+  ]},
+  { name: 'Learning → Decision → Adaptation', step: 3, tasks: [
+    'Decisions + tests in motion (+ the things we will look for and track about that decision)'
+  ]},
+  { name: 'Accountability & Transparency', step: 4, tasks: [
+    'Learning product menu clarifies purpose',
+    'Create decision briefs, learning memos, community summaries'
+  ]},
+  { name: 'Reflection & Transition', step: 4, tasks: [
+    'Explicit learning handoff completed',
+    'Information + Learning system left behind'
+  ]}
+];
+
+var ppActiveSprint = 1;
+var ppTotalSprints = 2; // EVB has 2; dynamic for other projects
+
+// Build phase HTML for a given sprint number and phase index within that sprint
+function ppBuildPhaseHtml(sprintNum, phaseIdx, globalPhaseIdx, phase) {
+  var pid = 's' + sprintNum + 'p' + phaseIdx;
+  var taskHtml = phase.tasks.map(function(task, ti) {
+    var tid = pid + 't' + ti;
+    return '<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">' +
+      '<button id="task-' + tid + '" onclick="ppToggleSprintTask(\'' + tid + '\',\'' + pid + '\')" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>' +
+      '<span id="task-text-' + tid + '" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">' + pvEscape(task) + '</span>' +
+      '</div>';
+  }).join('');
+
+  return '<div id="pp-' + pid + '" style="background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;">' +
+    '<div onclick="ppToggleSprintPhase(\'' + pid + '\')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;">' +
+      '<span style="font-size:10px;font-weight:700;background:var(--vip-blue);color:white;padding:2px 8px;border-radius:10px;letter-spacing:0.05em;flex-shrink:0;">PHASE ' + phaseIdx + '</span>' +
+      '<span style="font-size:13px;font-weight:600;color:var(--vip-midnight);flex:1;">' + pvEscape(phase.name) + '</span>' +
+      '<span id="pp-' + pid + '-pill" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper-mid);color:var(--vip-midnight-muted);border:1px solid var(--border);white-space:nowrap;">0/' + phase.tasks.length + '</span>' +
+      '<span id="pp-' + pid + '-chev" style="font-size:11px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>' +
+    '</div>' +
+    '<div id="pp-' + pid + '-body" style="display:none;padding:0 14px 14px;border-top:1px solid var(--border);background:#fafafa;">' +
+      '<div style="margin:12px 0 4px;">' + taskHtml + '</div>' +
+      '<div id="pp-' + pid + '-cards" style="margin-top:14px;display:flex;flex-direction:column;gap:8px;"></div>' +
+      '<button onclick="ppShowSprintCard(\'' + pid + '\')" style="margin-top:8px;padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.3);background:transparent;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add content</button>' +
+      '<div style="margin-top:14px;">' +
+        '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:6px;">Phase Notes</div>' +
+        '<textarea id="pp-' + pid + '-notes" onblur="ppSaveSprintPhaseNotes(\'' + pid + '\')" placeholder="Internal notes for this phase…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;min-height:60px;box-sizing:border-box;color:var(--vip-midnight-soft);"></textarea>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function ppToggleSprintPhase(pid) {
+  var body = document.getElementById('pp-' + pid + '-body');
+  var chev = document.getElementById('pp-' + pid + '-chev');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function ppToggleSprintTask(tid, pid) {
+  var btn = document.getElementById('task-' + tid);
+  var textEl = document.getElementById('task-text-' + tid);
+  if (!btn) return;
+  var done = btn.style.background === 'var(--vip-blue)' || btn.innerHTML.includes('✓');
+  if (done) {
+    btn.innerHTML = '';
+    btn.style.background = 'white';
+    btn.style.borderColor = 'var(--border)';
+    if (textEl) { textEl.style.textDecoration = ''; textEl.style.opacity = ''; }
+  } else {
+    btn.innerHTML = '✓';
+    btn.style.background = 'var(--vip-blue)';
+    btn.style.borderColor = 'var(--vip-blue)';
+    btn.style.color = 'white';
+    if (textEl) { textEl.style.textDecoration = 'line-through'; textEl.style.opacity = '0.5'; }
+  }
+  // Save state
+  publishedWidgets['sprint-task-' + tid] = !done;
+  savePublishState();
+}
+
+function ppSaveSprintPhaseNotes(pid) {
+  var el = document.getElementById('pp-' + pid + '-notes');
+  if (!el) return;
+  publishedWidgets['sprint-notes-' + pid] = el.value;
+  savePublishState();
+}
+
+function ppShowSprintCard(pid) {
+  // Reuse existing ppShowAddCard logic if available, else simple prompt
+  showToast('Content cards for sprint phases coming soon');
+}
+
+// Populate Sprint 2 steps with task structure
+function ppPopulateSprint(sprintNum) {
+  var stepMap = { 1: 's' + sprintNum + 'step1', 2: 's' + sprintNum + 'step2', 3: 's' + sprintNum + 'step3', 4: 's' + sprintNum + 'step4' };
+  // Clear placeholder text from each step body
+  [1,2,3,4].forEach(function(s) {
+    var body = document.getElementById('pp-' + stepMap[s] + '-body');
+    if (!body) return;
+    // Remove placeholder
+    var placeholder = body.querySelector('[style*="font-style:italic"]');
+    if (placeholder && placeholder.textContent.includes('Phases will be defined')) placeholder.remove();
+  });
+  // Insert phases grouped by step
+  SPRINT_PHASE_TEMPLATE.forEach(function(phase, i) {
+    var stepBody = document.getElementById('pp-' + stepMap[phase.step] + '-body');
+    if (!stepBody) return;
+    var html = ppBuildPhaseHtml(sprintNum, i, i, phase);
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    // Insert before any existing launch button wrap
+    var launchWrap = stepBody.querySelector('[id^="launch-sprint"]');
+    if (launchWrap) {
+      stepBody.insertBefore(wrapper.firstElementChild, launchWrap);
+    } else {
+      stepBody.appendChild(wrapper.firstElementChild);
+    }
+  });
+}
+
+// Update progress bar to show active sprint only
+function ppUpdateProgressBar(sprintNum, totalSprints) {
+  var indicator = document.getElementById('pb-sprint-indicator');
+  var labelEl = document.getElementById('pb-active-label');
+  var activeSprint = document.getElementById('pb-active-sprint');
+  if (!activeSprint) return;
+
+  // Show indicator if more than 1 sprint
+  if (totalSprints > 1 && indicator) {
+    indicator.style.display = 'block';
+    indicator.textContent = 'Sprint ' + sprintNum + ' of ' + totalSprints;
+  }
+
+  // Update label
+  if (labelEl) {
+    labelEl.textContent = 'Sprint ' + sprintNum;
+    labelEl.style.color = 'var(--vip-blue)';
+  }
+
+  // Reset all steps to upcoming for new sprint
+  var steps = activeSprint.querySelectorAll('.sprint-step, [class*="sprint-step"]');
+  var stepDivs = activeSprint.querySelectorAll('[style*="flex:1;display:flex;flex-direction:column"]');
+  stepDivs.forEach(function(el, i) {
+    var bar = el.querySelector('div');
+    var label = el.querySelectorAll('div')[1] || el.querySelector('div');
+    if (!bar) return;
+    bar.style.background = 'var(--border)';
+    bar.style.position = '';
+    bar.innerHTML = '';
+    el.style.opacity = '0.45';
+  });
+
+  // Set Step 1 as active for new sprint
+  if (stepDivs[0]) {
+    var bar0 = stepDivs[0].querySelector('div');
+    var lbl0 = stepDivs[0].querySelectorAll('div')[1];
+    if (bar0) { bar0.style.background = 'var(--vip-blue)'; bar0.style.position = 'relative'; bar0.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--vip-blue);border:2px solid white;box-shadow:0 0 0 2px var(--vip-blue);"></div>'; }
+    if (lbl0) { lbl0.textContent = 'Set up'; lbl0.style.color = 'var(--vip-blue)'; lbl0.style.fontWeight = '700'; }
+    stepDivs[0].style.opacity = '1';
+  }
+}
+
+// Main launch function
+function ppLaunchSprint(sprintNum) {
+  // Confirm
+  if (!confirm('Launch Sprint ' + sprintNum + '? This will populate the sprint phases and switch the progress bar.')) return;
+
+  ppActiveSprint = sprintNum;
+
+  // Populate the sprint with tasks
+  ppPopulateSprint(sprintNum);
+
+  // Update progress bar
+  ppUpdateProgressBar(sprintNum, ppTotalSprints);
+
+  // Hide the launch button for this sprint
+  var launchWrap = document.getElementById('launch-sprint' + sprintNum + '-wrap');
+  if (launchWrap) launchWrap.style.display = 'none';
+
+  // Activate Sprint 2 section visually — remove upcoming state
+  var upcomingLabel = document.getElementById('sprint' + sprintNum + '-upcoming-label');
+  if (upcomingLabel) upcomingLabel.remove();
+  // Restore section header border to active blue
+  var sprintSection = document.getElementById('pp-sprint' + sprintNum + '-section');
+  if (sprintSection) {
+    var header = sprintSection.querySelector('[style*="border-bottom:2px solid"]');
+    if (header) { header.style.borderBottomColor = 'var(--vip-blue)'; }
+    var sprintTitle = sprintSection.querySelector('[style*="font-size:18px"]');
+    if (sprintTitle) { sprintTitle.style.color = 'var(--vip-midnight)'; }
+  }
+  // Re-enable step wrappers (remove opacity + pointer-events:none)
+  [1,2,3,4].forEach(function(s) {
+    var wrap = document.getElementById('pp-s' + sprintNum + 'step' + s + '-wrap');
+    if (wrap) {
+      wrap.style.opacity = '1';
+      wrap.style.pointerEvents = '';
+      // Restore click handler and chevron
+      var stepHeader = wrap.querySelector('[style*="background:var(--paper-mid)"]');
+      if (stepHeader) {
+        stepHeader.style.cursor = 'pointer';
+        stepHeader.setAttribute('onclick', "ppToggleStep('s" + sprintNum + "step" + s + "')");
+        // Restore step number circle color
+        var circle = stepHeader.querySelector('[style*="background:var(--vip-midnight-muted)"]');
+        if (circle) circle.style.background = 'var(--vip-blue)';
+        // Restore step title color
+        var title = stepHeader.querySelector('[style*="color:var(--vip-midnight-muted)"]');
+        if (title) title.style.color = 'var(--vip-midnight)';
+        // Restore chevron id
+        var chev = stepHeader.querySelector('span:last-child');
+        if (chev) chev.id = 'pp-s' + sprintNum + 'step' + s + '-chev';
+      }
+    }
+  });
+
+  // Show "Launch Sprint 3+" button in Sprint 2 Step 4 (if applicable)
+  if (sprintNum === 2) {
+    var s3wrap = document.getElementById('launch-sprint3-wrap');
+    if (s3wrap) { s3wrap.style.display = 'flex'; }
+  }
+
+  // Scroll to Sprint N section in Project Planning
+  var sprintSection = document.getElementById('pp-s' + sprintNum + 'step1-body');
+  if (sprintSection) {
+    var header = document.getElementById('pp-s' + sprintNum + 'step1');
+    if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Save state + GitHub commit
+  publishedWidgets['pp-active-sprint'] = sprintNum;
+  publishedWidgets['pp-total-sprints'] = ppTotalSprints;
+  publishedWidgets['pp-sprint' + sprintNum + '-launched'] = true;
+  savePublishState();
+  if (typeof abCommitToGitHub === 'function') abCommitToGitHub('Sprint ' + sprintNum + ' launched');
+
+  showToast('✓ Sprint ' + sprintNum + ' launched');
+}
+
+// Launch Sprint 3+ (dynamic, for projects with more than 2 sprints)
+function ppLaunchNextSprint() {
+  var nextNum = ppActiveSprint + 1;
+  ppTotalSprints = Math.max(ppTotalSprints, nextNum);
+
+  // Build Sprint N section HTML dynamically and insert after Sprint 2
+  var sprintContainer = document.querySelector('#view-evaluator > .content-area, #view-evaluator');
+  // Find the Sprint 2 section
+  var s2Header = document.getElementById('pp-s2step1');
+  if (!s2Header) { showToast('Could not find Sprint 2 section'); return; }
+  var s2Section = s2Header.closest('[style*="margin-bottom:28px"]') || s2Header.parentElement;
+
+  var newSection = document.createElement('div');
+  newSection.style.cssText = 'margin-bottom:28px;';
+  newSection.id = 'pp-sprint' + nextNum + '-section';
+  newSection.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--vip-blue);">' +
+      '<div style="font-size:18px;font-weight:800;color:var(--vip-midnight);">Sprint ' + nextNum + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+        '<div style="font-size:12px;color:var(--vip-midnight-muted);" id="sprint' + nextNum + '-count">0/0 tasks complete</div>' +
+        '<div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="sprint' + nextNum + '-bar" style="height:100%;width:0%;background:var(--vip-blue);border-radius:3px;transition:width 0.3s;"></div></div>' +
+      '</div>' +
+    '</div>' +
+    ['Set up & Design','Learning Loop','Adapt & Document','Close / Prep Next Sprint'].map(function(name, i) {
+      var sid = 's' + nextNum + 'step' + (i+1);
+      return '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">' +
+        '<div onclick="ppToggleStep(\'' + sid + '\')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">' +
+          '<div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' + (i+1) + '</div>' +
+          '<div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">' + pvEscape(name) + '</div></div>' +
+          '<div id="pp-' + sid + '-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>' +
+          '<span id="pp-' + sid + '-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>' +
+        '</div>' +
+        '<div id="pp-' + sid + '-body" style="padding:14px 16px;border-top:1px solid var(--border);">' +
+          (i === 3 ? '<div id="launch-sprint' + (nextNum+1) + '-wrap" class="eval-only" style="display:none;margin-top:16px;padding:16px;background:var(--vip-blue-pale);border-radius:12px;border:1.5px solid var(--vip-blue-light);align-items:center;justify-content:space-between;gap:16px;"><div><div style="font-size:13px;font-weight:700;color:var(--vip-midnight);">Ready to begin the next learning loop?</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:2px;">This will generate a new sprint with the same phase and task structure.</div></div><button onclick="ppLaunchNextSprint()" style="padding:8px 20px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0;">Launch next loop →</button></div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+  if (s2Section && s2Section.parentElement) {
+    s2Section.parentElement.insertBefore(newSection, s2Section.nextSibling);
+  }
+
+  ppLaunchSprint(nextNum);
+}
+
+// Restore sprint state on page load
+function ppRestoreSprintState() {
+  var activeSprint = publishedWidgets['pp-active-sprint'];
+  var totalSprints = publishedWidgets['pp-total-sprints'];
+  if (activeSprint) ppActiveSprint = parseInt(activeSprint);
+  if (totalSprints) ppTotalSprints = parseInt(totalSprints);
+
+  // Restore launched sprints
+  for (var s = 2; s <= ppActiveSprint; s++) {
+    if (publishedWidgets['pp-sprint' + s + '-launched']) {
+      ppPopulateSprint(s);
+      ppUpdateProgressBar(s, ppTotalSprints);
+      var launchWrap = document.getElementById('launch-sprint' + s + '-wrap');
+      if (launchWrap) launchWrap.style.display = 'none';
+      if (s >= 2) {
+        var s3wrap = document.getElementById('launch-sprint' + (s+1) + '-wrap');
+        if (s3wrap) s3wrap.style.display = 'flex';
+      }
+    }
+  }
+
+  // Restore task states
+  Object.keys(publishedWidgets).forEach(function(key) {
+    if (!key.startsWith('sprint-task-')) return;
+    var tid = key.replace('sprint-task-', '');
+    var done = publishedWidgets[key];
+    if (!done) return;
+    var btn = document.getElementById('task-' + tid);
+    var textEl = document.getElementById('task-text-' + tid);
+    if (btn) {
+      btn.innerHTML = '✓';
+      btn.style.background = 'var(--vip-blue)';
+      btn.style.borderColor = 'var(--vip-blue)';
+      btn.style.color = 'white';
+    }
+    if (textEl) { textEl.style.textDecoration = 'line-through'; textEl.style.opacity = '0.5'; }
+  });
+
+  // Restore phase notes
+  Object.keys(publishedWidgets).forEach(function(key) {
+    if (!key.startsWith('sprint-notes-')) return;
+    var pid = key.replace('sprint-notes-', '');
+    var el = document.getElementById('pp-' + pid + '-notes');
+    if (el) el.value = publishedWidgets[key];
   });
 }
 
@@ -6440,6 +7386,478 @@ function ppRestoreCards() {
   });
 }
 
+// ── DATA COLLECTION ───────────────────────────────────────────────────────────
+
+// Track submission data per activity for the overview
+var dcSubmissions = {}; // { actId: { count, submitters: Set, lastDate } }
+
+function dcInit() {
+  // Build nav items and views for all photovoice activities
+  var navContainer = document.getElementById('dc-nav-items');
+  var viewContainer = document.getElementById('dc-activity-views');
+  if (!navContainer || !viewContainer) return;
+
+  navContainer.innerHTML = '';
+  viewContainer.innerHTML = '';
+
+  ACTIVITIES.forEach(function(act) {
+    // Only photovoice activities
+    var actEl = document.getElementById(act.id);
+    if (!actEl) return;
+    var header = actEl.querySelector('[style*="background:var(--vip-amber)"]');
+    if (!header) return; // not amber = not photovoice
+
+    var titleEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+    var name = titleEl ? titleEl.textContent.trim() : act.id;
+    var viewId = 'view-dc-' + act.id;
+
+    // Nav item
+    var navItem = document.createElement('div');
+    navItem.className = 'nav-item';
+    navItem.setAttribute('data-color', 'orange');
+    navItem.setAttribute('onclick', "showView('dc-" + act.id + "', this)");
+    navItem.innerHTML = '<span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">' + pvEscape(name) + '</span>';
+    navContainer.appendChild(navItem);
+
+    // Activity data view
+    var viewDiv = document.createElement('div');
+    viewDiv.id = viewId;
+    viewDiv.className = 'view';
+    viewDiv.innerHTML = dcBuildActivityViewHtml(act.id, act.num, name);
+    viewContainer.appendChild(viewDiv);
+
+    // Init submission tracker
+    dcSubmissions[act.id] = { count: 0, submitters: new Set(), lastDate: null };
+  });
+
+  dcBuildOverview();
+}
+
+function dcBuildActivityViewHtml(actId, actNum, name) {
+  return '<div style="background:var(--vip-amber);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">' +
+    '<div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>' +
+    '<div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Data Collection</div>' +
+    '<div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:6px;">' + pvEscape(name) + '</div>' +
+    '<div style="display:flex;gap:20px;margin-top:12px;">' +
+      '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
+        '<div id="dc-stat-count-' + actId + '" style="font-size:24px;font-weight:800;color:white;">0</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">submissions</div>' +
+      '</div>' +
+      '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
+        '<div id="dc-stat-submitters-' + actId + '" style="font-size:24px;font-weight:800;color:white;">0</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">submitters</div>' +
+      '</div>' +
+      '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
+        '<div id="dc-stat-last-' + actId + '" style="font-size:13px;font-weight:700;color:white;line-height:1.3;">—</div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">last submission</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>' +
+  '<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;">' +
+    '<div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;">Submissions Gallery</div>' +
+    '<div id="dc-gallery-' + actId + '" style="display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;">' +
+      '<div id="dc-gallery-empty-' + actId + '" style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">No submissions yet.</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function dcBuildOverview() {
+  var container = document.getElementById('dc-overview-cards');
+  if (!container) return;
+
+  var pvActivities = ACTIVITIES.filter(function(act) {
+    var actEl = document.getElementById(act.id);
+    if (!actEl) return false;
+    return !!actEl.querySelector('[style*="background:var(--vip-amber)"]');
+  });
+
+  if (!pvActivities.length) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">No data collection activities yet. Create a Photovoice activity using the Activity Builder.</div>';
+    return;
+  }
+
+  container.innerHTML = pvActivities.map(function(act) {
+    var actEl = document.getElementById(act.id);
+    var titleEl = actEl ? actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+    var name = titleEl ? titleEl.textContent.trim() : act.id;
+    var stats = dcSubmissions[act.id] || { count: 0, submitters: new Set(), lastDate: null };
+
+    return '<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;" onclick="showView(\'dc-' + act.id + '\', null)">' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:15px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">' + pvEscape(name) + '</div>' +
+        '<div style="font-size:12px;color:var(--vip-midnight-muted);">Photovoice</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:24px;align-items:center;">' +
+        '<div style="text-align:center;">' +
+          '<div id="dc-ov-count-' + act.id + '" style="font-size:22px;font-weight:800;color:var(--vip-amber);">' + stats.count + '</div>' +
+          '<div style="font-size:11px;color:var(--vip-midnight-muted);font-weight:600;">submissions</div>' +
+        '</div>' +
+        '<div style="text-align:center;">' +
+          '<div id="dc-ov-submitters-' + act.id + '" style="font-size:22px;font-weight:800;color:var(--vip-midnight);">' + stats.submitters.size + '</div>' +
+          '<div style="font-size:11px;color:var(--vip-midnight-muted);font-weight:600;">submitters</div>' +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<div id="dc-ov-last-' + act.id + '" style="font-size:12px;font-weight:600;color:var(--vip-midnight-muted);">' + (stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—') + '</div>' +
+          '<div style="font-size:11px;color:var(--vip-midnight-muted);">last submission</div>' +
+        '</div>' +
+        '<div style="font-size:18px;color:var(--vip-midnight-muted);">›</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// Update stats for an activity when submissions load
+function dcUpdateStats(actId, submissions) {
+  if (!dcSubmissions[actId]) dcSubmissions[actId] = { count: 0, submitters: new Set(), lastDate: null };
+  var stats = dcSubmissions[actId];
+  stats.count = submissions.length;
+  stats.submitters = new Set();
+  var lastTs = null;
+  submissions.forEach(function(meta) {
+    if (meta.submitter) stats.submitters.add(meta.submitter);
+    else if (meta.name) stats.submitters.add(meta.name);
+    if (meta.timestamp) {
+      if (!lastTs || new Date(meta.timestamp) > new Date(lastTs)) lastTs = meta.timestamp;
+    }
+  });
+  stats.lastDate = lastTs;
+
+  // Update overview card
+  var countEl = document.getElementById('dc-ov-count-' + actId);
+  var subEl = document.getElementById('dc-ov-submitters-' + actId);
+  var lastEl = document.getElementById('dc-ov-last-' + actId);
+  if (countEl) countEl.textContent = stats.count;
+  if (subEl) subEl.textContent = stats.submitters.size;
+  if (lastEl) lastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
+
+  // Update activity page stats
+  var pCountEl = document.getElementById('dc-stat-count-' + actId);
+  var pSubEl = document.getElementById('dc-stat-submitters-' + actId);
+  var pLastEl = document.getElementById('dc-stat-last-' + actId);
+  if (pCountEl) pCountEl.textContent = stats.count;
+  if (pSubEl) pSubEl.textContent = stats.submitters.size;
+  if (pLastEl) pLastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
+}
+
+// Add a submission card to both the village gallery AND the evaluator dc page
+function dcAddToGallery(actId, meta) {
+  var gallery = document.getElementById('dc-gallery-' + actId);
+  if (!gallery) return;
+  var dupKey = 'dc-' + actId + '-' + (meta.timestamp || Math.random());
+  if (gallery.querySelector('[data-sub-key="' + dupKey + '"]')) return;
+  var empty = document.getElementById('dc-gallery-empty-' + actId);
+  if (empty) empty.remove();
+
+  var ts = meta.timestamp ? new Date(meta.timestamp).toLocaleString() : '';
+  var files = meta.files || [];
+  var viewUrl = meta.driveLink || (files.length > 0 ? files[0].viewUrl : '');
+  var thumbUrl = meta.thumbUrl || (files.length > 0 ? files[0].thumbnailUrl : '');
+  var mediaHtml = '';
+  if (meta.type === 'photo' && thumbUrl) {
+    mediaHtml = '<a href="' + viewUrl + '" target="_blank" style="display:block;margin-bottom:10px;"><img src="' + thumbUrl + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;"></a>';
+  } else if (meta.type === 'story' && meta.storyText) {
+    mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--vip-midnight);line-height:1.6;border-left:3px solid var(--vip-amber);">' + pvEscape(meta.storyText) + '</div>';
+  } else if (viewUrl) {
+    var icon = { video: '🎬', audio: '🎙', story: '📝' }[meta.type] || '📎';
+    mediaHtml = '<a href="' + viewUrl + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f5f5f5;border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--vip-blue);text-decoration:none;">' + icon + ' Open in Drive</a>';
+  }
+  var themePills = (meta.code || '').split(',').map(function(t) {
+    t = t.trim();
+    return t ? '<span style="background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">' + pvEscape(t) + '</span>' : '';
+  }).join('');
+
+  var card = document.createElement('div');
+  card.setAttribute('data-sub-key', dupKey);
+  card.style.cssText = 'background:white;border:1px solid var(--vip-amber-light);border-radius:12px;padding:14px;min-width:240px;max-width:280px;flex-shrink:0;scroll-snap-align:start;';
+  card.innerHTML = mediaHtml +
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">' + themePills + '</div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+      '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + (meta.type || '') + '</span>' +
+      '<span style="font-size:11px;color:var(--vip-midnight-muted);">' + ts + '</span>' +
+    '</div>';
+  gallery.appendChild(card);
+}
+
+// ── INLINE EDITING ────────────────────────────────────────────────────────────
+
+var _ieCurrentEl = null;
+var _ieCurrentKey = null;
+
+function initInlineEditing() {
+  // Only active when NOT in village/residents mode
+  if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+
+  // Add data-edit-key attributes to all editable elements
+  var edits = [
+    // Page-level
+    { sel: '#view-village [style*="font-size:24px"][style*="font-weight:800"]', key: 'village-page-title', type: 'text' },
+    { sel: '#view-village [style*="font-size:14px"][style*="rgba(255,255,255,0.8)"]', key: 'village-page-subtitle', type: 'text' },
+
+    // Nav labels (sidebar)
+    { sel: '#residentsNav .nav-item:nth-child(1) span:last-child', key: 'nav-act-1', type: 'text' },
+    { sel: '#residentsNav .nav-item:nth-child(2) span:last-child', key: 'nav-act-2', type: 'text' },
+    { sel: '#residentsNav .nav-item:nth-child(3) span:last-child', key: 'nav-act-3', type: 'text' },
+    { sel: '#residentsNav .nav-item:nth-child(4) span:last-child', key: 'nav-act-4', type: 'text' },
+
+    // Activity 1
+    { sel: '#res-act-1 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act1-title', type: 'text' },
+    { sel: '#res-act-1 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act1-tag', type: 'text' },
+    { sel: '#res-act-1 [style*="font-size:16px"][style*="font-style:italic"]', key: 'act1-framing-pre', type: 'text' },
+    { sel: '#res-act-1 [style*="font-size:20px"][style*="font-style:italic"]', key: 'act1-framing', type: 'textarea' },
+    { sel: '#res-act-1 [style*="font-size:11px"][style*="text-transform:uppercase"][style*="letter-spacing:0.07em"]', key: 'act1-subcat-header', type: 'text' },
+    { sel: '#res-act-1 [style*="EVB Kickoff"]', key: 'act1-action', type: 'text' },
+
+    // Activity 1 BAR rows
+    { sel: '#res-act-1 [style*="background:#f0f7fa"] [style*="font-size:13px"][style*="line-height:1.7"]', key: 'act1-bar-overall', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#f5f0fb"] [style*="font-size:13px"][style*="line-height:1.7"]', key: 'act1-bar-residents', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#f0f7f1"] [style*="font-size:13px"][style*="line-height:1.7"]', key: 'act1-bar-disagree', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#fdf7f0"] [style*="font-size:13px"][style*="line-height:1.7"]', key: 'act1-bar-outcomes', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#fdf2f2"] [style*="font-size:13px"][style*="line-height:1.7"]', key: 'act1-bar-values', type: 'textarea' },
+
+    // Activity 1 subcategory descriptions
+    { sel: '#res-act-1 [style*="background:#f5f0fb"] [style*="line-height:1.6"]', key: 'act1-sub-residents', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#f0f7f1"] [style*="line-height:1.6"]', key: 'act1-sub-disagree', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#fdf7f0"] [style*="line-height:1.6"]', key: 'act1-sub-outcomes', type: 'textarea' },
+    { sel: '#res-act-1 [style*="background:#fdf2f2"] [style*="line-height:1.6"]', key: 'act1-sub-values', type: 'textarea' },
+
+    // Activity 2
+    { sel: '#res-act-2 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act2-title', type: 'text' },
+    { sel: '#res-act-2 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act2-tag', type: 'text' },
+    { sel: '#res-act-2 [style*="font-size:20px"][style*="font-style:italic"]', key: 'act2-framing', type: 'textarea' },
+    { sel: '#res-act-2 [style*="font-size:11px"][style*="text-transform:uppercase"][style*="letter-spacing:0.07em"]', key: 'act2-subcat-header', type: 'text' },
+    { sel: '#res-act-2 [style*="Building the Village"]', key: 'act2-action', type: 'text' },
+    { sel: '#res-act-2 [style*="background:#EBF6FB"] [style*="font-size:13px"][style*="font-weight:700"]', key: 'act2-sub1-name', type: 'text' },
+    { sel: '#res-act-2 [style*="background:#f5f0fb"] [style*="font-size:13px"][style*="font-weight:700"]', key: 'act2-sub2-name', type: 'text' },
+    { sel: '#res-act-2 [style*="background:#f0f7f1"] [style*="font-size:13px"][style*="font-weight:700"]', key: 'act2-sub3-name', type: 'text' },
+
+    // Activity 3
+    { sel: '#res-act-3 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act3-title', type: 'text' },
+    { sel: '#res-act-3 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act3-tag', type: 'text' },
+
+    // Activity 4
+    { sel: '#res-act-4 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act4-title', type: 'text' },
+    { sel: '#res-act-4 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act4-tag', type: 'text' },
+  ];
+
+  edits.forEach(function(def) {
+    try {
+      var el = document.querySelector(def.sel);
+      if (!el || el.hasAttribute('data-edit-key')) return;
+      el.setAttribute('data-edit-key', def.key);
+      el.setAttribute('data-edit-type', def.type);
+      el.classList.add('inline-editable');
+      el.addEventListener('click', function(e) {
+        // Only fire in evaluator mode
+        if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+        e.stopPropagation();
+        ieOpenPopover(el, def.key, def.type);
+      });
+    } catch(err) {}
+  });
+
+  // Also mark meeting timeline nodes as editable (handled separately via existing edit UI)
+}
+
+function ieOpenPopover(el, key, type) {
+  _ieCurrentEl = el;
+  _ieCurrentKey = key;
+
+  var pop = document.getElementById('inline-edit-popover');
+  if (!pop) return;
+
+  var label = document.getElementById('ie-pop-label');
+  var field = document.getElementById('ie-pop-field');
+  var input = document.getElementById('ie-pop-input');
+
+  var currentText = el.textContent.trim();
+  var isTextarea = type === 'textarea';
+
+  if (label) label.textContent = 'Edit text';
+  if (isTextarea) {
+    if (field) { field.style.display = 'block'; field.value = currentText; }
+    if (input) input.style.display = 'none';
+  } else {
+    if (input) { input.style.display = 'block'; input.value = currentText; }
+    if (field) field.style.display = 'none';
+  }
+
+  // Position near the element
+  var rect = el.getBoundingClientRect();
+  pop.style.display = 'block';
+  var popH = pop.offsetHeight || 160;
+  var top = rect.bottom + 8;
+  if (top + popH > window.innerHeight) top = rect.top - popH - 8;
+  pop.style.top = Math.max(8, top) + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 500) + 'px';
+
+  // Focus field
+  setTimeout(function() {
+    if (isTextarea && field) field.focus();
+    else if (input) input.focus();
+  }, 50);
+}
+
+function ieSavePopover() {
+  if (!_ieCurrentEl || !_ieCurrentKey) return;
+  var field = document.getElementById('ie-pop-field');
+  var input = document.getElementById('ie-pop-input');
+  var newText = (_ieCurrentEl.getAttribute('data-edit-type') === 'textarea')
+    ? (field ? field.value : '')
+    : (input ? input.value : '');
+  newText = newText.trim();
+  if (!newText) { ieClosePopover(); return; }
+
+  // Update DOM
+  _ieCurrentEl.textContent = newText;
+
+  // If this is an activity title, also update nav label
+  var key = _ieCurrentKey;
+  var numMatch = key.match(/^act(\d+)-title$/);
+  var genMatch = key.match(/^(res-act-\d+)-title$/);
+  if (numMatch) {
+    var navSpan = document.querySelector('#residentsNav .nav-item:nth-child(' + numMatch[1] + ') span:last-child');
+    if (navSpan) navSpan.textContent = newText;
+  } else if (genMatch) {
+    var actId = genMatch[1];
+    document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
+      if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'" + actId + "'")) {
+        var span = item.querySelector('span:last-child');
+        if (span) span.textContent = newText;
+      }
+    });
+  }
+
+  // Persist to Drive
+  publishedWidgets['ie-' + key] = newText;
+  savePublishState();
+
+  // GitHub commit (structural change)
+  if (typeof abCommitToGitHub === 'function') abCommitToGitHub('Text edit: ' + key);
+
+  ieClosePopover();
+  showToast('✓ Saved');
+}
+
+function ieClosePopover() {
+  var pop = document.getElementById('inline-edit-popover');
+  if (pop) pop.style.display = 'none';
+  _ieCurrentEl = null;
+  _ieCurrentKey = null;
+}
+
+// Restore inline edits from Drive on page load
+// Bind a single element for inline editing
+function ieBindElement(el, key, type) {
+  if (!el || el.hasAttribute('data-edit-key')) return;
+  el.setAttribute('data-edit-key', key);
+  el.setAttribute('data-edit-type', type);
+  el.classList.add('inline-editable');
+  el.addEventListener('click', function(e) {
+    if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+    e.stopPropagation();
+    ieOpenPopover(el, key, type);
+  });
+}
+
+// Wire inline editing for a generated activity by id
+function ieInitActivity(id, num) {
+  var actEl = document.getElementById(id);
+  if (!actEl) return;
+
+  // Title
+  var titleEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+  ieBindElement(titleEl, id + '-title', 'text');
+
+  // Tag
+  var tagEl = actEl.querySelector('[style*="background:rgba(255,255,255,0.2)"][style*="font-size:10px"]');
+  ieBindElement(tagEl, id + '-tag', 'text');
+
+  // Framing question
+  var framingEl = actEl.querySelector('[style*="font-size:20px"][style*="font-style:italic"]');
+  ieBindElement(framingEl, id + '-framing', 'textarea');
+
+  // Framing preamble
+  var preEl = actEl.querySelector('[style*="font-size:16px"][style*="font-style:italic"]');
+  ieBindElement(preEl, id + '-framing-pre', 'text');
+
+  // Action label
+  var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
+  ieBindElement(actionEl, id + '-action', 'text');
+
+  // BAR rows
+  actEl.querySelectorAll('[data-bar-row]').forEach(function(rowEl) {
+    var rowName = rowEl.getAttribute('data-bar-row');
+    var contentEl = rowEl.querySelector('[style*="font-size:13px"][style*="line-height:1.7"]') ||
+                    rowEl.querySelector('[style*="font-size:13px"]');
+    ieBindElement(contentEl, id + '-bar-' + rowName.toLowerCase().replace(/\s+/g, '-'), 'textarea');
+  });
+
+  // AAR cells
+  actEl.querySelectorAll('[data-aar-cell]').forEach(function(cellEl) {
+    var cellKey = cellEl.getAttribute('data-aar-cell');
+    ieBindElement(cellEl, id + '-aar-' + cellKey, 'textarea');
+  });
+}
+
+function ieRestoreEdits() {
+  Object.keys(publishedWidgets).forEach(function(key) {
+    if (!key.startsWith('ie-')) return;
+    var editKey = key.replace('ie-', '');
+    var newText = publishedWidgets[key];
+    if (!newText) return;
+    var el = document.querySelector('[data-edit-key="' + editKey + '"]');
+    if (el) {
+      el.textContent = newText;
+      // Sync nav label if this is an activity title
+      var titleMatch = editKey.match(/^act(\d+)-title$/) || editKey.match(/^(res-act-\d+)-title$/);
+      if (titleMatch) {
+        var actId = titleMatch[1];
+        // For hardcoded acts (act1, act2...) sync by nav child index
+        var numMatch = actId.match(/^act(\d+)$/);
+        if (numMatch) {
+          var navSpan = document.querySelector('#residentsNav .nav-item:nth-child(' + numMatch[1] + ') span:last-child');
+          if (navSpan) navSpan.textContent = newText;
+        }
+        // For generated acts sync by res-act-N id
+        var genMatch = actId.match(/^res-act-(\d+)$/);
+        if (genMatch) {
+          var navItems = document.querySelectorAll('#residentsNav .nav-item');
+          navItems.forEach(function(item) {
+            if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'" + actId + "'")) {
+              var span = item.querySelector('span:last-child');
+              if (span) span.textContent = newText;
+            }
+          });
+        }
+      }
+    }
+  });
+}
+
+</script>
+
+<!-- Inline edit popover -->
+<div id="inline-edit-popover">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div id="ie-pop-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-blue);">Edit text</div>
+    <button onclick="ieClosePopover()" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--vip-midnight-muted);padding:0;line-height:1;">×</button>
+  </div>
+  <textarea id="ie-pop-field" rows="4" style="display:none;"></textarea>
+  <input type="text" id="ie-pop-input" style="display:none;">
+  <div style="display:flex;gap:8px;margin-top:10px;">
+    <button onclick="ieSavePopover()" style="flex:1;padding:7px 0;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);">Save</button>
+    <button onclick="ieClosePopover()" style="padding:7px 16px;border-radius:20px;background:white;color:var(--vip-midnight-muted);border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Cancel</button>
+  </div>
+</div>
+
+<!-- Close popover on outside click -->
+<script>
+document.addEventListener('click', function(e) {
+  var pop = document.getElementById('inline-edit-popover');
+  if (pop && pop.style.display !== 'none' && !pop.contains(e.target)) {
+    ieClosePopover();
+  }
+});
 </script>
 </div><!-- /app -->
 </body>
