@@ -1519,16 +1519,16 @@
             <div id="ab-ctx-existing" style="display:none;">
               <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Which activity?</label>
               <div style="display:flex;flex-direction:column;gap:6px;" id="ab-activity-picker">
-                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abLoadEditFields('res-act-1')">
                   <input type="radio" name="ab-existing-act" value="res-act-1"> Data Collection: Planning for EVB Kickoff
                 </label>
-                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abLoadEditFields('res-act-2')">
                   <input type="radio" name="ab-existing-act" value="res-act-2"> Data Collection: Group and Individual Roles
                 </label>
-                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abLoadEditFields('res-act-3')">
                   <input type="radio" name="ab-existing-act" value="res-act-3"> Submit Data: Tasty
                 </label>
-                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abLoadEditFields('res-act-4')">
                   <input type="radio" name="ab-existing-act" value="res-act-4"> Submit Data: Trust
                 </label>
               </div>
@@ -1547,6 +1547,19 @@
               <div style="margin-bottom:10px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Action label <span style="font-weight:400;font-style:italic;">(the dark bubble)</span></label>
                 <input type="text" id="ab-edit-action" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+              </div>
+              <!-- Subcategories section — pre-populated from existing activity -->
+              <div id="ab-edit-subcats-wrap" style="margin-bottom:10px;padding:12px 14px;background:var(--vip-blue-pale);border-radius:10px;border:1px solid var(--vip-blue-light);">
+                <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">Subcategories
+                  <span style="font-weight:400;font-style:italic;color:var(--vip-midnight-muted);font-size:11px;"> (populate both framing banner and BAR rows)</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                  <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Subcategory block header <span style="font-weight:400;font-style:italic;">(optional)</span></label>
+                  <input type="text" id="ab-edit-subcat-header" style="width:100%;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                </div>
+                <div style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);margin-bottom:6px;">Subcategory names</div>
+                <div id="ab-edit-subcat-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+                <button onclick="abEditAddSubcat()" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:white;color:var(--vip-blue);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add subcategory</button>
               </div>
               <div id="ab-edit-bar-fields" style="margin-bottom:10px;"></div>
             </div>
@@ -1573,20 +1586,31 @@
           <!-- Step 3: Source (conditional — not shown for manual themes) -->
           <div id="ab-step3" style="display:none;margin-bottom:16px;">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:8px;">Step 3 — Source material</div>
-            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
-              <button onclick="abSetSource('paste')" id="ab-src-paste" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Paste text</button>
-              <button onclick="abSetSource('doc')" id="ab-src-doc" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Load from Google Doc</button>
+            <!-- Source type selector — shown only in edit-existing mode -->
+            <div id="ab-source-type-wrap" style="display:none;margin-bottom:12px;">
+              <div style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);margin-bottom:6px;">What are you synthesizing?</div>
+              <div style="display:flex;flex-direction:column;gap:6px;" id="ab-source-type-picker">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abSetSourceType('full-bar')">
+                  <input type="radio" name="ab-source-type" value="full-bar"> <div><div style="font-weight:600;">Full BAR</div><div style="font-size:11px;color:var(--vip-midnight-muted);">Synthesize "What will make us successful?" across all subcategory rows</div></div>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abSetSourceType('specific-subcat')">
+                  <input type="radio" name="ab-source-type" value="specific-subcat"> <div><div style="font-weight:600;">Specific subcategory</div><div style="font-size:11px;color:var(--vip-midnight-muted);">Fill one row only</div></div>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abSetSourceType('transcript')">
+                  <input type="radio" name="ab-source-type" value="transcript"> <div><div style="font-weight:600;">Meeting transcript</div><div style="font-size:11px;color:var(--vip-midnight-muted);">AI extracts BAR content from a meeting transcript</div></div>
+                </label>
+              </div>
+              <!-- Subcategory dropdown — shown for specific-subcat -->
+              <div id="ab-subcat-dropdown-wrap" style="display:none;margin-top:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Which subcategory?</label>
+                <select id="ab-subcat-dropdown" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;background:white;">
+                  <option value="">— select —</option>
+                </select>
+              </div>
             </div>
+            <!-- Paste input only -->
             <div id="ab-paste-input">
               <textarea id="ab-text" rows="5" placeholder="Paste meeting transcript, notes, or interview excerpts here. Including the meeting transcript significantly improves the BAR synthesis." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;line-height:1.6;"></textarea>
-            </div>
-            <div id="ab-doc-input" style="display:none;">
-              <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" id="ab-doc-url" placeholder="Paste Google Doc URL or Doc ID" style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
-                <button onclick="abLoadDoc()" style="padding:9px 18px;border-radius:8px;background:var(--vip-blue);color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);white-space:nowrap;">Load Doc</button>
-              </div>
-              <div id="ab-doc-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;min-height:18px;"></div>
-              <textarea id="ab-doc-text" rows="5" placeholder="Document text will appear here after loading…" style="width:100%;margin-top:8px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;line-height:1.6;display:none;"></textarea>
             </div>
           </div>
 
@@ -6410,30 +6434,78 @@ function abLoadEditFields(actId) {
   var editPanel = document.getElementById('ab-ctx-edit-fields');
   if (!editPanel) return;
   editPanel.style.display = 'block';
-  // Load current values from DOM
+
+  // Show source type selector in Step 3 for edit mode
+  var sourceTypeWrap = document.getElementById('ab-source-type-wrap');
+  if (sourceTypeWrap) sourceTypeWrap.style.display = 'block';
+
+  // Show Step 3 and Step 4
+  var step3 = document.getElementById('ab-step3');
+  var step4 = document.getElementById('ab-step4');
+  if (step3) step3.style.display = 'block';
+  if (step4) step4.style.display = 'block';
+
+  // Update generate button for this activity
+  document.getElementById('ab-generate-btns').innerHTML =
+    '<button onclick="abGenerateEditBar(\'' + actId + '\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ AI: Synthesize BAR content</button>' +
+    '<button onclick="abSaveEditedActivity(\'' + actId + '\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Save changes to activity</button>';
+
   var actEl = document.getElementById(actId);
   if (!actEl) return;
+
   // Name
   var nameEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
   var nameInput = document.getElementById('ab-edit-name');
-  if (nameInput && nameEl) nameInput.value = nameEl.textContent;
+  if (nameInput && nameEl) nameInput.value = nameEl.textContent.trim();
+
   // Framing
   var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
   var framingInput = document.getElementById('ab-edit-framing');
-  if (framingInput && framingEl) framingInput.value = framingEl.textContent;
+  if (framingInput && framingEl) framingInput.value = framingEl.textContent.trim();
+
   // Action label
   var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
   var actionInput = document.getElementById('ab-edit-action');
-  if (actionInput && actionEl) actionInput.value = actionEl.textContent;
-  // BAR rows
+  if (actionInput && actionEl) actionInput.value = actionEl.textContent.trim();
+
+  // Subcategories — detect from existing framing banner boxes and BAR rows
+  var subcatList = document.getElementById('ab-edit-subcat-list');
+  if (subcatList) {
+    subcatList.innerHTML = '';
+    // Detect subcategory header
+    var subcatHeaderEl = actEl.querySelector('[style*="text-transform:uppercase"][style*="letter-spacing:0.07em"]');
+    var headerInput = document.getElementById('ab-edit-subcat-header');
+    if (headerInput && subcatHeaderEl) headerInput.value = subcatHeaderEl.textContent.trim();
+
+    // Detect existing subcategory names from BAR rows
+    var barRows = actEl.querySelectorAll('[data-bar-row]');
+    var detectedSubcats = [];
+    barRows.forEach(function(row) {
+      var name = row.getAttribute('data-bar-row');
+      if (name && name !== 'Overall') detectedSubcats.push(name);
+    });
+
+    // Populate subcat fields
+    if (detectedSubcats.length) {
+      detectedSubcats.forEach(function(sc) { abEditAddSubcatField(sc); });
+    } else {
+      // No subcategories — add one blank field
+      abEditAddSubcatField('');
+    }
+
+    // Populate subcategory dropdown for source type
+    abPopulateSubcatDropdown(detectedSubcats);
+  }
+
+  // BAR row fields
   var barFields = document.getElementById('ab-edit-bar-fields');
   if (barFields) {
     barFields.innerHTML = '';
-    var barRows = actEl.querySelectorAll('[data-bar-row]');
-    barRows.forEach(function(row) {
+    var barRows2 = actEl.querySelectorAll('[data-bar-row]');
+    barRows2.forEach(function(row) {
       var rowName = row.getAttribute('data-bar-row');
       var contentEl = row.querySelector('[style*="font-size:13px"]');
-      var currentText = (contentEl && contentEl.textContent !== '—') ? contentEl.textContent : '';
+      var currentText = (contentEl && contentEl.textContent.trim() !== '—') ? contentEl.textContent.trim() : '';
       var field = document.createElement('div');
       field.style.marginBottom = '10px';
       field.innerHTML =
@@ -6441,13 +6513,139 @@ function abLoadEditFields(actId) {
         '<textarea data-edit-bar-row="' + pvEscape(rowName) + '" rows="3" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(currentText) + '</textarea>';
       barFields.appendChild(field);
     });
-    if (barRows.length) {
-      var saveBtn = document.createElement('button');
-      saveBtn.textContent = 'Save changes to activity';
-      saveBtn.style.cssText = 'margin-top:8px;padding:7px 18px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);';
-      saveBtn.onclick = function() { abSaveEditedActivity(actId); };
-      barFields.appendChild(saveBtn);
-    }
+  }
+}
+
+function abEditAddSubcatField(value) {
+  var list = document.getElementById('ab-edit-subcat-list');
+  if (!list) return;
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML =
+    '<input type="text" value="' + pvEscape(value) + '" placeholder="Subcategory name" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
+    '<button onclick="this.parentElement.remove();abRefreshSubcatDropdown();" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;font-family:var(--sans);">✕</button>';
+  list.appendChild(row);
+}
+
+function abEditAddSubcat() {
+  abEditAddSubcatField('');
+  abRefreshSubcatDropdown();
+}
+
+function abGetEditSubcats() {
+  var inputs = document.querySelectorAll('#ab-edit-subcat-list input');
+  var result = [];
+  inputs.forEach(function(inp) {
+    var v = (inp.value || '').trim();
+    if (v) result.push(v);
+  });
+  return result;
+}
+
+function abPopulateSubcatDropdown(subcats) {
+  var sel = document.getElementById('ab-subcat-dropdown');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— select —</option>';
+  subcats.forEach(function(sc) {
+    var opt = document.createElement('option');
+    opt.value = sc;
+    opt.textContent = sc;
+    sel.appendChild(opt);
+  });
+}
+
+function abRefreshSubcatDropdown() {
+  abPopulateSubcatDropdown(abGetEditSubcats());
+}
+
+var abCurrentSourceType = 'full-bar';
+
+function abSetSourceType(type) {
+  abCurrentSourceType = type;
+  var dropdownWrap = document.getElementById('ab-subcat-dropdown-wrap');
+  if (dropdownWrap) dropdownWrap.style.display = (type === 'specific-subcat') ? 'block' : 'none';
+}
+
+// New AI generation function for edit-existing mode
+async function abGenerateEditBar(actId) {
+  var sourceText = (document.getElementById('ab-text').value || '').trim();
+  if (!sourceText) { showToast('Please paste source material in Step 3 first'); return; }
+
+  var subcats = abGetEditSubcats();
+  var sourceType = abCurrentSourceType;
+  var targetSubcat = sourceType === 'specific-subcat' ? (document.getElementById('ab-subcat-dropdown').value || '').trim() : null;
+
+  if (sourceType === 'specific-subcat' && !targetSubcat) { showToast('Please select a subcategory'); return; }
+
+  var outputEl = document.getElementById('ab-output');
+  var thinkingEl = document.getElementById('ab-output-thinking');
+  var outputTextEl = document.getElementById('ab-output-text');
+  outputEl.style.display = 'block';
+  thinkingEl.style.display = 'block';
+  outputTextEl.style.display = 'none';
+  outputTextEl.textContent = '';
+
+  var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language accessible to community members. Write in first-person plural "we" voice. Each BAR row should be 2-3 narrative sentences answering the question "What will make us successful?" for that subcategory. Be specific and grounded in the source material provided.';
+
+  var rowsToFill = targetSubcat ? [targetSubcat] : subcats.length ? subcats : ['Overall'];
+  var rowsInstruction = rowsToFill.map(function(r) { return r.toUpperCase() + '\n[2-3 sentences]'; }).join('\n\n');
+
+  var sourceLabel = sourceType === 'transcript' ? 'MEETING TRANSCRIPT' : sourceType === 'specific-subcat' ? 'SOURCE MATERIAL for ' + targetSubcat : 'SOURCE MATERIAL';
+  var userMsg = sourceLabel + ':\n' + sourceText + '\n\nFor the BAR question "What will make us successful?", write synthesis for the following rows:\n\n' + rowsInstruction + '\n\nFormat exactly as shown — row name in caps, then text below. Do not include any other sections.';
+
+  try {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, system: systemPrompt, messages: [{ role: 'user', content: userMsg }] })
+    });
+    var data = await response.json();
+    var reply = data.content?.[0]?.text || 'Something went wrong.';
+    thinkingEl.style.display = 'none';
+    outputTextEl.style.display = 'block';
+    outputTextEl.textContent = reply;
+    outputTextEl.setAttribute('data-full-reply', reply);
+
+    // Offer to apply to activity
+    var existingBtn = document.getElementById('ab-apply-edit-btn');
+    if (existingBtn) existingBtn.remove();
+    var btn = document.createElement('button');
+    btn.id = 'ab-apply-edit-btn';
+    btn.textContent = 'Apply to activity';
+    btn.style.cssText = 'margin-top:12px;padding:7px 18px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);display:block;';
+    btn.onclick = function() {
+      // Parse reply and apply to BAR rows
+      rowsToFill.forEach(function(rowName) {
+        var re = new RegExp(rowName.toUpperCase() + '\\s*\\n([\\s\\S]*?)(?=\\n[A-Z][A-Z\\s]+\\n|$)', 'i');
+        var m = reply.match(re);
+        if (!m) return;
+        var newText = m[1].trim();
+        // Update textarea in edit panel
+        var textarea = document.querySelector('[data-edit-bar-row="' + rowName + '"]');
+        if (textarea) textarea.value = newText;
+        // Update DOM directly
+        var actEl = document.getElementById(actId);
+        if (actEl) {
+          var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
+          if (barRow) {
+            var contentEl = barRow.querySelector('[style*="font-size:13px"]');
+            if (contentEl) { contentEl.textContent = newText; contentEl.style.fontStyle = 'normal'; }
+          }
+        }
+      });
+      publishedWidgets[actId + '-bar-ai-edit'] = JSON.stringify({ rows: rowsToFill, reply: reply });
+      savePublishState();
+      if (typeof abCommitToGitHub === 'function') abCommitToGitHub('BAR AI edit: ' + actId);
+      showToast('✓ BAR content applied');
+      btn.textContent = '✓ Applied';
+      btn.style.background = '#1a6b3e';
+      btn.onclick = null;
+    };
+    outputEl.appendChild(btn);
+  } catch(err) {
+    thinkingEl.style.display = 'none';
+    outputTextEl.style.display = 'block';
+    outputTextEl.textContent = 'Connection error. Please try again.';
   }
 }
 
@@ -6565,8 +6763,7 @@ abSetMode = function(mode) {
     step3.style.display = 'block';
     step4.style.display = 'block';
     document.getElementById('ab-generate-btns').innerHTML =
-      '<button onclick="abLoadEditFieldsFromPicker()" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Load activity fields</button>' +
-      '<button onclick="abGenerate(\'edit-bar\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ AI: Suggest BAR content</button>';
+      '<span style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Select an activity above to load its fields</span>';
     return;
   }
   // Show subcategory panel only for new-bar
