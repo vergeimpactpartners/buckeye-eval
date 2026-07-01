@@ -80,7 +80,7 @@
   .view.active { display: block; position: relative; max-width: 100%; }
   .eval-only { display: inline-block; }
   body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
-  body.hide-eval .sidebar-mode { display: none !important; }
+  body.hide-eval .sidebar-mode, body.mode-village .sidebar-mode { display: none !important; }
   body.hide-eval #view-village { opacity: 0; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
   /* True village URL only: hide unpublished themes from residents */
@@ -1716,9 +1716,6 @@
       <!-- ═══════════════════════════════ /VILLAGE EXPERIENCE ══════════════════════════ -->
       <div id="view-village" class="view">
 
-
-        <!-- Header -->
-        <div style="padding:12px 28px 0;">
         <!-- Header -->
         <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
           <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
@@ -1726,7 +1723,6 @@
           <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Hub</div>
           <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:12px;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
           <div id="village-welcome-text" style="font-size:13px;color:rgba(255,255,255,0.9);line-height:1.8;font-style:italic;border-top:1px solid rgba(255,255,255,0.2);padding-top:12px;">This is your evaluation space — built with and for Buckeye EcoVillage residents. Here you'll find the activities we're doing together to document what we're learning, track what's working, and make sense of it as a community. Your participation shapes the evaluation in real time.</div>
-        </div>
         </div>
 
         <!-- Timeline -->
@@ -4358,9 +4354,9 @@ function _applyPublishedState() {
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
     var vv = document.getElementById('view-village');
     if (vv) {
-      // Remove hide-eval opacity immediately — no more blank flash
-      document.body.classList.remove('hide-eval');
+      // Remove hide-eval opacity on view-village directly — keep hide-eval on body
       vv.style.opacity = '1';
+      vv.style.display = 'block';
     }
   }
 
