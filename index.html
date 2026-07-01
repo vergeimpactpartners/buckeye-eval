@@ -90,18 +90,18 @@
   #view-village .themes-panel-unpublished { opacity: 0.5; }
   body.mode-residents.hide-eval #view-village .themes-panel-unpublished { display: none !important; }
 
-  /* INLINE EDITING — evaluator only */
-  body:not(.mode-village):not(.mode-residents) .inline-editable {
+  /* INLINE EDITING — evaluator only, persists across all view modes */
+  body.is-evaluator .inline-editable {
     position: relative;
     cursor: pointer;
     border-radius: 4px;
     transition: background 0.15s;
   }
-  body:not(.mode-village):not(.mode-residents) .inline-editable:hover {
+  body.is-evaluator .inline-editable:hover {
     background: rgba(24,144,186,0.08);
     outline: 1.5px dashed var(--vip-blue);
   }
-  body:not(.mode-village):not(.mode-residents) .inline-editable::after {
+  body.is-evaluator .inline-editable::after {
     content: '✏️';
     font-size: 10px;
     margin-left: 5px;
@@ -109,7 +109,7 @@
     transition: opacity 0.15s;
     pointer-events: none;
   }
-  body:not(.mode-village):not(.mode-residents) .inline-editable:hover::after {
+  body.is-evaluator .inline-editable:hover::after {
     opacity: 1;
   }
   /* Edit popover */
@@ -474,10 +474,9 @@
         <!-- Populated dynamically from ACTIVITIES (photovoice only) -->
       </div>
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-midnight);">Sensemaking</div>
-      <div class="nav-item" data-color="midnight" onclick="showView('coding', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Coding studio</span></div>
-      <div class="nav-item" data-color="midnight" onclick="showView('themes', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Theme map</span></div>
+      <div class="nav-item" data-color="midnight" onclick="showView('ai', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Sensemaking</span></div>
+      <div class="nav-item" data-color="midnight" onclick="showView('themes', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Themes</span></div>
       <div class="nav-item" data-color="midnight" onclick="showView('fidelity', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Fidelity tracker</span></div>
-      <div class="nav-item" data-color="midnight" onclick="showView('ai', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">AI sensemaking</span></div>
     </div>
 
     <div id="residentsNav" class="nav-group" style="display:none;">
@@ -488,43 +487,13 @@
       <div class="nav-group-label" style="margin-top:8px;">Activities</div>
       <div style="padding:0 6px 8px;">
         <div class="nav-item" data-color="vip-blue" onclick="scrollToResActivity('res-act-1')"><span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">Planning for EVB Kickoff</span></div>
-        <div class="nav-item" data-color="vip-midnight" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Group and Individual Roles</span></div>
+        <div class="nav-item" data-color="vip-blue" onclick="scrollToResActivity('res-act-2')"><span class="nav-dot" style="background:var(--vip-blue);"></span> <span style="color:var(--vip-blue);">Group and Individual Roles</span></div>
         <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-3')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Tasty</span></div>
         <div class="nav-item" data-color="vip-amber" onclick="scrollToResActivity('res-act-4')"><span class="nav-dot" style="background:var(--vip-amber);"></span> <span style="color:var(--vip-amber);">Submit Data: Trust</span></div>
       </div>
     </div>
 
     <div id="communityNav" class="nav-group" style="display:none;">
-      <div class="nav-group-label">Jump to</div>
-      <div style="padding:0 6px 8px;">
-
-        <!-- Core sections — always visible -->
-        <div class="nav-item" data-section="top" onclick="activateCommNav(this);document.getElementById('mainContentArea').scrollTop=0;"><span class="nav-dot dot-sage"></span> Home</div>
-        <div class="nav-item" data-section="about-this-project" onclick="activateCommNav(this);scrollToSection('about-this-project')"><span class="nav-dot dot-sage"></span> About This Project</div>
-        <div class="nav-item" data-section="eval-aims" onclick="activateCommNav(this);scrollToSection('eval-aims')"><span class="nav-dot dot-sage"></span> Evaluation Aims</div>
-        <div class="nav-item" data-section="our-process" onclick="activateCommNav(this);scrollToSection('our-process')"><span class="nav-dot dot-sage"></span> Our Process</div>
-
-        <!-- Learning widget link — shown only when published -->
-        <div id="comm-nav-lq" style="display:none;">
-          <div class="nav-item" data-section="learning-questions" onclick="activateCommNav(this);scrollToSection('learning-questions')" style="color:var(--vip-magenta);">
-            <span class="nav-dot" style="background:var(--vip-magenta);"></span>
-            <span style="color:var(--vip-magenta);">Our Learning Questions</span>
-          </div>
-        </div>
-
-        <!-- Action widgets — shown only when published -->
-        <div id="comm-nav-actions" style="display:none;">
-          <div style="font-size:10px;color:var(--vip-orange);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin:10px 0 7px;">Take action</div>
-          <div id="comm-nav-story-link" style="display:none;">
-            <div class="nav-item" data-section="comm-story-widget" onclick="activateCommNav(this);scrollToSection('comm-story-widget')" style="color:var(--vip-orange);">
-              <span class="nav-dot" style="background:var(--vip-orange);"></span>
-              <span style="color:var(--vip-orange);">Share a story</span>
-            </div>
-          </div>
-          <!-- Future action links will appear here when published -->
-        </div>
-
-      </div>
     </div>
 
     </div>
@@ -611,7 +580,7 @@
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
               <div style="flex:1;">
                 <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Set up & Design</div>
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Establishing the evaluation design and learning framework</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">We align what matters for your learning — co-designing learning questions, decisions, roles, and methods so the sprint is focused, feasible, and set up to apply learning from the start.</div>
               </div>
               <div id="pp-s1step1-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/9 tasks</div>
               <span id="pp-s1step1-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
@@ -660,7 +629,30 @@
                     <div style="margin:12px 0 4px;">
                           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
                             <button id="task-p1t0" onclick="toggleTask('p1t0',1)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
-                            <span id="task-text-p1t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Explicit Learning Question Reframing Gate — mandatory reframing and prioritization using 4 tests: time, authority, emergence, plausibility AND right-sizing of well-fit formative questions</span>
+                            <div style="flex:1;">
+                              <span id="task-text-p1t0" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">Explicit Learning Question Reframing Gate — mandatory reframing and prioritization using 4 tests: time, authority, emergence, plausibility AND right-sizing of well-fit formative questions</span>
+                              <div style="margin-top:10px;padding:12px 14px;background:var(--vip-blue-pale);border-radius:10px;border:1px solid var(--vip-blue-light);">
+                                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-blue);margin-bottom:10px;">Well-fit learning questions are:</div>
+                                <div style="display:flex;flex-direction:column;gap:8px;">
+                                  <div style="display:flex;gap:10px;align-items:flex-start;">
+                                    <span style="font-size:11px;font-weight:700;color:var(--vip-blue);background:white;border:1px solid var(--vip-blue-light);border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0;">Time-bound</span>
+                                    <span style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">Learning can inform a decision or the development of the work in 90 days.</span>
+                                  </div>
+                                  <div style="display:flex;gap:10px;align-items:flex-start;">
+                                    <span style="font-size:11px;font-weight:700;color:var(--vip-blue);background:white;border:1px solid var(--vip-blue-light);border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0;">Developmental</span>
+                                    <span style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">Asks "what's happening and what enables it" vs. "did it work?"</span>
+                                  </div>
+                                  <div style="display:flex;gap:10px;align-items:flex-start;">
+                                    <span style="font-size:11px;font-weight:700;color:var(--vip-blue);background:white;border:1px solid var(--vip-blue-light);border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0;">Applied</span>
+                                    <span style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">You have the mechanisms and authority to absorb and act on the learning.</span>
+                                  </div>
+                                  <div style="display:flex;gap:10px;align-items:flex-start;">
+                                    <span style="font-size:11px;font-weight:700;color:var(--vip-blue);background:white;border:1px solid var(--vip-blue-light);border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0;">Grounded</span>
+                                    <span style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">Requires lived experience and insight from the work as it happens — rather than theory or evidence from outside of the work — to answer.</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);">
                             <button id="task-p1t1" onclick="toggleTask('p1t1',1)" style="width:18px;height:18px;min-width:18px;border-radius:4px;border:2px solid var(--border);background:white;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;"></button>
@@ -740,7 +732,7 @@
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
               <div style="flex:1;">
                 <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Learning Loop</div>
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Data collection & real-time sensemaking</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">We gather real-time information and facilitate ongoing sensemaking to surface patterns, test assumptions, and generate decisions or action-ready insights as your work unfolds.</div>
               </div>
               <div id="pp-s1step2-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/2 tasks</div>
               <span id="pp-s1step2-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
@@ -781,7 +773,7 @@
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
               <div style="flex:1;">
                 <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Adapt & Document</div>
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Reflect, adjust, and capture what we're learning</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">We translate insights into learning and help you apply learning to make clear decisions and adjustments to your work, documenting what is changing, why it's changing, and what it suggests for next steps.</div>
               </div>
               <div id="pp-s1step3-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/2 tasks</div>
               <span id="pp-s1step3-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
@@ -842,7 +834,7 @@
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
               <div style="flex:1;">
                 <div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">Close / Prep Next Sprint</div>
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">Synthesis, handoff, and sprint retrospective</div>
+                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">We consolidate your key learnings (you select the product format), hand off the tools and practices your team has used, and determine whether to close the project or carry things forward into the next learning sprint.</div>
               </div>
               <div id="pp-s1step4-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/4 tasks</div>
               <span id="pp-s1step4-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>
@@ -931,7 +923,7 @@
           <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step1-wrap">
             <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Set up & Design</div></div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Set up & Design</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;opacity:0.7;">We align what matters for your learning — co-designing learning questions, decisions, roles, and methods so the sprint is focused, feasible, and set up to apply learning from the start.</div></div>
               <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
             <div id="pp-s2step1-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
@@ -939,7 +931,7 @@
           <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step2-wrap">
             <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Learning Loop</div></div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Learning Loop</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;opacity:0.7;">We gather real-time information and facilitate ongoing sensemaking to surface patterns, test assumptions, and generate decisions or action-ready insights as your work unfolds.</div></div>
               <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
             <div id="pp-s2step2-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
@@ -947,7 +939,7 @@
           <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step3-wrap">
             <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Adapt & Document</div></div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Adapt & Document</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;opacity:0.7;">We translate insights into learning and help you apply learning to make clear decisions and adjustments to your work, documenting what is changing, why it's changing, and what it suggests for next steps.</div></div>
               <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
             <div id="pp-s2step3-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);"></div>
@@ -955,7 +947,7 @@
           <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;opacity:0.5;pointer-events:none;" id="pp-s2step4-wrap">
             <div style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;">
               <div style="width:24px;height:24px;border-radius:50%;background:var(--vip-midnight-muted);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Close / Prep Next Sprint</div></div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight-muted);">Close / Prep Next Sprint</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;opacity:0.7;">We consolidate your key learnings (you select the product format), hand off the tools and practices your team has used, and determine whether to close the project or carry things forward into the next learning sprint.</div></div>
               <span style="font-size:14px;color:var(--vip-midnight-muted);">▼</span>
             </div>
             <div id="pp-s2step4-body" style="display:none;padding:14px 16px;border-top:1px solid var(--border);">
@@ -997,7 +989,7 @@
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="padding:12px 16px;border-radius:10px;background:var(--vip-blue-pale);border:1px solid var(--vip-blue-light);">
                 <div style="font-size:13px;font-weight:700;color:var(--vip-blue);margin-bottom:4px;">Evaluator</div>
-                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">The full workspace for the evaluation team. Includes Project Planning, Village Experience, data collection views, AI sensemaking, and fidelity tracking. Controls what residents see. Only accessible to VIP team members.</div>
+                <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;">The full workspace for the evaluation team. Includes Project Planning, Village Experience, data collection views, sensemaking, and fidelity tracking. Controls what residents see. Only accessible to VIP team members.</div>
               </div>
               <div style="padding:12px 16px;border-radius:10px;background:var(--vip-magenta-pale);border:1px solid rgba(158,31,99,0.15);">
                 <div style="font-size:13px;font-weight:700;color:var(--vip-magenta);margin-bottom:4px;">EHW</div>
@@ -1046,11 +1038,11 @@
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
                 <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Data Collection</span>
-                <span style="color:var(--vip-midnight-soft);">Overview, Stories, Photovoice, Survey &amp; forms, Key informant notes, Reflection logs.</span>
+                <span style="color:var(--vip-midnight-soft);">Overview + one page per Photovoice activity. Pages are generated automatically as Photovoice activities are created.</span>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);">
                 <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Sensemaking</span>
-                <span style="color:var(--vip-midnight-soft);">Coding studio, Theme map, Fidelity tracker, AI sensemaking.</span>
+                <span style="color:var(--vip-midnight-soft);">Sensemaking (AI chat), Themes, Fidelity tracker.</span>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;">
                 <span style="font-weight:700;color:var(--vip-midnight);min-width:160px;">Platform Guide</span>
@@ -1066,7 +1058,7 @@
             <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Meeting Timeline</span> — Set and advance the current meeting. Edit and advance using the ✏ Edit button on the Up Next meeting.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activities table</span> — Three columns per activity: Default (which activity opens first for residents), Visibility (Published/Hidden), Themes (Unpublished/✓ Published). Changes save to Drive immediately.</div>
-              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity Builder</span> — Build new BAR/AAR or Photovoice activities, add AAR content to existing activities, or fill in emerging themes — using AI synthesis from a transcript or Google Doc, or by typing themes directly.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity Builder</span> — Five modes: (1) New BAR/AAR — create a full new activity with optional subcategories; (2) New Photovoice — create a new submission activity; (3) Add AAR to existing — fill the After Action Review on an existing card; (4) Fill themes box — add emerging themes via AI or direct input; (5) Edit existing activity — select an activity, fields pre-populate from the current content including detected subcategories, then use AI synthesis from pasted source material or edit manually. All structural changes auto-commit to GitHub.</div>
             </div>
           </div>
 
@@ -1114,8 +1106,11 @@
             <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 10px;">Data syncs to Google Drive via César's <code>vergeimpactpartners.com</code> account through a Google Apps Script. The following are synced across all evaluator devices:</p>
             <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
               <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Publish state — activity visibility, default activity, theme publish status</div>
-              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Photovoice submissions — saved to a Google Sheet with links to media files in Drive</div>
-              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Fidelity assessments, stories, reflections, KII notes</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Theme card content — theme names and notes for each activity, restored on every page load</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Inline text edits — any text edited directly on the village page (activity titles, framing questions, descriptions, etc.)</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Photovoice submissions — saved to Google Drive with media files and metadata</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Generated activities — new activities created via the Activity Builder, restored on every page load</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Sprint state — which sprint is active, task completions, phase notes</div>
             </div>
             <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;font-size:13px;">
               <div style="padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;"><span style="color:#1a6b3e;font-weight:600;">● Drive</span> — Data syncing to Google Drive. All evaluators see the same state.</div>
@@ -1126,15 +1121,58 @@
           <!-- How to update -->
           <div class="card" style="margin-bottom:0;">
             <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">How to update the platform</div>
-            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The platform is a single HTML file deployed via GitHub Pages (managed by César under the <code>vergeimpactpartners</code> org).</p>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The platform is a single HTML file deployed via GitHub Pages (managed by César under the <code>vergeimpactpartners</code> org). There are two types of changes — automatic and manual.</p>
+            <div style="padding:12px 14px;background:var(--vip-blue-pale);border-radius:10px;border:1px solid var(--vip-blue-light);margin-bottom:12px;">
+              <div style="font-size:13px;font-weight:700;color:var(--vip-blue);margin-bottom:6px;">Automatic — no action needed</div>
+              <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.7;">Structural changes made inside the platform auto-commit to GitHub 2 seconds after saving. This includes: creating new activities via the Activity Builder, editing BAR content, filling AAR, and inline text edits. Drive state (themes, visibility, submissions, sprint progress) saves to Drive only — not GitHub.</div>
+            </div>
+            <div style="padding:12px 14px;background:var(--paper);border-radius:10px;border:1px solid var(--border);margin-bottom:16px;">
+              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Manual — for code changes in Claude</div>
+              <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.7;">When you need to make structural code changes (new features, layout changes, etc.), bring the current file into a Claude session. Since the auto-commit keeps GitHub current, always pull the latest file from GitHub — not a locally saved copy.</div>
+            </div>
             <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span><span style="color:var(--vip-midnight-soft);">Make changes with Claude — share the current file and describe what you need</span></div>
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span><span style="color:var(--vip-midnight-soft);">Download the updated file from Claude</span></div>
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span><span style="color:var(--vip-midnight-soft);">Go to <a href="https://github.com/vergeimpactpartners/buckeye-eval/blob/main/index.html" target="_blank" style="font-size:13px;color:var(--vip-blue);text-decoration:underline;font-family:monospace;">github.com → vergeimpactpartners → buckeye-eval → index.html</a></span></div>
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span><span style="color:var(--vip-midnight-soft);">Click the pencil icon → Select all (Cmd+A) → Paste the new file (Cmd+V) → Commit changes</span></div>
-              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">5</span><span style="color:var(--vip-midnight-soft);">GitHub Pages auto-deploys within 60 seconds</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span><span style="color:var(--vip-midnight-soft);">Go to <a href="https://github.com/vergeimpactpartners/buckeye-eval/blob/main/index.html" target="_blank" style="color:var(--vip-blue);text-decoration:underline;font-family:monospace;">github.com → vergeimpactpartners → buckeye-eval → index.html</a></span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span><span style="color:var(--vip-midnight-soft);">Click <strong>Raw</strong> → Select all (Cmd+A) → Copy</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span><span style="color:var(--vip-midnight-soft);">Open Claude → start a new chat → paste the file and describe the changes needed</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span><span style="color:var(--vip-midnight-soft);">Download the updated file from Claude</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">5</span><span style="color:var(--vip-midnight-soft);">Go back to GitHub → click the pencil icon → Select all (Cmd+A) → Paste (Cmd+V) → Commit changes</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;"><span style="background:var(--vip-blue);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">6</span><span style="color:var(--vip-midnight-soft);">GitHub Pages auto-deploys within 60 seconds</span></div>
             </div>
             <div style="margin-top:12px;padding:10px 14px;background:var(--vip-blue-pale);border-radius:8px;font-size:13px;color:var(--vip-midnight-soft);border:1px solid var(--vip-blue-light);"><strong>Tip — continuity across sessions:</strong> Claude remembers the platform's history and structure. If starting a new chat, mention this is the VIPIlluminate platform for Buckeye EcoVillage DE and share the current file — Claude will pick up right where you left off.</div>
+          </div>
+
+          <!-- Inline text editing -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Inline text editing</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">In the evaluator link, any text on the Village page can be edited directly without coming back to Claude. Edits are only visible to evaluators — residents never see the edit controls.</p>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">Switch to Village mode (using the Evaluator / EHW / Village switcher in the top bar). Hover over any text — a dashed blue outline and ✏️ appears. Click to open an edit popover with the current text pre-filled.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">Editable text includes: activity titles, framing question preambles, framing questions, subcategory headers and names, action labels, BAR row content, and Photovoice activity descriptions.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">How edits save:</span> Each edit saves immediately to Drive under a key like <code>ie-act2-framing-pre</code>. It also triggers an auto-commit to GitHub so the edited text is baked into the file for future Claude sessions. On every page load, all saved text edits are restored from Drive.</div>
+            </div>
+          </div>
+
+          <!-- Sensemaking -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Sensemaking</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The Sensemaking section is the AI thinking partner for the EVB evaluation. It is the hub for interpreting data, surfacing patterns, and generating questions — not a reporting tool.</p>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Sensemaking (AI chat)</span> — A persistent conversation with Claude, using the full EVB DE system prompt. Load activity data directly into the chat by selecting one or more activities and choosing which data types to include (Activity content, Themes, Submissions). Quick prompts in the right panel are context-aware — if an activity is selected, they generate focused prompts referencing that activity's data.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Themes</span> — A live view of all published theme cards across activities, organized by activity. Updates when you publish themes from the Activity Builder, or click ✦ Refresh themes. A ✦ Generate synthesis button runs AI analysis across all published themes to surface connections and tensions.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Fidelity tracker</span> — A structured self-assessment of the evaluation's fidelity to EVB's principles and the developmental evaluation approach. Completed by the evaluator team at key sprint milestones.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Theme updates:</span> Theme data is Drive-only — it updates every time you publish themes and does not require a GitHub commit. The Themes page reads from Drive on load and always reflects the current published state.</div>
+            </div>
+          </div>
+
+          <!-- Sprint launching -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Sprint launching</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The Project Planning page supports multiple learning loop sprints. Sprint 2 is pre-built but inactive until launched. Additional sprints can be added dynamically for projects with more than two learning loops.</p>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Launching Sprint 2</span> — In the Project Planning page, Sprint 2 shows as ⏳ Upcoming with a "Ready to begin Sprint 2?" prompt. Clicking Launch Sprint 2 → populates Sprint 2 with the same phase and task structure as Sprint 1, switches the progress bar to Sprint 2, and saves the launch state to Drive + GitHub.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Additional sprints</span> — A "Launch next loop →" button appears at the bottom of each sprint's Step 4 once that sprint is active. This generates a new sprint dynamically with the same structure. Works for any number of sprints — designed to support future projects beyond EVB's two-sprint structure.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Progress bar</span> — Shows only the active sprint's steps, with a "Sprint X of Y" indicator when more than one sprint exists. Clicking a step in the bar navigates directly to that step in Project Planning.</div>
+            </div>
           </div>
 
         </div>
@@ -1160,35 +1198,24 @@
       <div id="dc-activity-views"></div>
 
       <div id="view-themes" class="view">
-<div class="section-header">
-          <div><div class="section-title">Theme map</div><div class="section-sub">Patterns, frequencies, and relationships across all data</div></div>
-          <button class="btn btn-ai" onclick="runAISensemaking()">✦ Refresh with AI</button>
+        <div class="section-header">
+          <div><div class="section-title">Themes</div><div class="section-sub">Emerging themes from published activity theme cards — updated when you publish themes from the Activity Builder</div></div>
+          <button class="btn btn-ai" onclick="smRefreshThemes()">✦ Refresh themes</button>
         </div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Theme frequency</div></div>
-            <div class="theme-row"><div class="theme-name">Belonging</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-blue)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Governance fluency</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-magenta)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Onboarding challenges</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-amber)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Relational trust</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-orange)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Sustainability commitment</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-magenta)"></div></div><div class="theme-count">0</div></div>
-            <div class="theme-row"><div class="theme-name">Land trust & permanence</div><div class="theme-bar-wrap"><div class="theme-bar" style="width:0%;background:var(--vip-amber)"></div></div><div class="theme-count">0</div></div>
+        <!-- Live theme cards by activity -->
+        <div id="sm-themes-container" style="display:flex;flex-direction:column;gap:20px;">
+          <div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">No themes published yet. Use the Activity Builder → Fill themes box to add themes to activities, then publish them to the Village.</div>
+        </div>
+        <!-- AI synthesis of themes — populated on demand -->
+        <div id="sm-themes-synthesis" style="display:none;margin-top:24px;background:var(--vip-magenta-pale);border:1.5px solid rgba(158,31,99,0.2);border-radius:12px;padding:20px 24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div>
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-magenta);margin-bottom:4px;">AI Sensemaking</div>
+              <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);">Across-activity theme synthesis</div>
+            </div>
+            <button class="btn btn-ai" onclick="smGenerateThemeSynthesis()" style="white-space:nowrap;">✦ Generate synthesis</button>
           </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Theme relationships <span class="badge badge-plum">AI mapped</span></div></div>
-            <div class="synthesis-block" style="border-left-color:var(--sage);">
-              <div class="synthesis-type">Strong connection</div>
-              <div class="synthesis-text"><strong>Belonging ↔ Governance:</strong> Stories about belonging most often arise in governance contexts — specifically in moments of inclusion or exclusion from collective decisions. These themes co-occur in 5 of 6 belonging-coded passages.</div>
-            </div>
-            <div class="synthesis-block" style="border-left-color:var(--amber);">
-              <div class="synthesis-type">Enabling condition</div>
-              <div class="synthesis-text"><strong>Relational trust → Governance fluency:</strong> In all 4 governance-coded passages, relational trust is mentioned as a precondition for effective participation. Trust appears to be upstream of governance readiness.</div>
-            </div>
-            <div class="tension-block">
-              <div class="tension-label">Tension</div>
-              <div class="tension-text"><strong>Onboarding ↔ Belonging:</strong> Onboarding challenges and belonging are appearing in narratives from different cohorts — newer residents name onboarding struggles while longer-term residents describe belonging. This may reflect a developmental arc rather than a fixed split.</div>
-            </div>
-          </div>
+          <div id="sm-themes-synthesis-text" style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.8;font-style:italic;">Click "Generate synthesis" to have the AI analyze connections and tensions across all published themes.</div>
         </div>
       </div>
 
@@ -1262,8 +1289,8 @@
           <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0;">
               <div>
-                <div class="section-title">AI sensemaking</div>
-                <div class="section-sub">Ask questions, analyze specific content, or request structured outputs</div>
+                <div class="section-title">Sensemaking</div>
+                <div class="section-sub">Your AI thinking partner for the EVB Developmental Evaluation</div>
               </div>
               <button class="btn" onclick="clearAIChat()" style="font-size:11px;">Clear conversation</button>
               <button class="btn" onclick="toggleSystemPrompt()" id="system-prompt-btn" style="font-size:11px;">View system prompt</button>
@@ -1301,6 +1328,23 @@
               </div>
             </div>
 
+            <!-- Activity data loader -->
+            <div style="flex-shrink:0;margin-bottom:10px;padding:12px 14px;background:var(--paper);border-radius:10px;border:1px solid var(--border);">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-muted);margin-bottom:8px;">Load activity data into chat</div>
+              <div id="sm-activity-checkboxes" style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px;">
+                <!-- Populated by smPopulateActivitySelect() -->
+                <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Loading activities…</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                  <label style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--vip-midnight-soft);cursor:pointer;white-space:nowrap;"><input type="checkbox" id="sm-load-bar" checked style="accent-color:var(--vip-blue);"> Activity content</label>
+                  <label style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--vip-midnight-soft);cursor:pointer;white-space:nowrap;"><input type="checkbox" id="sm-load-themes" checked style="accent-color:var(--vip-magenta);"> Themes</label>
+                  <label style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--vip-midnight-soft);cursor:pointer;white-space:nowrap;"><input type="checkbox" id="sm-load-submissions" style="accent-color:var(--vip-amber);"> Submissions</label>
+                </div>
+                <button onclick="smLoadActivityData()" style="padding:6px 14px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap;">Load →</button>
+              </div>
+            </div>
+
             <!-- Input area -->
             <div style="flex-shrink:0;">
               <div style="background:var(--white);border:1px solid var(--border-strong);border-radius:var(--radius-lg);overflow:hidden;">
@@ -1318,43 +1362,46 @@
             <div style="font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px;flex-shrink:0;">Quick prompts</div>
 
             <div class="prompt-group">
-              <div class="prompt-group-label">Synthesis</div>
-              <button class="prompt-btn" onclick="usePrompt('synthesize-all')">Synthesize all data this cycle</button>
-              <button class="prompt-btn" onclick="usePrompt('synthesis-memo')">Write a plain-language memo</button>
-              <button class="prompt-btn" onclick="usePrompt('what-emerging')">What patterns are emerging?</button>
+              <div class="prompt-group-label">BAR sensemaking</div>
+              <button class="prompt-btn" onclick="smPromptWithActivity('bar-synthesis')">What does the full BAR reveal?</button>
+              <button class="prompt-btn" onclick="smPromptWithActivity('bar-tensions')">Where are the tensions in the BAR?</button>
+              <button class="prompt-btn" onclick="smPromptWithActivity('bar-questions')">What questions does the BAR open up?</button>
             </div>
 
             <div class="prompt-group">
-              <div class="prompt-group-label">Analysis</div>
-              <button class="prompt-btn" onclick="usePrompt('tensions')">Find contradictions & tensions</button>
-              <button class="prompt-btn" onclick="usePrompt('themes')">Map themes and relationships</button>
-              <button class="prompt-btn" onclick="usePrompt('gaps')">What voices are missing?</button>
+              <div class="prompt-group-label">Photovoice & submissions</div>
+              <button class="prompt-btn" onclick="smPromptWithActivity('pv-patterns')">What patterns are in submissions?</button>
+              <button class="prompt-btn" onclick="smPromptWithActivity('pv-missing')">What voices are missing?</button>
+              <button class="prompt-btn" onclick="smPromptWithActivity('pv-themes')">What themes are emerging?</button>
+            </div>
+
+            <div class="prompt-group">
+              <div class="prompt-group-label">Themes</div>
+              <button class="prompt-btn" onclick="usePrompt('themes-across')">How do themes connect across activities?</button>
+              <button class="prompt-btn" onclick="usePrompt('themes-tensions')">Are any themes in tension?</button>
+              <button class="prompt-btn" onclick="smRefreshThemes()">✦ Refresh themes page</button>
             </div>
 
             <div class="prompt-group">
               <div class="prompt-group-label">Paste & analyze</div>
-              <button class="prompt-btn" onclick="usePrompt('paste-code')">Suggest codes for a passage</button>
-              <button class="prompt-btn" onclick="usePrompt('paste-theme')">Find themes in pasted text</button>
-              <button class="prompt-btn" onclick="usePrompt('paste-questions')">Questions from pasted text</button>
+              <button class="prompt-btn" onclick="usePrompt('paste-transcript')">Analyze a meeting transcript</button>
+              <button class="prompt-btn" onclick="usePrompt('paste-questions')">What questions does this open up?</button>
+              <button class="prompt-btn" onclick="usePrompt('paste-hypothesis')">Name hypotheses from this text</button>
             </div>
 
             <div class="prompt-group">
               <div class="prompt-group-label">Outputs</div>
-              <button class="prompt-btn" onclick="usePrompt('followup-questions')">Suggest follow-up questions</button>
-              <button class="prompt-btn" onclick="usePrompt('funder-summary')">Draft funder-facing summary</button>
+              <button class="prompt-btn" onclick="usePrompt('learning-memo')">Draft a learning memo</button>
               <button class="prompt-btn" onclick="usePrompt('reflection-prompt')">Give me a reflection prompt</button>
+              <button class="prompt-btn" onclick="usePrompt('next-questions')">What should we ask next?</button>
             </div>
 
             <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--border);flex-shrink:0;">
-              <div style="font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">Context loaded</div>
-              <div class="context-pill">✦ Animating question</div>
-              <div class="context-pill">✦ 0 stories so far</div>
-              <div class="context-pill">✦ 0 themes yet</div>
-              <div class="context-pill">✦ 0 coded passages</div>
-              <div class="context-pill">✦ 0 KII notes</div>
-              <div class="context-pill
-            
-">✦ 0 reflection logs</div>
+              <div style="font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">Platform context</div>
+              <div class="context-pill" id="sm-ctx-themes">✦ 0 activities with themes</div>
+              <div class="context-pill" id="sm-ctx-submissions">✦ 0 photovoice submissions</div>
+              <div class="context-pill" id="sm-ctx-bar">✦ 0 BAR activities with content</div>
+              <div class="context-pill" id="sm-ctx-sprint">✦ Sprint 1 active</div>
             </div>
           </div>
 
@@ -1493,7 +1540,12 @@
               </div>
               <div style="margin-bottom:10px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Framing / learning question <span style="font-weight:400;font-style:italic;">(optional)</span></label>
-                <textarea id="ab-framing" rows="2" placeholder="e.g. Over the months of May and June, what would it take for us to successfully carry out our specific roles?" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+                <div id="ab-framing-toolbar" style="display:flex;gap:4px;padding:4px 6px;background:var(--paper-mid);border:1.5px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;">
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('bold',false,null)" title="Bold" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);font-weight:700;">B</button>
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('italic',false,null)" title="Italic" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);font-style:italic;">I</button>
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('underline',false,null)" title="Underline" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);text-decoration:underline;">U</button>
+                </div>
+                <div id="ab-framing" contenteditable="true" data-placeholder="e.g. What would it take for us to successfully carry out our specific roles?" style="min-height:52px;padding:8px 12px;border:1.5px solid var(--border);border-radius:0 0 8px 8px;font-size:13px;font-family:var(--sans);line-height:1.6;color:var(--vip-midnight);outline:none;background:white;" onfocus="this.style.borderColor='var(--vip-blue)';document.getElementById('ab-framing-toolbar').style.borderColor='var(--vip-blue)';" onblur="this.style.borderColor='var(--border)';document.getElementById('ab-framing-toolbar').style.borderColor='var(--border)';"></div>
               </div>
               <!-- Subcategories (shown only for new-bar) -->
               <div id="ab-subcats-wrap" style="display:none;margin-top:4px;padding:14px;background:var(--vip-blue-pale);border-radius:10px;border:1px solid var(--vip-blue-light);">
@@ -1685,7 +1737,6 @@
             <!-- Framing question + EVB Way banner -->
             <div style="background:var(--vip-blue-pale);padding:20px 22px;border-bottom:1px solid var(--vip-blue-light);">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-blue);margin-bottom:10px;">Framing Question</div>
-              <div style="font-size:16px;font-weight:400;color:var(--vip-midnight);font-style:italic;line-height:1.5;margin-bottom:4px;">Over the months of May and June,</div>
               <div style="font-size:20px;font-weight:700;color:var(--vip-midnight);font-style:italic;line-height:1.5;">What would it take to successfully hold the EVB Way while planning and carrying out the EVB kickoff?</div>
               <div style="margin-top:16px;padding:16px;background:white;border-radius:10px;border:1px solid var(--border);">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">There are four ways of working that came up during our evaluation kickoff. They are:</div>
@@ -1811,7 +1862,6 @@
             <!-- Framing question -->
             <div style="background:var(--vip-blue-pale);padding:20px 22px;border-bottom:1px solid var(--vip-blue-light);">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-blue);margin-bottom:10px;">Framing Question</div>
-              <div style="font-size:16px;font-weight:400;color:var(--vip-midnight);font-style:italic;line-height:1.5;margin-bottom:4px;">Over the months of May and June,</div>
               <div style="font-size:20px;font-weight:700;color:var(--vip-midnight);font-style:italic;line-height:1.5;">What would it take for us to successfully carry out our specific roles as we build the Village and carry out our work (e.g. the kickoff)?</div>
               <div style="margin-top:16px;padding:16px;background:white;border-radius:10px;border:1px solid var(--border);">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-midnight-soft);margin-bottom:12px;">The roles we are playing include:</div>
@@ -2109,305 +2159,8 @@
       </div><!-- /view-village -->
 
 <div id="view-ehw" class="view">
-        <!-- Welcome + Last updated -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-          <div id="commLastUpdated" style="font-size:11px;color:var(--vip-midnight-muted);"></div>
-        </div>
-
-        <!-- VILLAGE PROGRESS BAR -->
-        <div id="commSprintProgressBar" style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:10px 24px;display:flex;align-items:center;gap:0;overflow:hidden;margin-bottom:20px;">
-
-          <!-- Sprint 1 -->
-          <div style="display:flex;align-items:center;gap:0;flex:1;">
-            <div style="font-size:10px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;">Sprint 1</div>
-            <div style="display:flex;align-items:center;gap:0;flex:1;">
-              <div class="sprint-step sprint-step-done" id="comm-pb-s1-step1" onclick="scrollToSection('our-process')" title="Step 1 · Set up &amp; Design" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
-                <div style="width:100%;height:4px;background:#1a6b3e;border-radius:2px 0 0 2px;"></div>
-                <div style="font-size:10px;font-weight:600;color:#1a6b3e;white-space:nowrap;">✓ Set up</div>
-              </div>
-              <div class="sprint-step sprint-step-active" id="comm-pb-s1-step2" onclick="scrollToSection('step2-body')" title="Step 2 · Learning Loop" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
-                <div style="width:100%;height:4px;background:var(--vip-blue);border-radius:0;position:relative;"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--vip-blue);border:2px solid white;box-shadow:0 0 0 2px var(--vip-blue);"></div></div>
-                <div style="font-size:10px;font-weight:700;color:var(--vip-blue);white-space:nowrap;">Learning Loop</div>
-              </div>
-              <div class="sprint-step sprint-step-upcoming" id="comm-pb-s1-step3" onclick="scrollToSection('step3-body')" title="Step 3 · Adapt &amp; Document" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
-                <div style="width:100%;height:4px;background:var(--border);border-radius:0;"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Adapt</div>
-              </div>
-              <div class="sprint-step sprint-step-upcoming" id="comm-pb-s1-step4" onclick="scrollToSection('step4-body')" title="Step 4 · Close / Prep Next Sprint" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
-                <div style="width:100%;height:4px;background:var(--border);border-radius:0 2px 2px 0;"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Close</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Divider -->
-          <div style="width:1px;height:32px;background:var(--border);margin:0 16px;flex-shrink:0;"></div>
-
-          <!-- Sprint 2 -->
-          <div style="display:flex;align-items:center;gap:0;flex:1;">
-            <div style="font-size:10px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;">Sprint 2</div>
-            <div style="display:flex;align-items:center;gap:0;flex:1;opacity:0.4;">
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-                <div style="width:100%;height:4px;background:var(--border);border-radius:2px 0 0 2px;"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Set up</div>
-              </div>
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-                <div style="width:100%;height:4px;background:var(--border);"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Learning Loop</div>
-              </div>
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-                <div style="width:100%;height:4px;background:var(--border);"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Adapt</div>
-              </div>
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;">
-                <div style="width:100%;height:4px;background:var(--border);border-radius:0 2px 2px 0;"></div>
-                <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Close</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- HERO -->
-        <div id="about-bev" style="background:var(--vip-magenta);border-radius:14px;padding:28px 30px;margin-bottom:24px;position:relative;overflow:hidden;">
-          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Buckeye EcoVillage Developmental Evaluation</div>
-          <div style="font-size:22px;font-weight:800;color:white;line-height:1.3;margin-bottom:10px;">Welcome to the Project Home</div>
-          <div style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.8;max-width:600px;">This page keeps you connected to the evaluation process — what we're learning, what questions are guiding our inquiry, and how you can share your experience.</div>
-        </div>
-
-        <!-- ABOUT THIS PROJECT -->
-        <div id="about-this-project" class="card" style="margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px;">About This Project</div>
-          <div style="font-size:14px;color:var(--ink-soft);line-height:1.8;">The DE aims to track, make sense of, and strengthen how the EcoVillage Buckeye Project operationalizes its theory of change AND demonstrates what the "EHW way", at the center of EVB model looks, feels, and functions like in practice.</div>
-        </div>
-
-        <!-- EVALUATION AIMS -->
-        <div id="eval-aims" class="card" style="margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:16px;">Evaluation Aims</div>
-          <div style="display:flex;flex-direction:column;gap:16px;">
-            <div style="padding:14px 16px;background:var(--vip-magenta-pale);border-radius:10px;border-left:3px solid var(--vip-magenta);">
-              <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Aim 1 — Document and Distill the Model</div>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Document the key resources, practices, principles, and ways of working that enable or impede the EVB resident-led approach.</div>
-            </div>
-            <div style="padding:14px 16px;background:var(--vip-magenta-pale);border-radius:10px;border-left:3px solid var(--vip-magenta);">
-              <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Aim 2 — Understand the Difference Made</div>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Understand the "difference made" when all partners work in the "EHW way" — with fidelity to resident leadership, village principles, community definitions of resilience and wellbeing, and community-endorsed priorities — and what that difference reveals about the roles, goals, and power of partners in a community-led model.</div>
-            </div>
-            <div style="padding:14px 16px;background:var(--vip-magenta-pale);border-radius:10px;border-left:3px solid var(--vip-magenta);">
-              <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Aim 3 — Improve the Practice</div>
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Surface what Phase 1 reveals — for EHW, resident leadership and partners — about the conditions, assumptions, and dynamics expressed in the theory of change, in order to strengthen and adapt resident-led practice that is central to the "EHW way" for the next phase of the EVB work.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- OUR PROCESS -->
-        <div id="our-process" style="margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;">Our Process</div>
-
-          <!-- Phase 1 label -->
-          <div style="display:inline-flex;align-items:center;gap:8px;background:var(--vip-blue);color:white;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:20px;padding:5px 16px;margin-bottom:14px;">
-            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.7);"></div>
-            Phase 1
-          </div>
-
-          <!-- Step 1 -->
-          <div style="border:1px solid #b3e5cc;border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div style="background:#e8f8f0;padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="1" data-side="comm" onclick="toggleStep('step1-body', this)">
-              <div style="width:22px;height:22px;border-radius:50%;background:#1a6b3e;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
-              <div><div style="font-size:16px;font-weight:600;color:#1a6b3e;">Set up &amp; Design</div><div style="font-size:13px;color:#1a6b3e;margin-top:2px;opacity:0.75;">Establishing the evaluation design and learning framework</div></div>
-              <span style="margin-left:auto;background:#1a6b3e;color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--sans);">DONE</span>
-              <span class="step-chevron" style="color:#1a6b3e;font-size:14px;margin-left:8px;transition:transform 0.2s;transform:rotate(0deg);">▲</span>
-            </div>
-            <div id="step1-body" style="background:var(--vip-blue-pale);padding:16px 18px;border-top:1px solid var(--vip-blue-light);display:none;">
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:12px;">Content and activities for this step will appear here when it becomes active.</div>
-              <div id="comm-fidelity-widget" style="display:none;margin-top:16px;background:var(--vip-magenta-pale);border:1px solid var(--vip-magenta-light);border-radius:10px;padding:16px;">
-                <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Working in the EHW Way</div>
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:12px;line-height:1.6;">Community-defined markers of how this work is meant to happen — and what the evidence is showing.</div>
-                <div id="comm-fidelity-list" style="display:flex;flex-direction:column;"></div>
-              </div>
-
-              <div id="comm-lq-widget" style="display:none;">
-              <div style="font-size:13px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;" id="learning-questions">Our Learning Questions</div>
-              <div style="background:white;border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q1</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">Sprint 1</span>
-                      </div>
-              </div>
-            </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">The model</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">What are the key inputs, practices, enablers, and barriers that enable the EVB resident-led approach to mitigating environmental harms and building community resilience?</div>
-                      </div>
-                    </div>
-                  </div>
-              <div style="background:white;border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q2</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">S1 &amp; S2</span>
-                      </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">How we work</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">How are we (or are we not) holding fidelity to resident-derived definitions of resilience and contribution to community-endorsed priorities for mitigation of environmental harms? What enables or stops us from doing so?</div>
-                      </div>
-                    </div>
-                  </div>
-              <div style="background:white;border-radius:8px;padding:18px 18px;border-left:3px solid var(--vip-magenta);">
-                    <div style="display:flex;align-items:flex-start;gap:14px;">
-                      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
-                        <span style="background:var(--vip-magenta);color:white;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.04em;white-space:nowrap;">Q3</span>
-                        <span style="background:var(--vip-magenta-pale);color:var(--vip-magenta);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;border:1px solid var(--vip-magenta-light);white-space:nowrap;">Sprint 2</span>
-                      </div>
-                      <div>
-                        <div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">Lessons learned</div>
-                        <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">What are the key lessons learned from this phase that demonstrate the power of EHW's strategy AND will help us do this work even "better" in the next phase?</div>
-                      </div>
-                    </div>
-                  </div>
-
-          <!-- Step 2 -->
-          <div style="border:1px solid var(--vip-blue-light);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div style="background:var(--vip-blue-pale);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;" data-step="2" data-side="comm" onclick="toggleStep('step2-body', this)">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--vip-blue);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-              <div><div style="font-size:16px;font-weight:600;color:var(--vip-blue);">Learning Loop</div><div style="font-size:13px;color:var(--vip-blue);margin-top:2px;opacity:0.75;">Data collection &amp; real-time sensemaking</div></div>
-              <span style="margin-left:auto;background:var(--vip-blue);color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--sans);">ACTIVE</span>
-              <span class="step-chevron" style="color:var(--vip-blue);font-size:14px;margin-left:8px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-            </div>
-            <div id="step2-body" style="background:var(--vip-blue-pale);padding:16px 18px;border-top:1px solid var(--vip-blue-light);">
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:12px;">Content and activities for this step will appear here when it becomes active.</div>
-              <div id="comm-title-widget" style="display:none;background:var(--vip-magenta-pale);border:1px solid var(--vip-magenta-light);border-radius:10px;overflow:hidden;margin-top:4px;">
-                <div style="padding:12px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                  <div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.07em;">Example Learning Widget</div>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-magenta);margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-magenta);display:inline-block;flex-shrink:0;"></span>What we are testing</div>
-                  <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Nothing recorded yet.</div>
-                </div>
-                <div style="padding:14px 16px;border-bottom:1px solid var(--vip-magenta-light);">
-                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-orange);margin-bottom:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-orange);display:inline-block;flex-shrink:0;"></span>How we are testing it</div>
-                  <div id="comm-story-widget" style="display:block;">
-              <div style="background:var(--vip-orange-pale);border:1px solid var(--vip-orange-light);border-radius:10px;padding:16px;">
-                  <!-- STORY WIDGET INTRO -->
-                  <div style="margin-bottom:12px;">
-                    <div style="font-size:12px;font-weight:700;color:var(--vip-orange);text-transform:uppercase;letter-spacing:0.07em;">Voice Story Collection</div>
-                  </div>
-                  <div style="margin-bottom:18px;">
-                    <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Your story matters here</div>
-                    <div style="font-size:14px;color:var(--ink-soft);line-height:1.7;">Every story shared here helps us understand what's really happening in the Buckeye EcoVillage process — what's working, what's hard, and what matters most to the people living it. What you share stays confidential and is used only to strengthen this work.</div>
-                  </div>
-
-                  <!-- VOICE STORY WIDGET -->
-                  <div id="comm-storyWidget" style="background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;">
-
-                    <!-- State: READY -->
-                    <div id="comm-sw-ready" style="padding:24px;text-align:center;">
-                      <div style="width:64px;height:64px;border-radius:50%;background:var(--vip-magenta);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s;" onclick="startVoiceStory()" id="comm-sw-start-btn" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="9" y="2" width="6" height="13" rx="3" fill="white"/>
-                          <path d="M5 11C5 14.866 8.13401 18 12 18C15.866 18 19 14.866 19 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                          <line x1="12" y1="18" x2="12" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                          <line x1="9" y1="22" x2="15" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                      <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">Ready when you are</div>
-                      <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;">We'll ask you a few gentle questions.<br>Just speak naturally — there are no right or wrong answers.</div>
-                    </div>
-
-                    <!-- State: CONVERSATION (hidden initially) -->
-                    <div id="comm-sw-convo" style="display:none;">
-
-                      <!-- Recording indicator bar -->
-                      <div id="comm-sw-rec-bar" style="background:var(--vip-magenta);padding:8px 16px;display:flex;align-items:center;gap:10px;">
-                        <div id="comm-sw-rec-dot" style="width:8px;height:8px;border-radius:50%;background:white;animation:recPulse 1.2s infinite;flex-shrink:0;"></div>
-                        <span style="font-size:11px;font-weight:700;color:white;letter-spacing:0.06em;text-transform:uppercase;">Recording</span>
-                        <span id="comm-sw-timer" style="font-size:11px;color:rgba(255,255,255,0.8);margin-left:auto;font-variant-numeric:tabular-nums;">0:00</span>
-                      </div>
-
-                      <!-- Conversation area -->
-                      <div style="padding:20px 20px 0;">
-                        <!-- Question bubble -->
-                        <div id="comm-sw-question-bubble" style="background:var(--vip-blue-pale);border-radius:12px 12px 12px 3px;padding:14px 16px;margin-bottom:16px;max-width:85%;">
-                          <div style="font-size:10px;color:var(--vip-blue);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">A question for you</div>
-                          <div id="comm-sw-question-text" style="font-size:15px;color:var(--vip-midnight);font-weight:600;line-height:1.5;"></div>
-                        </div>
-
-                        <!-- Live transcript -->
-                        <div id="comm-sw-transcript-area" style="min-height:60px;margin-bottom:16px;">
-                          <div id="comm-sw-transcript-text" style="font-size:13px;color:var(--ink-soft);line-height:1.7;font-style:italic;padding:10px 12px;background:var(--paper-warm);border-radius:8px;min-height:48px;"></div>
-                          <div id="comm-sw-transcript-hint" style="font-size:11px;color:var(--vip-midnight-muted);margin-top:5px;text-align:center;">Take your time — we're listening whenever you're ready</div>
-                        </div>
-                      </div>
-
-                      <!-- Controls -->
-                      <div style="padding:0 20px 18px;display:flex;gap:10px;align-items:center;">
-                        <button id="comm-sw-next-btn" onclick="voiceNext()" style="flex:1;background:var(--vip-blue);color:white;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity 0.15s;" disabled>Continue ›</button>
-                        <button onclick="cancelVoiceStory()" style="background:none;border:1px solid var(--border-strong);color:var(--ink-muted);border-radius:8px;padding:11px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">Cancel</button>
-                      </div>
-                    </div>
-
-                    <!-- State: SAVED (hidden initially) -->
-                    <div id="comm-sw-saved" style="display:none;padding:28px;text-align:center;">
-                      <div style="width:52px;height:52px;border-radius:50%;background:var(--vip-blue-pale);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#1890BA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </div>
-                      <div style="font-size:17px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">What a gift, <span id="comm-sw-saved-name"></span> — thank you.</div>
-                      <div style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:16px;">Your story has been saved and will help us better understand and strengthen the Buckeye EcoVillage work. We're glad you took the time.</div>
-                      <button onclick="resetVoiceStory()" style="background:var(--vip-magenta);color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;">Share another</button>
-                    </div>
-
-                  </div>
-                  <!-- end story widget -->
-                  </div>
-                </div>
-                <div style="padding:14px 16px;">
-                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-soft);margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--vip-midnight-soft);display:inline-block;flex-shrink:0;"></span>What we are learning</div>
-                  <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Nothing recorded yet.</div>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-
-          <!-- Step 3 -->
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" data-step="3" data-side="comm" onclick="toggleStep('step3-body', this)">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-              <div><div style="font-size:16px;font-weight:600;color:var(--ink-soft);">Adapt &amp; Document</div><div style="font-size:13px;color:var(--vip-midnight-muted);margin-top:2px;">Reflect, adjust, and capture what we're learning</div></div>
-              <span style="margin-left:auto;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;font-family:var(--sans);">UPCOMING</span>
-              <span class="step-chevron" style="color:var(--vip-midnight-muted);font-size:14px;margin-left:8px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-            </div>
-            <div id="step3-body" style="background:var(--paper-warm);padding:16px 18px;border-top:1px solid var(--border);display:none;">
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Content and activities for this step will appear here when it becomes active.</div>
-            </div>
-          </div>
-
-          <!-- Step 4 -->
-          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
-            <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" data-step="4" data-side="comm" onclick="toggleStep('step4-body', this)">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-              <div><div style="font-size:16px;font-weight:600;color:var(--ink-soft);">Close / Prep Next Sprint</div><div style="font-size:13px;color:var(--vip-midnight-muted);margin-top:2px;">Synthesis, handoff, and sprint retrospective</div></div>
-              <span style="margin-left:auto;background:var(--paper-mid);color:var(--vip-midnight-muted);font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;font-family:var(--sans);">UPCOMING</span>
-              <span class="step-chevron" style="color:var(--vip-midnight-muted);font-size:14px;margin-left:8px;transition:transform 0.2s;transform:rotate(180deg);">▲</span>
-            </div>
-            <div id="step4-body" style="background:var(--paper-warm);padding:16px 18px;border-top:1px solid var(--border);display:none;">
-              <div style="font-size:13px;color:var(--ink-soft);line-height:1.7;">Content and activities for this step will appear here when it becomes active.</div>
-            </div>
-          </div>
-
-          <!-- Phase 2 label -->
-          <div style="display:inline-flex;align-items:center;gap:8px;background:var(--paper-mid);color:var(--vip-midnight-soft);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:20px;padding:5px 16px;margin-top:8px;margin-bottom:14px;opacity:0.6;">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--vip-midnight-soft);opacity:0.5;"></div>
-            Phase 2 — Coming Next
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
+  <div style="padding:40px 24px;text-align:center;color:var(--vip-midnight-muted);font-size:14px;font-style:italic;">EHW content coming soon.</div>
+</div>
   </div>
 </div>
 
@@ -2791,7 +2544,7 @@ function showView(name, navEl) {
   const titles = {
     evaluator: 'Project Planning', home: 'Project Planning', guide: 'Platform Guide', overview: 'Overview', stories: 'Stories', photos: 'Photovoice',
     survey: 'Survey & forms', kii: 'Key informant notes', reflections: 'Reflection logs',
-    coding: 'Coding studio', themes: 'Theme map', ai: 'AI sensemaking',
+    coding: 'Coding studio', themes: 'Themes', ai: 'Sensemaking',
     ehw: null, village: null, 'village-experience': 'Village Experience',
     questions: 'Questions & design', community: null
   };
@@ -3773,18 +3526,25 @@ Working with data: You only see data the evaluator deliberately shares with you 
 Tone: Plain, direct, curious. You are not a consultant producing deliverables. You are a thinking partner sitting alongside someone doing hard, important work. Ask questions that open things up. Surface what the evaluator might be too close to see. Stay grounded in the data.`;
 
 const PROMPT_TEMPLATES = {
-  'synthesize-all': `Please synthesize all the data collected this cycle. What are the strongest patterns? What do you notice across sources?`,
-  'synthesis-memo': `Write a plain-language synthesis memo for this cycle using these headers: What we're hearing, What seems to matter most, What we're not yet hearing, A question worth sitting with. Keep each section to 2-3 sentences.`,
-  'what-emerging': `What patterns are emerging across the data this cycle? Focus on what feels significant and what's still unclear.`,
-  'tensions': `What contradictions or tensions do you see in the data? Where do sources disagree or complicate each other?`,
-  'themes': `Map the themes that are emerging and how they relate to each other. Are there themes that seem to enable others? Any that seem in tension?`,
-  'gaps': `Based on what's been collected, what voices or perspectives are missing? Who might see this differently than who we've heard from?`,
-  'paste-code': `I'm going to paste a passage below. Please suggest codes from our code frame (agency, power shift, exclusion, trust, leadership, governance) and explain your reasoning. If you see something that doesn't fit existing codes, name it.\n\n[paste your passage here]`,
-  'paste-theme': `I'm going to paste some text below. What themes do you see in it? How does it connect to — or complicate — what we've heard elsewhere?\n\n[paste your text here]`,
-  'paste-questions': `I'm going to paste something below. Based on it, what follow-up questions would you want to explore?\n\n[paste your content here]`,
-  'followup-questions': `Based on the data so far, what are the 4-5 most important follow-up questions we should be asking? Focus on questions that would move our understanding forward.`,
-  'funder-summary': `Draft a short (3-4 paragraph) funder-facing summary of what this evaluation is finding so far. Tone should be accessible and compelling, but honest about what's still emerging.`,
-  'reflection-prompt': `Give me a reflection prompt I could use with my team at our next check-in — something that gets at the methodological and equity questions we should be sitting with at this stage.`
+  // BAR sensemaking
+  'bar-synthesis': `Here is the current BAR content for [activity name]:\n\n[paste BAR content here]\n\nWhat does this full BAR reveal about what will make us successful? What's the strongest signal? What's still uncertain?`,
+  'bar-tensions': `Here is the BAR content:\n\n[paste BAR content here]\n\nWhere are the tensions or contradictions in this BAR? Where do different rows complicate each other?`,
+  'bar-questions': `Here is the BAR content:\n\n[paste BAR content here]\n\nWhat questions does this BAR open up that we should be sitting with? What do we not yet know?`,
+  // Photovoice
+  'pv-patterns': `Here are submissions from [activity name]:\n\n[paste submission content here]\n\nWhat patterns do you see across these submissions? What's showing up consistently — and what's showing up only once but feels significant?`,
+  'pv-missing': `Based on these submissions:\n\n[paste submission content here]\n\nWhat voices or perspectives seem absent? Who might see this differently than the people who submitted?`,
+  'pv-themes': `Based on these submissions:\n\n[paste submission content here]\n\nWhat themes are emerging? Name them as hypotheses, not findings. Where are you uncertain?`,
+  // Themes
+  'themes-across': `Here are the published themes across our activities:\n\n[paste theme data here]\n\nHow do these themes connect to each other across activities? Are any themes showing up in multiple places? What might that mean?`,
+  'themes-tensions': `Here are the published themes:\n\n[paste theme data here]\n\nAre any of these themes in tension with each other? Where might they be telling different or competing stories?`,
+  // Paste & analyze
+  'paste-transcript': `Here is a meeting transcript:\n\n[paste transcript here]\n\nWhat stands out to you in this transcript? What patterns, tensions, or questions does it surface — relative to what we already know about the EVB work?`,
+  'paste-questions': `Here is some content:\n\n[paste content here]\n\nWhat questions does this open up? Focus on questions that would move our understanding forward, not questions we've already answered.`,
+  'paste-hypothesis': `Here is some content:\n\n[paste content here]\n\nBased on this, name 2-3 hypotheses — not findings. Frame each as something worth testing or watching for as the evaluation continues.`,
+  // Outputs
+  'learning-memo': `Based on what we've shared in this conversation, draft a short learning memo using these headers: What we're hearing, What seems to matter most, What we're not yet hearing, A question worth sitting with. Keep each section to 2-3 sentences. Write in plain language.`,
+  'reflection-prompt': `Give me a reflection prompt I could use with my team at our next check-in — something that gets at the methodological and equity questions we should be sitting with at this stage of the EVB evaluation.`,
+  'next-questions': `Based on everything we've discussed, what are the 3-4 most important questions we should be asking next? Focus on questions that would move our understanding of the EVB resident-led approach forward.`
 };
 
 function usePrompt(key) {
@@ -3939,6 +3699,348 @@ async function runAISensemaking() {
 }
 // ── END AI CHAT ENGINE ────────────────────────────────────────────────────────
 
+// ── SENSEMAKING — THEMES + CONTEXT ───────────────────────────────────────────
+
+// Populate activity checkboxes in the sensemaking chat
+function smPopulateActivitySelect() {
+  var container = document.getElementById('sm-activity-checkboxes');
+  if (!container) return;
+  if (!ACTIVITIES || !ACTIVITIES.length) {
+    container.innerHTML = '<div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">No activities yet.</div>';
+    return;
+  }
+  container.innerHTML = '';
+  ACTIVITIES.forEach(function(act) {
+    var actEl = document.getElementById(act.id);
+    if (!actEl) return;
+    var titleEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+    var name = titleEl ? titleEl.textContent.trim() : act.id;
+    var isPhotovoice = !!actEl.querySelector('[style*="background:var(--vip-amber)"]');
+    var label = document.createElement('label');
+    label.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:white;font-size:12px;';
+    label.innerHTML =
+      '<input type="checkbox" data-act-id="' + act.id + '" style="accent-color:var(--vip-blue);flex-shrink:0;">' +
+      '<span style="flex:1;color:var(--vip-midnight);font-weight:500;">' + pvEscape(name) + '</span>' +
+      '<span style="font-size:10px;font-weight:600;color:' + (isPhotovoice ? 'var(--vip-amber)' : 'var(--vip-blue)') + ';background:' + (isPhotovoice ? 'rgba(230,138,0,0.1)' : 'var(--vip-blue-pale)') + ';padding:2px 7px;border-radius:10px;white-space:nowrap;">' + (isPhotovoice ? 'Photovoice' : 'BAR/AAR') + '</span>';
+    container.appendChild(label);
+  });
+}
+
+// Get all selected activity IDs from checkboxes
+function smGetSelectedActivityIds() {
+  var checked = document.querySelectorAll('#sm-activity-checkboxes input[type="checkbox"]:checked');
+  var ids = [];
+  checked.forEach(function(cb) { if (cb.getAttribute('data-act-id')) ids.push(cb.getAttribute('data-act-id')); });
+  return ids;
+}
+
+// Load selected activities data into the chat as a context message
+function smLoadActivityData() {
+  var actIds = smGetSelectedActivityIds();
+  if (!actIds.length) { showToast('Please select at least one activity'); return; }
+
+  var allData = actIds.map(function(actId) { return smGetActivityData(actId); }).filter(Boolean);
+  if (!allData.length) { showToast('Could not load data for selected activities'); return; }
+
+  var contextMsg = 'Here is the current data for the selected ' + (actIds.length === 1 ? 'activity' : actIds.length + ' activities') + ':\n\n' + allData.join('\n\n---\n\n') + '\n\n[You can now ask questions about this data.]';
+
+  var names = actIds.map(function(id) {
+    var actEl = document.getElementById(id);
+    var titleEl = actEl ? actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+    return titleEl ? titleEl.textContent.trim() : id;
+  }).join(', ');
+
+  appendMessage('user', ('Context loaded: ' + names).replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+  aiChatHistory.push({ role: 'user', content: contextMsg });
+
+  var ackMsg = 'Got it — I\'ve loaded the data for ' + (actIds.length === 1 ? names : actIds.length + ' activities') + '. What would you like to explore?';
+  appendMessage('assistant', ackMsg);
+  aiChatHistory.push({ role: 'assistant', content: ackMsg });
+
+  showToast('✓ Activity data loaded into chat');
+}
+
+// Smart prompt — uses selected activities if any, otherwise falls back to paste template
+function smPromptWithActivity(key) {
+  var actIds = smGetSelectedActivityIds();
+
+  if (actIds.length) {
+    var names = actIds.map(function(id) {
+      var actEl = document.getElementById(id);
+      var titleEl = actEl ? actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+      return titleEl ? titleEl.textContent.trim() : id;
+    });
+    var nameStr = actIds.length === 1 ? names[0] : names.join(' and ');
+    var isPhotovoice = actIds.every(function(id) {
+      var actEl = document.getElementById(id);
+      return actEl && !!actEl.querySelector('[style*="background:var(--vip-amber)"]');
+    });
+
+    var promptMap = {
+      'bar-synthesis': 'Looking at the activity content for ' + nameStr + ' that I loaded — what does it reveal about what will make us successful? What\'s the strongest signal? What\'s still uncertain?',
+      'bar-tensions': 'Looking at the activity content for ' + nameStr + ' — where are the tensions or contradictions? Where do different parts complicate each other?',
+      'bar-questions': 'Based on the activity content for ' + nameStr + ' — what questions does it open up that we should be sitting with?',
+      'pv-patterns': 'Based on the submissions for ' + nameStr + ' — what patterns do you see? What\'s showing up consistently, and what feels significant even if it only appears once?',
+      'pv-missing': 'Based on the submissions for ' + nameStr + ' — what voices or perspectives seem absent? Who might see this differently?',
+      'pv-themes': 'Based on the submissions for ' + nameStr + ' — what themes are emerging? Name them as hypotheses, not findings.'
+    };
+
+    var prompt = promptMap[key];
+    if (prompt) {
+      var input = document.getElementById('aiChatInput');
+      input.value = prompt;
+      autoResizeChat(input);
+      input.focus();
+      return;
+    }
+  }
+
+  // Fall back to paste template
+  usePrompt(key);
+}
+
+// Collect all available data for an activity as a structured text block
+function smGetActivityData(actId) {
+  var actEl = document.getElementById(actId);
+  if (!actEl) return null;
+
+  var titleEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+  var name = titleEl ? titleEl.textContent.trim() : actId;
+  var isPhotovoice = !!actEl.querySelector('[style*="background:var(--vip-amber)"]');
+
+  var loadBar = document.getElementById('sm-load-bar').checked;
+  var loadThemes = document.getElementById('sm-load-themes').checked;
+  var loadSubmissions = document.getElementById('sm-load-submissions').checked;
+
+  var parts = ['ACTIVITY: ' + name];
+  parts.push('TYPE: ' + (isPhotovoice ? 'Photovoice (submission activity)' : 'BAR/AAR (before/after action review)'));
+
+  // BAR content
+  if (loadBar && !isPhotovoice) {
+    var barRows = actEl.querySelectorAll('[data-bar-row]');
+    if (barRows.length) {
+      parts.push('\nBAR — What will make us successful?');
+      barRows.forEach(function(row) {
+        var rowName = row.getAttribute('data-bar-row');
+        var contentEl = row.querySelector('[style*="font-size:13px"]');
+        var text = contentEl ? contentEl.textContent.trim() : '';
+        if (text && text !== '—') parts.push(rowName + ': ' + text);
+        else parts.push(rowName + ': [not yet filled]');
+      });
+    }
+    // AAR content
+    var aarCells = actEl.querySelectorAll('[data-aar-cell]');
+    var hasAar = false;
+    var aarParts = ['\nAAR — After Action Review'];
+    aarCells.forEach(function(cell) {
+      var cellKey = cell.getAttribute('data-aar-cell');
+      var text = cell.textContent.trim();
+      if (text && text !== '—') { hasAar = true; aarParts.push(cellKey + ': ' + text); }
+    });
+    if (hasAar) parts = parts.concat(aarParts);
+  }
+
+  // Themes
+  if (loadThemes) {
+    var themeData = publishedWidgets[actId + '-theme-data'];
+    if (themeData && publishedWidgets[actId + '-themes']) {
+      try {
+        var themes = JSON.parse(themeData);
+        if (themes.length) {
+          parts.push('\nPUBLISHED THEMES');
+          themes.forEach(function(t) {
+            parts.push('- ' + t.name + (t.note ? ': ' + t.note : ''));
+          });
+        }
+      } catch(e) {}
+    } else {
+      parts.push('\nPUBLISHED THEMES: none yet');
+    }
+  }
+
+  // Photovoice submissions
+  if (loadSubmissions && isPhotovoice) {
+    var stats = dcSubmissions[actId];
+    if (stats && stats.count > 0) {
+      parts.push('\nSUBMISSION SUMMARY');
+      parts.push('Total submissions: ' + stats.count);
+      parts.push('Distinct submitters: ' + stats.submitters.size);
+      if (stats.lastDate) parts.push('Last submission: ' + new Date(stats.lastDate).toLocaleDateString());
+      // Pull submission text content from DOM gallery
+      var gallery = document.getElementById('dc-gallery-' + actId);
+      if (gallery) {
+        var cards = gallery.querySelectorAll('[data-sub-key]');
+        if (cards.length) {
+          parts.push('\nSUBMISSION CONTENT');
+          cards.forEach(function(card, i) {
+            var storyEl = card.querySelector('[style*="border-left:3px solid var(--vip-amber)"]');
+            var themeEl = card.querySelectorAll('span[style*="background:var(--vip-amber)"]');
+            var themes = [];
+            themeEl.forEach(function(t) { themes.push(t.textContent.trim()); });
+            if (storyEl) parts.push('Submission ' + (i+1) + (themes.length ? ' [' + themes.join(', ') + ']' : '') + ': ' + storyEl.textContent.trim());
+            else if (themes.length) parts.push('Submission ' + (i+1) + ' [' + themes.join(', ') + ']: media file');
+          });
+        }
+      }
+    } else {
+      parts.push('\nSUBMISSIONS: none yet');
+    }
+  }
+
+  return parts.join('\n');
+}
+
+// Build the live themes view from published theme cards across all activities
+function smRefreshThemes() {
+  var container = document.getElementById('sm-themes-container');
+  var synthPanel = document.getElementById('sm-themes-synthesis');
+  if (!container) return;
+
+  // Collect all published theme data from publishedWidgets
+  var allThemes = []; // { actId, actName, themes: [{name, note}] }
+
+  ACTIVITY_IDS.forEach(function(actId) {
+    var dataKey = actId + '-theme-data';
+    var pubKey = actId + '-themes';
+    if (!publishedWidgets[dataKey] || !publishedWidgets[pubKey]) return;
+    try {
+      var themes = JSON.parse(publishedWidgets[dataKey]);
+      if (!themes || !themes.length) return;
+      var actEl = document.getElementById(actId);
+      var titleEl = actEl ? actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+      var actName = titleEl ? titleEl.textContent.trim() : actId;
+      allThemes.push({ actId: actId, actName: actName, themes: themes });
+    } catch(e) {}
+  });
+
+  if (!allThemes.length) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">No themes published yet. Use the Activity Builder → Fill themes box to add themes to activities, then publish them to the Village.</div>';
+    if (synthPanel) synthPanel.style.display = 'none';
+    smUpdateContextPanel();
+    return;
+  }
+
+  // Render one section per activity
+  container.innerHTML = allThemes.map(function(actData) {
+    var themeCards = actData.themes.map(function(theme) {
+      return '<div style="background:white;border:1.5px solid rgba(158,31,99,0.15);border-radius:12px;padding:14px 16px;flex:1;min-width:200px;max-width:280px;">' +
+        '<div style="width:28px;height:3px;background:var(--vip-magenta);border-radius:2px;opacity:0.5;margin-bottom:8px;"></div>' +
+        '<div style="font-size:14px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">' + pvEscape(theme.name) + '</div>' +
+        (theme.note ? '<div style="font-size:12px;color:var(--vip-midnight-soft);line-height:1.6;">' + pvEscape(theme.note) + '</div>' : '') +
+      '</div>';
+    }).join('');
+
+    return '<div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">' +
+        '<div style="font-size:12px;font-weight:700;color:var(--vip-magenta);text-transform:uppercase;letter-spacing:0.08em;">' + pvEscape(actData.actName) + '</div>' +
+        '<div style="height:1px;flex:1;background:rgba(158,31,99,0.15);"></div>' +
+        '<div style="font-size:11px;color:var(--vip-midnight-muted);">' + actData.themes.length + ' theme' + (actData.themes.length !== 1 ? 's' : '') + '</div>' +
+      '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:12px;">' + themeCards + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Show synthesis panel
+  if (synthPanel) synthPanel.style.display = 'block';
+  smUpdateContextPanel();
+}
+
+// Update the context panel pills in the AI chat sidebar
+function smUpdateContextPanel() {
+  // Count activities with published themes
+  var themeCount = ACTIVITY_IDS.filter(function(id) {
+    return publishedWidgets[id + '-themes'] && publishedWidgets[id + '-theme-data'];
+  }).length;
+
+  // Count total photovoice submissions
+  var subCount = 0;
+  Object.keys(dcSubmissions || {}).forEach(function(actId) {
+    subCount += (dcSubmissions[actId].count || 0);
+  });
+
+  // Count BAR activities with content
+  var barCount = ACTIVITY_IDS.filter(function(id) {
+    var actEl = document.getElementById(id);
+    if (!actEl) return false;
+    if (actEl.querySelector('[style*="background:var(--vip-amber)"]')) return false; // photovoice
+    var rows = actEl.querySelectorAll('[data-bar-row]');
+    var hasSome = false;
+    rows.forEach(function(row) {
+      var contentEl = row.querySelector('[style*="font-size:13px"]');
+      if (contentEl && contentEl.textContent.trim() !== '—' && contentEl.textContent.trim() !== '') hasSome = true;
+    });
+    return hasSome;
+  }).length;
+
+  var activeSprint = ppActiveSprint || 1;
+
+  var els = {
+    'sm-ctx-themes': '✦ ' + themeCount + ' activit' + (themeCount === 1 ? 'y' : 'ies') + ' with themes',
+    'sm-ctx-submissions': '✦ ' + subCount + ' photovoice submission' + (subCount === 1 ? '' : 's'),
+    'sm-ctx-bar': '✦ ' + barCount + ' BAR activit' + (barCount === 1 ? 'y' : 'ies') + ' with content',
+    'sm-ctx-sprint': '✦ Sprint ' + activeSprint + ' active'
+  };
+  Object.keys(els).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = els[id];
+  });
+}
+
+// Generate across-activity theme synthesis via Claude API
+async function smGenerateThemeSynthesis() {
+  var synthText = document.getElementById('sm-themes-synthesis-text');
+  if (!synthText) return;
+  synthText.textContent = '✦ Thinking…';
+  synthText.style.fontStyle = 'italic';
+  synthText.style.color = 'var(--vip-magenta)';
+
+  // Collect theme data
+  var allThemeText = '';
+  ACTIVITY_IDS.forEach(function(actId) {
+    var dataKey = actId + '-theme-data';
+    if (!publishedWidgets[dataKey] || !publishedWidgets[actId + '-themes']) return;
+    try {
+      var themes = JSON.parse(publishedWidgets[dataKey]);
+      var actEl = document.getElementById(actId);
+      var titleEl = actEl ? actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+      var actName = titleEl ? titleEl.textContent.trim() : actId;
+      allThemeText += '\n\n' + actName.toUpperCase() + '\n';
+      themes.forEach(function(t) {
+        allThemeText += '- ' + t.name + (t.note ? ': ' + t.note : '') + '\n';
+      });
+    } catch(e) {}
+  });
+
+  if (!allThemeText.trim()) {
+    synthText.textContent = 'No published themes found. Publish themes from the Activity Builder first.';
+    return;
+  }
+
+  try {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: EVB_DE_SYSTEM_PROMPT,
+        messages: [{
+          role: 'user',
+          content: 'Here are the published themes across all activities in this evaluation:\n' + allThemeText + '\n\nAnalyze these themes across activities. What connections do you see? What tensions? What hypotheses do they open up? Name 2-3 things you notice, and end with one question worth sitting with. Be specific. Do not produce a report — produce a thinking-partner response.'
+        }]
+      })
+    });
+    var data = await response.json();
+    var reply = data.content?.[0]?.text || 'Something went wrong.';
+    synthText.innerHTML = reply.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+    synthText.style.fontStyle = 'normal';
+    synthText.style.color = 'var(--vip-midnight-soft)';
+  } catch(e) {
+    synthText.textContent = 'Connection error. Please try again.';
+    synthText.style.fontStyle = 'italic';
+  }
+}
+
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('open');
@@ -3971,8 +4073,10 @@ if (urlMode === 'ehw') {
   if (ca) { ca.style.overflowY = 'scroll'; ca.style.maxHeight = 'calc(100vh - 60px)'; }
   // Hide village content until Drive state is applied — prevents flash of wrong state
   var vv = document.getElementById('view-village');
-} else if (urlMode === 'eval') {
-  setMode('eval');
+} else {
+  // Evaluator context (no mode param, or ?mode=eval) — enable inline editing
+  document.body.classList.add('is-evaluator');
+  if (urlMode === 'eval') setMode('eval');
 }
 
 function renderCodeFrameModalList() {
@@ -4187,23 +4291,37 @@ function _applyPublishedState() {
   if (typeof ppRestoreSprintState === 'function') ppRestoreSprintState();
   // Restore inline text edits
   if (typeof ieRestoreEdits === 'function') ieRestoreEdits();
+  // Refresh themes view and context panel
+  setTimeout(function() {
+    if (typeof smRefreshThemes === 'function') smRefreshThemes();
+  }, 600);
 
   // If on village URL, reveal content now that state is correct and scroll to top
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
     var vv = document.getElementById('view-village');
     if (vv) {
-      // Reveal first, then use requestAnimationFrame to scroll after layout is complete
-      // This ensures the browser has calculated element positions before scrolling
       vv.style.opacity = '1';
-      // Use double rAF to guarantee layout is complete before scroll
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          if (activeActivityId) {
-            var targetEl = document.getElementById('res-act-' + activeActivityId);
-            if (targetEl) pvScrollTo(targetEl, false);
-          }
-        });
-      });
+
+      var isMobileVillage = (window.location.search.indexOf('mode=village') !== -1);
+
+      function doScrollToActive() {
+        if (!activeActivityId) return;
+        var targetEl = document.getElementById('res-act-' + activeActivityId);
+        if (!targetEl) return;
+        var container = document.getElementById('mainContentArea');
+        var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
+        var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
+        if (useContainer) {
+          container.scrollTop = Math.max(0, targetEl.offsetTop - 20);
+        } else {
+          targetEl.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
+      }
+
+      // First attempt
+      setTimeout(doScrollToActive, isMobileVillage ? 400 : 0);
+      // Second attempt for mobile — catches slow renders
+      if (isMobileVillage) setTimeout(doScrollToActive, 1200);
       renderTimeline();
       ACTIVITIES.forEach(function(act) {
         var key = 'act-' + act.num + '-visible';
@@ -4908,6 +5026,7 @@ initScrollSpy();
 setTimeout(function() {
   if (typeof initInlineEditing === 'function') initInlineEditing();
   if (typeof dcInit === 'function') dcInit();
+  if (typeof smPopulateActivitySelect === 'function') smPopulateActivitySelect();
 }, 300);
 
 
@@ -5136,15 +5255,16 @@ function scrollToVillageTop() {
 function pvScrollTo(el, smooth) {
   if (!el) return;
   var container = document.getElementById('mainContentArea');
-  // If container has overflow set (scroll or auto), use it directly
-  // Otherwise fall back to window scroll (mobile)
   var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
   var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
   if (useContainer) {
-    container.scrollTo({ top: el.offsetTop - 20, behavior: smooth ? 'smooth' : 'instant' });
+    if (smooth) {
+      container.scrollTo({ top: Math.max(0, el.offsetTop - 20), behavior: 'smooth' });
+    } else {
+      container.scrollTop = Math.max(0, el.offsetTop - 20);
+    }
   } else {
-    var rect = el.getBoundingClientRect();
-    window.scrollTo({ top: window.scrollY + rect.top - 20, behavior: smooth ? 'smooth' : 'instant' });
+    el.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', block: 'start' });
   }
 }
 
@@ -5736,6 +5856,34 @@ function pvAddToGalleryFromMeta(actId, meta) {
 
 // ── ACTIVITY BUILDER ──────────────────────────────────────────────────────────
 
+var EVB_DE_SYSTEM_PROMPT = `You are the sensemaking partner for the Buckeye EcoVillage Developmental Evaluation (EVB DE), a project led by Verge Impact Partners (VIP). You support the evaluator — not the community directly — in making sense of data collected across the evaluation's sprint cycles.
+
+Your role: You help the evaluator find patterns, surface tensions, generate questions, and think through what the data is and isn't saying. You are a thought partner, not an analyst. You do not render verdicts. You do not claim to know what the community means. You hold the data lightly and ask good questions.
+
+What this evaluation is about: The EVB DE examines how the Buckeye EcoVillage Project operationalizes its theory of change — and what the "EHW way" looks, feels, and functions like in practice.
+
+Evaluation aims:
+- Aim 1: Document and distill the key resources, practices, enablers, and barriers of the EVB resident-led approach
+- Aim 2: Understand the difference made when all partners work in the EHW way — with fidelity to resident leadership, village principles, community definitions of resilience, and community-endorsed priorities
+- Aim 3: Surface what Phase 1 reveals about the conditions, assumptions, and dynamics in the theory of change, in order to strengthen and adapt resident-led practice going forward
+
+The animating question: How does the EVB resident-led approach take shape in practice — and what does it reveal about what it takes to do this work with fidelity to community?
+
+Frameworks you should know:
+- Developmental evaluation (Patton): This is not summative evaluation. The work is evolving. Your job is to support learning in real time, not measure against fixed benchmarks.
+- Participatory Action Research (PAR): Community members are co-inquirers, not subjects. Data from residents carries weight precisely because they generated it from lived experience.
+- Equitable evaluation: Whose voices are present matters. Whose are absent matters more.
+
+How to handle community voice: Stories, quotes, and testimonies are the most important data in this evaluation. Handle them carefully. Never flatten or summarize away the texture of what someone said. Do not interpret beyond what the data supports. When a story is ambiguous, say so — and name the ambiguity as information. Do not speak for community members or infer their intent. If a pattern seems to emerge, name it as a hypothesis, not a finding.
+
+What you should not do: Make causal claims ("X caused Y") — this evaluation documents and interprets, it does not prove causation. Treat a small number of coded passages as representative of the whole community. Produce outputs that feel like a final report — you are supporting a living, iterative process. Offer reassurance when the data is actually troubling — name the tension honestly.
+
+Working with data: You only see data the evaluator deliberately shares with you in each session. Do not assume you have access to anything beyond what is in the current conversation. When the evaluator shares a passage, story, or note, engage with it specifically. When asked to synthesize across data, be transparent about what you're drawing from and what you're not.
+
+Tone: Plain, direct, curious. You are not a consultant producing deliverables. You are a thinking partner sitting alongside someone doing hard, important work. Ask questions that open things up. Surface what the evaluator might be too close to see. Stay grounded in the data.
+
+For BAR synthesis specifically: Write in first-person plural "we" voice. Each row should be 2-3 narrative sentences answering "What will make us successful?" for that subcategory. Be specific and grounded in the source material. Do not generalize beyond what the data supports.`;
+
 var abCurrentMode = null;
 var abCurrentSource = 'paste';
 var abThemesMethod = 'ai';
@@ -5919,6 +6067,10 @@ function abRenderThemesInActivity(actId, themes) {
   publishedWidgets[actId + '-themes'] = true;
   publishedWidgets[actId + '-theme-data'] = JSON.stringify(themes);
   savePublishState();
+  // Refresh themes view and context panel
+  setTimeout(function() {
+    if (typeof smRefreshThemes === 'function') smRefreshThemes();
+  }, 300);
 }
 
 // ── AI generation ─────────────────────────────────────────────────────────────
@@ -5928,7 +6080,8 @@ async function abGenerate(genMode) {
 
   var actName  = (document.getElementById('ab-act-name') ? document.getElementById('ab-act-name').value  : '') || '';
   var actLabel = (document.getElementById('ab-act-label') ? document.getElementById('ab-act-label').value : '') || '';
-  var framing  = (document.getElementById('ab-framing') ? document.getElementById('ab-framing').value   : '') || '';
+  var framingEl = document.getElementById('ab-framing');
+  var framing  = framingEl ? (framingEl.innerHTML || framingEl.value || '').trim() : '';
   var selectedAct = abGetSelectedActivity();
 
   var outputEl     = document.getElementById('ab-output');
@@ -5939,7 +6092,7 @@ async function abGenerate(genMode) {
   outputTextEl.style.display = 'none';
   outputTextEl.textContent = '';
 
-  var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language.\n\nThe platform uses a BAR (Before Action Review) + AAR (After Action Review) structure.\n\nBAR columns: Overall | Residents Set Priorities | Space to Disagree | Different Outcomes | Values\nAAR columns: What were our intended results? | How did we do? | What caused our results? | What is our next opportunity to test what we learned?\n\nConstruct map themes: Community Power, Resident Voice, Trust, Access, Belonging, Governance, Collective Action, Health Equity, Space & Place, Economic Stability.';
+  var systemPrompt = EVB_DE_SYSTEM_PROMPT;
 
   var userMsg = 'SOURCE MATERIAL:\n' + sourceText + '\n\n';
   if (actName)  userMsg += 'Activity name: ' + actName + '\n';
@@ -6127,6 +6280,7 @@ function abRegisterActivity(num, id, name, type, label) {
   setTimeout(function() {
     if (typeof ieInitActivity === 'function') ieInitActivity(id, num);
     if (typeof dcInit === 'function') dcInit(); // refresh dc nav + overview
+    if (typeof smPopulateActivitySelect === 'function') smPopulateActivitySelect();
   }, 200);
 }
 
@@ -6585,7 +6739,7 @@ async function abGenerateEditBar(actId) {
   outputTextEl.style.display = 'none';
   outputTextEl.textContent = '';
 
-  var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language accessible to community members. Write in first-person plural "we" voice. Each BAR row should be 2-3 narrative sentences answering the question "What will make us successful?" for that subcategory. Be specific and grounded in the source material provided.';
+  var systemPrompt = EVB_DE_SYSTEM_PROMPT;
 
   var rowsToFill = targetSubcat ? [targetSubcat] : subcats.length ? subcats : ['Overall'];
   var rowsInstruction = rowsToFill.map(function(r) { return r.toUpperCase() + '\n[2-3 sentences]'; }).join('\n\n');
@@ -6799,7 +6953,7 @@ abGenerate = async function(genMode) {
     outputTextEl.style.display = 'none';
     outputTextEl.textContent = '';
     // Build system prompt for edit mode
-    var systemPrompt = 'You are a developmental evaluator supporting the Buckeye EcoVillage (EVB) Healthy Neighborhoods Study. You use participatory action research principles and write in plain language accessible to community members. Write in "we" voice. Each cell should be 2-3 narrative sentences explaining the why behind the point.';
+    var systemPrompt = EVB_DE_SYSTEM_PROMPT;
     // Detect subcategory rows from the selected activity
     var actEl = actId ? document.getElementById(actId) : null;
     var barRowNames = [];
@@ -6874,7 +7028,8 @@ abGenerate = async function(genMode) {
     var reply2 = outputTextEl2.getAttribute('data-full-reply') || outputTextEl2.textContent;
     var actName = (document.getElementById('ab-act-name').value || '').trim();
     var actLabel = (document.getElementById('ab-act-label').value || '').trim();
-    var framing = (document.getElementById('ab-framing').value || '').trim();
+    var framingEl2 = document.getElementById('ab-framing');
+    var framing = framingEl2 ? (framingEl2.innerHTML || framingEl2.value || '').trim() : '';
     if (!actName) return; // can't publish without a name
     var existingPublishBtn = document.getElementById('ab-publish-live-btn');
     if (existingPublishBtn) existingPublishBtn.remove();
@@ -7148,18 +7303,16 @@ function ppLaunchSprint(sprintNum) {
     if (wrap) {
       wrap.style.opacity = '1';
       wrap.style.pointerEvents = '';
-      // Restore click handler and chevron
       var stepHeader = wrap.querySelector('[style*="background:var(--paper-mid)"]');
       if (stepHeader) {
         stepHeader.style.cursor = 'pointer';
         stepHeader.setAttribute('onclick', "ppToggleStep('s" + sprintNum + "step" + s + "')");
-        // Restore step number circle color
         var circle = stepHeader.querySelector('[style*="background:var(--vip-midnight-muted)"]');
         if (circle) circle.style.background = 'var(--vip-blue)';
-        // Restore step title color
-        var title = stepHeader.querySelector('[style*="color:var(--vip-midnight-muted)"]');
-        if (title) title.style.color = 'var(--vip-midnight)';
-        // Restore chevron id
+        var titles = stepHeader.querySelectorAll('div[style*="font-size:15px"]');
+        titles.forEach(function(t) { t.style.color = 'var(--vip-midnight)'; });
+        var descs = stepHeader.querySelectorAll('div[style*="font-size:12px"]');
+        descs.forEach(function(d) { d.style.color = 'var(--vip-midnight-muted)'; d.style.opacity = '1'; });
         var chev = stepHeader.querySelector('span:last-child');
         if (chev) chev.id = 'pp-s' + sprintNum + 'step' + s + '-chev';
       }
@@ -7212,12 +7365,19 @@ function ppLaunchNextSprint() {
         '<div style="width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="sprint' + nextNum + '-bar" style="height:100%;width:0%;background:var(--vip-blue);border-radius:3px;transition:width 0.3s;"></div></div>' +
       '</div>' +
     '</div>' +
-    ['Set up & Design','Learning Loop','Adapt & Document','Close / Prep Next Sprint'].map(function(name, i) {
+    ['Set up & Design|We align what matters for your learning — co-designing learning questions, decisions, roles, and methods so the sprint is focused, feasible, and set up to apply learning from the start.',
+     'Learning Loop|We gather real-time information and facilitate ongoing sensemaking to surface patterns, test assumptions, and generate decisions or action-ready insights as your work unfolds.',
+     'Adapt & Document|We translate insights into learning and help you apply learning to make clear decisions and adjustments to your work, documenting what is changing, why it\'s changing, and what it suggests for next steps.',
+     'Close / Prep Next Sprint|We consolidate your key learnings (you select the product format), hand off the tools and practices your team has used, and determine whether to close the project or carry things forward into the next learning sprint.'
+    ].map(function(stepStr, i) {
+      var parts = stepStr.split('|');
+      var name = parts[0];
+      var desc = parts[1];
       var sid = 's' + nextNum + 'step' + (i+1);
       return '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">' +
         '<div onclick="ppToggleStep(\'' + sid + '\')" style="background:var(--paper-mid);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;">' +
           '<div style="width:24px;height:24px;border-radius:50%;background:var(--vip-blue);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' + (i+1) + '</div>' +
-          '<div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">' + pvEscape(name) + '</div></div>' +
+          '<div style="flex:1;"><div style="font-size:15px;font-weight:600;color:var(--vip-midnight);">' + pvEscape(name) + '</div><div style="font-size:12px;color:var(--vip-midnight-muted);margin-top:1px;">' + pvEscape(desc) + '</div></div>' +
           '<div id="pp-' + sid + '-progress" style="font-size:11px;color:var(--vip-midnight-muted);white-space:nowrap;">0/0 tasks</div>' +
           '<span id="pp-' + sid + '-chev" style="font-size:14px;color:var(--vip-midnight-muted);transition:transform 0.2s;">▼</span>' +
         '</div>' +
@@ -7554,15 +7714,84 @@ function ppRenderCard(phaseIdx, card) {
   var html = '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">';
   html += '<div style="flex:1;">';
   if (card.title) html += '<div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:6px;">' + pvEscape(card.title) + '</div>';
-  // Support both old card.text (plain) and new card.html (rich)
   var body = card.html || (card.text ? pvEscape(card.text).replace(/\n/g,'<br>') : '');
   if (body) html += '<div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.6;margin-bottom:6px;">' + body + '</div>';
   if (card.url) html += '<a href="' + card.url + '" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--vip-magenta);text-decoration:underline;">&#128196; ' + pvEscape(card.label) + '</a>';
   html += '</div>';
-  html += '<button onclick="ppDeleteCard(' + phaseIdx + ',' + card.id + ')" style="color:var(--vip-midnight-muted);background:none;border:none;cursor:pointer;font-size:16px;padding:0 2px;flex-shrink:0;" title="Remove">&times;</button>';
+  html += '<div style="display:flex;gap:4px;flex-shrink:0;">';
+  html += '<button onclick="ppEditCard(' + phaseIdx + ',' + card.id + ')" style="color:var(--vip-blue);background:none;border:none;cursor:pointer;font-size:13px;padding:0 4px;font-family:var(--sans);" title="Edit">✏️</button>';
+  html += '<button onclick="ppDeleteCard(' + phaseIdx + ',' + card.id + ')" style="color:var(--vip-midnight-muted);background:none;border:none;cursor:pointer;font-size:16px;padding:0 2px;" title="Remove">&times;</button>';
+  html += '</div>';
   html += '</div>';
   div.innerHTML = html;
   container.appendChild(div);
+}
+
+function ppEditCard(phaseIdx, cardId) {
+  var key = 'pp_cards_' + phaseIdx;
+  var cards = publishedWidgets[key] || [];
+  var card = cards.find(function(c) { return c.id === cardId; });
+  if (!card) return;
+
+  // Reuse the add card modal, pre-populated
+  ppShowAddCard(phaseIdx);
+
+  // Pre-fill fields after modal is in DOM
+  setTimeout(function() {
+    var titleEl = document.getElementById('pp-card-title');
+    var editorEl = document.getElementById('pp-card-text');
+    var urlEl = document.getElementById('pp-card-url');
+    var labelEl = document.getElementById('pp-card-url-label');
+    var modal = document.getElementById('pp-add-card-modal');
+
+    if (titleEl) titleEl.value = card.title || '';
+    if (editorEl) editorEl.innerHTML = card.html || (card.text ? pvEscape(card.text).replace(/\n/g,'<br>') : '');
+    if (urlEl) urlEl.value = card.url || '';
+    if (labelEl) labelEl.value = (card.label && card.label !== 'Open in Drive') ? card.label : '';
+
+    // Update modal title
+    var titleDiv = modal ? modal.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+    if (titleDiv) titleDiv.textContent = 'Edit card';
+
+    // Replace Save button to call update instead of create
+    var saveBtn = modal ? modal.querySelector('button[style*="background:var(--vip-blue)"]') : null;
+    if (saveBtn) {
+      saveBtn.textContent = 'Save changes';
+      saveBtn.onclick = function() { ppUpdateCard(phaseIdx, cardId); };
+    }
+  }, 50);
+}
+
+function ppUpdateCard(phaseIdx, cardId) {
+  var title  = (document.getElementById('pp-card-title').value || '').trim();
+  var editor = document.getElementById('pp-card-text');
+  var html   = editor ? editor.innerHTML.trim() : '';
+  if (html === '<br>' || html === '&nbsp;') html = '';
+  var url   = (document.getElementById('pp-card-url').value   || '').trim();
+  var label = (document.getElementById('pp-card-url-label').value || '').trim() || 'Open in Drive';
+  if (!title && !html && !url) { showToast('Add a title, content, or link'); return; }
+
+  var key = 'pp_cards_' + phaseIdx;
+  var cards = publishedWidgets[key] || [];
+  var idx = cards.findIndex(function(c) { return c.id === cardId; });
+  if (idx === -1) return;
+  cards[idx] = { id: cardId, title: title, html: html, url: url, label: label };
+  publishedWidgets[key] = cards;
+  savePublishState();
+
+  // Re-render the card in place
+  var existing = document.getElementById('pp-card-' + cardId);
+  if (existing) existing.remove();
+  // Re-insert at correct position
+  var container = document.getElementById('pp-phase-' + phaseIdx + '-cards');
+  if (container) {
+    var allCards = publishedWidgets[key];
+    container.innerHTML = '';
+    allCards.forEach(function(c) { ppRenderCard(phaseIdx, c); });
+  }
+
+  document.getElementById('pp-add-card-modal').remove();
+  showToast('Card updated');
 }
 
 function ppDeleteCard(phaseIdx, cardId) {
@@ -7781,8 +8010,8 @@ var _ieCurrentEl = null;
 var _ieCurrentKey = null;
 
 function initInlineEditing() {
-  // Only active when NOT in village/residents mode
-  if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+  // Only active when in evaluator context
+  if (!document.body.classList.contains('is-evaluator')) return;
 
   // Add data-edit-key attributes to all editable elements
   var edits = [
@@ -7820,6 +8049,7 @@ function initInlineEditing() {
     // Activity 2
     { sel: '#res-act-2 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act2-title', type: 'text' },
     { sel: '#res-act-2 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act2-tag', type: 'text' },
+    { sel: '#res-act-2 [style*="font-size:16px"][style*="font-style:italic"]', key: 'act2-framing-pre', type: 'text' },
     { sel: '#res-act-2 [style*="font-size:20px"][style*="font-style:italic"]', key: 'act2-framing', type: 'textarea' },
     { sel: '#res-act-2 [style*="font-size:11px"][style*="text-transform:uppercase"][style*="letter-spacing:0.07em"]', key: 'act2-subcat-header', type: 'text' },
     { sel: '#res-act-2 [style*="Building the Village"]', key: 'act2-action', type: 'text' },
@@ -7827,13 +8057,17 @@ function initInlineEditing() {
     { sel: '#res-act-2 [style*="background:#f5f0fb"] [style*="font-size:13px"][style*="font-weight:700"]', key: 'act2-sub2-name', type: 'text' },
     { sel: '#res-act-2 [style*="background:#f0f7f1"] [style*="font-size:13px"][style*="font-weight:700"]', key: 'act2-sub3-name', type: 'text' },
 
-    // Activity 3
+    // Activity 3 (Photovoice)
     { sel: '#res-act-3 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act3-title', type: 'text' },
-    { sel: '#res-act-3 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act3-tag', type: 'text' },
+    { sel: '#res-act-3 [style*="font-size:11px"][style*="opacity:0.85"]', key: 'act3-subtitle', type: 'text' },
+    { sel: '#res-act-3 [style*="font-size:18px"][style*="font-weight:700"][style*="color:var(--vip-midnight)"]', key: 'act3-type-label', type: 'text' },
+    { sel: '#res-act-3 [style*="font-size:13px"][style*="font-weight:400"][style*="line-height:1.6"]', key: 'act3-description', type: 'textarea' },
 
-    // Activity 4
+    // Activity 4 (Photovoice)
     { sel: '#res-act-4 [style*="font-size:15px"][style*="font-weight:700"]', key: 'act4-title', type: 'text' },
-    { sel: '#res-act-4 [style*="font-size:10px"][style*="background:rgba(255,255,255,0.2)"]', key: 'act4-tag', type: 'text' },
+    { sel: '#res-act-4 [style*="font-size:11px"][style*="opacity:0.85"]', key: 'act4-subtitle', type: 'text' },
+    { sel: '#res-act-4 [style*="font-size:18px"][style*="font-weight:700"][style*="color:var(--vip-midnight)"]', key: 'act4-type-label', type: 'text' },
+    { sel: '#res-act-4 [style*="font-size:13px"][style*="font-weight:400"][style*="line-height:1.6"]', key: 'act4-description', type: 'textarea' },
   ];
 
   edits.forEach(function(def) {
@@ -7844,8 +8078,8 @@ function initInlineEditing() {
       el.setAttribute('data-edit-type', def.type);
       el.classList.add('inline-editable');
       el.addEventListener('click', function(e) {
-        // Only fire in evaluator mode
-        if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+        // Only fire in evaluator context
+        if (!document.body.classList.contains('is-evaluator')) return;
         e.stopPropagation();
         ieOpenPopover(el, def.key, def.type);
       });
@@ -7950,7 +8184,7 @@ function ieBindElement(el, key, type) {
   el.setAttribute('data-edit-type', type);
   el.classList.add('inline-editable');
   el.addEventListener('click', function(e) {
-    if (document.body.classList.contains('mode-village') || document.body.classList.contains('mode-residents')) return;
+    if (!document.body.classList.contains('is-evaluator')) return;
     e.stopPropagation();
     ieOpenPopover(el, key, type);
   });
