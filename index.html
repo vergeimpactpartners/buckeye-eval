@@ -86,8 +86,9 @@
   /* True village URL only: hide unpublished themes from residents */
   body.mode-residents.hide-eval .themes-panel-unpublished,
   body.mode-village .themes-panel-unpublished { display: none !important; }
-  /* Evaluator in Village mode: show unpublished themes dimmed */
-  #view-village .themes-panel-unpublished { opacity: 0.5; }
+  /* Evaluator in Village mode: show unpublished themes at full opacity — badge provides context */
+  #view-village .themes-panel-unpublished { opacity: 1; }
+  #view-village .themes-panel-unpublished .themes-body-content { opacity: 0.45; }
   body.mode-residents.hide-eval #view-village .themes-panel-unpublished { display: none !important; }
 
   /* INLINE EDITING — evaluator only, persists across all view modes */
@@ -476,7 +477,7 @@
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-midnight);">Sensemaking</div>
       <div class="nav-item" data-color="midnight" onclick="showView('ai', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Sensemaking</span></div>
       <div class="nav-item" data-color="midnight" onclick="showView('themes', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Themes</span></div>
-      <div class="nav-item" data-color="midnight" onclick="showView('fidelity', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Fidelity tracker</span></div>
+      <div class="nav-item" data-color="midnight" onclick="showView('fidelity', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Fidelity Tracker</span></div>
     </div>
 
     <div id="residentsNav" class="nav-group" style="display:none;">
@@ -1198,9 +1199,17 @@
       <div id="dc-activity-views"></div>
 
       <div id="view-themes" class="view">
-        <div class="section-header">
-          <div><div class="section-title">Themes</div><div class="section-sub">Emerging themes from published activity theme cards — updated when you publish themes from the Activity Builder</div></div>
-          <button class="btn btn-ai" onclick="smRefreshThemes()">✦ Refresh themes</button>
+        <!-- Header -->
+        <div style="background:var(--vip-magenta);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Sensemaking</div>
+              <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Themes</div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Emerging themes from published activity theme cards — updated when you publish themes from the Activity Builder.</div>
+            </div>
+            <button class="btn" onclick="smRefreshThemes()" style="flex-shrink:0;margin-top:4px;background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">✦ Refresh themes</button>
+          </div>
         </div>
         <!-- Live theme cards by activity -->
         <div id="sm-themes-container" style="display:flex;flex-direction:column;gap:20px;">
@@ -1220,17 +1229,18 @@
       </div>
 
       <div id="view-fidelity" class="view">
-        <div class="section-header">
-          <div>
-            <div class="section-title">Fidelity tracker</div>
-            <div class="section-sub">Are we working in the EHW way? Community-defined markers of fidelity</div>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn" onclick="openFidelitySetup()" id="fidelity-setup-btn">Edit markers</button>
-            <button class="btn btn-ai" onclick="aiFidelityScan()">✦ AI scan</button>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span id="fidelity-publish-status" style="font-size:10px;font-weight:600;color:var(--vip-midnight-muted);"></span>
-              <button id="fidelity-publish-btn" onclick="toggleFidelityPublish()" style="font-size:11px;font-weight:600;font-family:var(--sans);padding:4px 12px;border-radius:20px;border:1.5px solid var(--vip-midnight-soft);background:white;color:var(--vip-midnight-soft);cursor:pointer;transition:all 0.15s;">Publish to Village</button>
+        <!-- Header -->
+        <div style="background:var(--vip-midnight);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Sensemaking</div>
+              <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Fidelity Tracker</div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Are we working in the EHW way? Community-defined markers of fidelity.</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;margin-top:4px;">
+              <button class="btn" onclick="openFidelitySetup()" id="fidelity-setup-btn" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">Edit markers</button>
+              <button class="btn" onclick="aiFidelityScan()" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">✦ AI scan</button>
             </div>
           </div>
         </div>
@@ -1241,13 +1251,17 @@
         </div>
 
         <!-- Sprint selector -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
           <div style="font-size:12px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.07em;">Viewing:</div>
           <div style="display:flex;gap:6px;" id="fidelity-sprint-tabs">
-            <button onclick="setFidelitySprint('sprint1')" id="ftab-sprint1" style="font-size:12px;font-weight:600;font-family:var(--sans);padding:4px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:var(--vip-blue);color:white;cursor:pointer;">Sprint 1</button>
-            <button onclick="setFidelitySprint('sprint2')" id="ftab-sprint2" style="font-size:12px;font-weight:600;font-family:var(--sans);padding:4px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight-soft);cursor:pointer;">Sprint 2</button>
+            <button onclick="setFidelitySprint('sprint1')" id="ftab-sprint1" class="btn btn-primary">Sprint 1</button>
+            <button onclick="setFidelitySprint('sprint2')" id="ftab-sprint2" class="btn">Sprint 2</button>
           </div>
-          <div style="margin-left:auto;font-size:12px;color:var(--vip-midnight-muted);" id="fidelity-last-updated"></div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+            <span id="fidelity-publish-status" style="font-size:11px;font-weight:600;color:var(--vip-midnight-muted);"></span>
+            <button id="fidelity-publish-btn" onclick="toggleFidelityPublish()" class="btn">Publish to Village</button>
+          </div>
+          <div style="font-size:12px;color:var(--vip-midnight-muted);" id="fidelity-last-updated"></div>
         </div>
 
         <!-- Markers list -->
@@ -1264,6 +1278,14 @@
           </div>
         </div>
 
+        <!-- Trend view -->
+        <div style="margin-top:24px;">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-midnight-muted);margin-bottom:12px;">Trend across sprints</div>
+          <div id="fidelity-trend" style="display:flex;flex-direction:column;gap:10px;">
+            <!-- Populated by renderFidelityTrend() -->
+          </div>
+        </div>
+
         <!-- Setup modal -->
         <div id="fidelity-setup-modal" style="display:none;position:fixed;inset:0;background:rgba(15,35,40,0.5);z-index:200;display:none;align-items:center;justify-content:center;">
           <div style="background:white;border-radius:16px;padding:28px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;">
@@ -1272,7 +1294,7 @@
             <div id="fidelity-marker-inputs" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
               <!-- Populated by JS -->
             </div>
-            <button onclick="addFidelityMarkerInput()" style="font-size:12px;font-weight:600;font-family:var(--sans);padding:6px 14px;border-radius:8px;border:1.5px dashed var(--border-strong);background:white;color:var(--ink-soft);cursor:pointer;width:100%;margin-bottom:16px;">+ Add marker</button>
+            <button onclick="addFidelityMarkerInput()" class="btn" style="width:100%;margin-bottom:16px;">+ Add marker</button>
             <div style="display:flex;gap:8px;justify-content:flex-end;">
               <button onclick="closeFidelitySetup()" class="btn">Cancel</button>
               <button onclick="saveFidelityMarkers()" class="btn btn-primary">Save markers</button>
@@ -1283,18 +1305,25 @@
       </div>
 
       <div id="view-ai" class="view">
-<div style="display:flex;height:calc(100vh - 160px);gap:18px;">
+        <!-- Header -->
+        <div style="background:var(--vip-midnight);border-radius:14px;padding:28px 32px;margin-bottom:20px;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">EVB Developmental Evaluation</div>
+              <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Sensemaking</div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">Your AI thinking partner for the EVB Developmental Evaluation.</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;margin-top:4px;">
+              <button class="btn" onclick="clearAIChat()" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">Clear conversation</button>
+              <button class="btn" onclick="toggleSystemPrompt()" id="system-prompt-btn" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);">View system prompt</button>
+            </div>
+          </div>
+        </div>
+<div style="display:flex;height:calc(100vh - 280px);gap:18px;">
 
           <!-- LEFT: Chat -->
           <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0;">
-              <div>
-                <div class="section-title">Sensemaking</div>
-                <div class="section-sub">Your AI thinking partner for the EVB Developmental Evaluation</div>
-              </div>
-              <button class="btn" onclick="clearAIChat()" style="font-size:11px;">Clear conversation</button>
-              <button class="btn" onclick="toggleSystemPrompt()" id="system-prompt-btn" style="font-size:11px;">View system prompt</button>
-            </div>
 
             <!-- System prompt viewer (hidden) -->
             <div id="system-prompt-panel" style="display:none;background:#ece9e2;border-radius:10px;padding:14px 16px;margin-bottom:14px;flex-shrink:0;">
@@ -1695,7 +1724,8 @@
           <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
           <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
           <div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Hub</div>
-          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:12px;">A shared record of our process — what we planned, what happened, and what we learned together.</div>
+          <div id="village-welcome-text" style="font-size:13px;color:rgba(255,255,255,0.9);line-height:1.8;font-style:italic;border-top:1px solid rgba(255,255,255,0.2);padding-top:12px;">This is your evaluation space — built with and for Buckeye EcoVillage residents. Here you'll find the activities we're doing together to document what we're learning, track what's working, and make sense of it as a community. Your participation shapes the evaluation in real time.</div>
         </div>
         </div>
 
@@ -1826,12 +1856,12 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-1-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-1')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-1-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-1')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-1-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-1-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -1935,13 +1965,13 @@
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
                   <span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>
-                  <button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>
+                  <button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>
                 </div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-2-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-2-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2035,12 +2065,12 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-3-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-3')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-3-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-3')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-3-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-3-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2138,12 +2168,12 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-4-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-4')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-4-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-4')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-4-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-4-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2168,24 +2198,29 @@
 <!-- Up Next Editor Modal -->
 <div id="upnextModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:none;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:16px;padding:28px;width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-    <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">Edit Up Next Meeting</div>
-    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:20px;">This updates the meeting label and date across the timeline and nav.</div>
+    <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:4px;">Edit Timeline Node</div>
+    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:20px;">Updates the label, date, and status across the timeline.</div>
     <div style="margin-bottom:14px;">
       <label style="font-size:11px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px;">Meeting label</label>
       <input id="upnext-input-label" type="text" value="Meeting 2" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;box-sizing:border-box;font-family:var(--sans);color:var(--vip-midnight);">
     </div>
-    <div style="margin-bottom:20px;">
+    <div style="margin-bottom:14px;">
       <label style="font-size:11px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px;">Date</label>
       <input id="upnext-input-date" type="text" value="July 8" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;box-sizing:border-box;font-family:var(--sans);color:var(--vip-midnight);">
     </div>
-    <input type="hidden" id="upnext-edit-index" value="1">
-    <div style="margin-bottom:16px;padding:10px 12px;background:#fffbf0;border:1px solid rgba(245,166,35,0.3);border-radius:8px;display:flex;align-items:center;gap:10px;">
-      <input type="checkbox" id="upnext-advance" style="width:16px;height:16px;cursor:pointer;accent-color:#f5a623;">
-      <label for="upnext-advance" style="font-size:13px;color:var(--vip-midnight);cursor:pointer;">Mark this meeting as <strong>Done</strong> and advance to the next</label>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;color:var(--vip-midnight-soft);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px;">Status</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button onclick="tlSetStatus('done')" id="tl-status-done" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✓ Done</button>
+        <button onclick="tlSetStatus('upnext')" id="tl-status-upnext" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">⬤ Up Next</button>
+        <button onclick="tlSetStatus('future')" id="tl-status-future" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">○ Future</button>
+      </div>
     </div>
+    <input type="hidden" id="upnext-edit-index" value="1">
+    <input type="hidden" id="upnext-edit-status" value="">
     <div style="display:flex;gap:10px;justify-content:flex-end;">
       <button onclick="closeUpNextEditor()" style="background:var(--paper-mid);color:var(--ink-soft);border:1px solid var(--border);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;">Cancel</button>
-      <button onclick="saveUpNext()" style="background:#f5a623;color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;">Save</button>
+      <button onclick="saveUpNext()" style="background:var(--vip-blue);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;">Save</button>
     </div>
   </div>
 </div>
@@ -2443,10 +2478,8 @@ function renderTimeline() {
     var dateColor = isDone ? '#1a6b3e' : isUpNext ? 'var(--ink-soft)' : 'var(--vip-midnight-muted)';
     html += '<div style="font-size:10px;color:' + dateColor + ';text-align:center;">' + dateText + '</div>';
 
-    // Edit button (eval-only, Up Next only)
-    if (isUpNext) {
-      html += '<button class="eval-only" onclick="openUpNextEditor(' + idx + ')" style="margin-top:5px;background:rgba(245,166,35,0.12);color:#a06000;border:1px solid rgba(245,166,35,0.3);border-radius:10px;padding:2px 8px;font-size:9px;font-weight:600;cursor:pointer;">✏ Edit</button>';
-    }
+    // Edit button — eval-only, on all nodes
+    html += '<button class="eval-only" onclick="openUpNextEditor(' + idx + ')" style="margin-top:5px;background:rgba(0,0,0,0.07);color:var(--vip-midnight-muted);border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:2px 8px;font-size:9px;font-weight:600;cursor:pointer;">✏ Edit</button>';
 
     html += '</div>';
   });
@@ -2492,8 +2525,29 @@ function openUpNextEditor(idx) {
   document.getElementById('upnext-input-label').value = m.label;
   document.getElementById('upnext-input-date').value = m.date;
   document.getElementById('upnext-edit-index').value = idx;
-  document.getElementById('upnext-advance').checked = false;
+  document.getElementById('upnext-edit-status').value = m.status;
+  // Highlight current status button
+  ['done','upnext','future'].forEach(function(s) {
+    var btn = document.getElementById('tl-status-' + s);
+    if (!btn) return;
+    var isActive = s === m.status;
+    btn.style.background = isActive ? 'var(--vip-blue)' : 'white';
+    btn.style.color = isActive ? 'white' : 'var(--vip-midnight)';
+    btn.style.borderColor = isActive ? 'var(--vip-blue)' : 'var(--border)';
+  });
   document.getElementById('upnextModal').style.display = 'flex';
+}
+
+function tlSetStatus(status) {
+  document.getElementById('upnext-edit-status').value = status;
+  ['done','upnext','future'].forEach(function(s) {
+    var btn = document.getElementById('tl-status-' + s);
+    if (!btn) return;
+    var isActive = s === status;
+    btn.style.background = isActive ? 'var(--vip-blue)' : 'white';
+    btn.style.color = isActive ? 'white' : 'var(--vip-midnight)';
+    btn.style.borderColor = isActive ? 'var(--vip-blue)' : 'var(--border)';
+  });
 }
 
 function closeUpNextEditor() {
@@ -2504,23 +2558,19 @@ function saveUpNext() {
   var idx = parseInt(document.getElementById('upnext-edit-index').value);
   var label = document.getElementById('upnext-input-label').value.trim();
   var date = document.getElementById('upnext-input-date').value.trim();
-  var advance = document.getElementById('upnext-advance').checked;
+  var newStatus = document.getElementById('upnext-edit-status').value;
   if (!label || !date) return;
+
+  // If changing to upnext, ensure no other node is upnext
+  if (newStatus === 'upnext') {
+    meetingData.forEach(function(m, i) {
+      if (i !== idx && m.status === 'upnext') m.status = 'future';
+    });
+  }
 
   meetingData[idx].label = label;
   meetingData[idx].date = date;
-
-  if (advance) {
-    // Mark current as done
-    meetingData[idx].status = 'done';
-    // Find next non-done meeting and mark it upnext
-    for (var i = idx + 1; i < meetingData.length; i++) {
-      if (meetingData[i].status !== 'done') {
-        meetingData[i].status = 'upnext';
-        break;
-      }
-    }
-  }
+  meetingData[idx].status = newStatus;
 
   renderTimeline();
   saveMeetingData();
@@ -2599,6 +2649,8 @@ function setMode(mode) {
     document.getElementById('residentsNav').style.display = 'block';
     var ptRes = document.getElementById('pageTitle');
     if (ptRes) ptRes.innerHTML = '<span style="color:var(--vip-blue);font-weight:800;">Buckeye EcoVillage</span> <span style="color:var(--vip-midnight);font-weight:600;">Developmental Evaluation</span>';
+    // Apply unpublished activity badges (evaluator switching to village view)
+    _restoreActivityVisibility();
   } else {
     showView('evaluator', document.querySelector('[onclick*="home"]'));
     var _pb2 = document.getElementById('phaseBadge'); if(_pb2) _pb2.style.display = 'inline-block';
@@ -4291,56 +4343,32 @@ function _applyPublishedState() {
   if (typeof ppRestoreSprintState === 'function') ppRestoreSprintState();
   // Restore inline text edits
   if (typeof ieRestoreEdits === 'function') ieRestoreEdits();
+  // Restore fidelity tracker from Drive
+  if (typeof restoreFidelityData === 'function') {
+    restoreFidelityData();
+    if (typeof renderFidelityList === 'function') renderFidelityList();
+    if (typeof renderFidelityTrend === 'function') renderFidelityTrend();
+  }
   // Refresh themes view and context panel
   setTimeout(function() {
     if (typeof smRefreshThemes === 'function') smRefreshThemes();
   }, 600);
 
-  // If on village URL, reveal content now that state is correct and scroll to top
+  // If on village URL, reveal content now that state is correct and scroll to default activity
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
     var vv = document.getElementById('view-village');
     if (vv) {
+      // Remove hide-eval opacity immediately — no more blank flash
+      document.body.classList.remove('hide-eval');
       vv.style.opacity = '1';
-
-      var isMobileVillage = (window.location.search.indexOf('mode=village') !== -1);
-
-      function doScrollToActive() {
-        if (!activeActivityId) return;
-        var targetEl = document.getElementById('res-act-' + activeActivityId);
-        if (!targetEl) return;
-        var container = document.getElementById('mainContentArea');
-        var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
-        var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
-        if (useContainer) {
-          container.scrollTop = Math.max(0, targetEl.offsetTop - 20);
-        } else {
-          targetEl.scrollIntoView({ behavior: 'instant', block: 'start' });
-        }
-      }
-
-      // First attempt
-      setTimeout(doScrollToActive, isMobileVillage ? 400 : 0);
-      // Second attempt for mobile — catches slow renders
-      if (isMobileVillage) setTimeout(doScrollToActive, 1200);
-      renderTimeline();
-      ACTIVITIES.forEach(function(act) {
-        var key = 'act-' + act.num + '-visible';
-        var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
-        document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
-          if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + act.num + "'"))
-            item.style.display = visible ? '' : 'none';
-        });
-      });
     }
   }
 
-  // Restore active activity
+  // Restore active activity (must happen BEFORE scroll attempt)
   var savedAct = publishedWidgets['activeActivity'];
   if (savedAct) {
     activeActivityId = savedAct;
-    // Always pre-apply silently so state is ready when Village mode is entered
     applyActiveActivity(savedAct, true);
-    // Update VE default button state — reset all then highlight active
     [1,2,3,4].forEach(function(n) {
       var b = document.getElementById('ve-default-btn-' + n);
       if (!b) return;
@@ -4356,6 +4384,38 @@ function _applyPublishedState() {
         b.style.color = 'var(--vip-midnight-muted)';
       }
     });
+  }
+
+  // Scroll to default activity — now that activeActivityId is set
+  if (typeof urlMode !== 'undefined' && urlMode === 'village') {
+    var vv2 = document.getElementById('view-village');
+    if (vv2) {
+      var isMobileVillage = true; // always use delayed scroll for village URL
+      function doScrollToActive() {
+        if (!activeActivityId) return;
+        var targetEl = document.getElementById('res-act-' + activeActivityId);
+        if (!targetEl) return;
+        var container = document.getElementById('mainContentArea');
+        var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
+        var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
+        if (useContainer) {
+          container.scrollTop = Math.max(0, targetEl.offsetTop - 20);
+        } else {
+          targetEl.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
+      }
+      setTimeout(doScrollToActive, 300);
+      setTimeout(doScrollToActive, 1000);
+      renderTimeline();
+      ACTIVITIES.forEach(function(act) {
+        var key = 'act-' + act.num + '-visible';
+        var visible = (key in publishedWidgets) ? publishedWidgets[key] : act.defaultVisible;
+        document.querySelectorAll('#residentsNav .nav-item').forEach(function(item) {
+          if (item.getAttribute('onclick') && item.getAttribute('onclick').includes("'res-act-" + act.num + "'"))
+            item.style.display = visible ? '' : 'none';
+        });
+      });
+    }
   }
   // Restore project planning state
   if (typeof ppRestoreState === 'function') ppRestoreState();
@@ -5027,13 +5087,12 @@ setTimeout(function() {
   if (typeof initInlineEditing === 'function') initInlineEditing();
   if (typeof dcInit === 'function') dcInit();
   if (typeof smPopulateActivitySelect === 'function') smPopulateActivitySelect();
+  if (typeof abPopulateActivityPicker === 'function') abPopulateActivityPicker();
 }, 300);
 
 
 // ── FIDELITY TRACKER ─────────────────────────────────────────────────────────
-var fidelityData = (function() {
-  try { return JSON.parse(localStorage.getItem('evalcommons_fidelity_v1') || 'null'); } catch(e) { return null; }
-})() || {
+var fidelityData = {
   currentSprint: 'sprint1',
   markers: [
     { id: 'f1', text: 'Residents are leading decisions, not just consulted', sprint1: null, sprint2: null, notes1: '', notes2: '' },
@@ -5053,18 +5112,37 @@ var fidelitySignalColors = {
 
 function saveFidelityData() {
   try { localStorage.setItem('evalcommons_fidelity_v1', JSON.stringify(fidelityData)); } catch(e) {}
+  publishedWidgets['fidelityData'] = JSON.stringify(fidelityData);
+  savePublishState();
   drivePost('save_fidelity', { data: fidelityData }).then(function(res) { showDriveStatus(res !== null); });
+}
+
+function restoreFidelityData() {
+  // Try Drive first (publishedWidgets), fall back to localStorage
+  var driveData = publishedWidgets['fidelityData'];
+  if (driveData) {
+    try {
+      var parsed = JSON.parse(driveData);
+      if (parsed && parsed.markers) {
+        fidelityData = parsed;
+        return;
+      }
+    } catch(e) {}
+  }
+  // Fall back to localStorage
+  try {
+    var local = JSON.parse(localStorage.getItem('evalcommons_fidelity_v1') || 'null');
+    if (local && local.markers) fidelityData = local;
+  } catch(e) {}
 }
 
 function setFidelitySprint(sprint) {
   fidelityData.currentSprint = sprint;
   saveFidelityData();
-  document.getElementById('ftab-sprint1').style.background = sprint === 'sprint1' ? 'var(--vip-blue)' : 'white';
-  document.getElementById('ftab-sprint1').style.color = sprint === 'sprint1' ? 'white' : 'var(--vip-midnight-soft)';
-  document.getElementById('ftab-sprint1').style.borderColor = sprint === 'sprint1' ? 'var(--vip-blue)' : 'var(--border)';
-  document.getElementById('ftab-sprint2').style.background = sprint === 'sprint2' ? 'var(--vip-blue)' : 'white';
-  document.getElementById('ftab-sprint2').style.color = sprint === 'sprint2' ? 'white' : 'var(--vip-midnight-soft)';
-  document.getElementById('ftab-sprint2').style.borderColor = sprint === 'sprint2' ? 'var(--vip-blue)' : 'var(--border)';
+  var t1 = document.getElementById('ftab-sprint1');
+  var t2 = document.getElementById('ftab-sprint2');
+  if (t1) { t1.className = sprint === 'sprint1' ? 'btn btn-primary' : 'btn'; }
+  if (t2) { t2.className = sprint === 'sprint2' ? 'btn btn-primary' : 'btn'; }
   renderFidelityMarkers();
 }
 
@@ -5114,6 +5192,7 @@ function setFidelitySignal(markerId, signal) {
   saveFidelityData();
   renderFidelityMarkers();
   syncFidelityVillage();
+  if (typeof renderFidelityTrend === 'function') renderFidelityTrend();
 }
 
 
@@ -6189,6 +6268,28 @@ function abCopyOutput() {
   });
 }
 
+// Populate the activity picker in Edit existing mode from live ACTIVITIES array
+function abPopulateActivityPicker() {
+  var picker = document.getElementById('ab-activity-picker');
+  if (!picker) return;
+  picker.innerHTML = '';
+  ACTIVITIES.forEach(function(act) {
+    var actEl = document.getElementById(act.id);
+    if (!actEl) return;
+    var titleEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+    var name = titleEl ? titleEl.textContent.trim() : act.id;
+    var isPhotovoice = !!actEl.querySelector('[style*="background:var(--vip-amber)"]');
+    var label = document.createElement('label');
+    label.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;';
+    label.setAttribute('onclick', "abLoadEditFields('" + act.id + "')");
+    label.innerHTML =
+      '<input type="radio" name="ab-existing-act" value="' + act.id + '"> ' +
+      pvEscape(name) +
+      '<span style="margin-left:auto;font-size:10px;font-weight:600;color:' + (isPhotovoice ? 'var(--vip-amber)' : 'var(--vip-blue)') + ';background:' + (isPhotovoice ? 'rgba(230,138,0,0.1)' : 'var(--vip-blue-pale)') + ';padding:2px 8px;border-radius:10px;white-space:nowrap;">' + (isPhotovoice ? 'Photovoice' : 'BAR/AAR') + '</span>';
+    picker.appendChild(label);
+  });
+}
+
 // ── ACTIVITY BUILDER — SUBCATEGORY HANDLING ───────────────────────────────────
 
 var abSubcatsEnabled = false;
@@ -6279,8 +6380,9 @@ function abRegisterActivity(num, id, name, type, label) {
   // Wire inline editing for this new activity
   setTimeout(function() {
     if (typeof ieInitActivity === 'function') ieInitActivity(id, num);
-    if (typeof dcInit === 'function') dcInit(); // refresh dc nav + overview
+    if (typeof dcInit === 'function') dcInit();
     if (typeof smPopulateActivitySelect === 'function') smPopulateActivitySelect();
+    if (typeof abPopulateActivityPicker === 'function') abPopulateActivityPicker();
   }, 200);
 }
 
@@ -6395,7 +6497,7 @@ function abBuildBarCardHtml(id, num, name, label, framing, actionLabel, subcats,
             '</div>' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
               '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
-              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>' +
             '</div>' +
           '</div>' +
           '<div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">' +
@@ -6498,7 +6600,7 @@ function abPublishPhotovoiceActivity(name, label, framing, topic) {
             '</div>' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
               '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
-              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border:1px solid rgba(158,31,99,0.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Publish to Village</button>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>' +
             '</div>' +
           '</div>' +
           '<div id="' + id + '-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>' +
@@ -6545,39 +6647,47 @@ function abRestoreGeneratedActivities() {
 // ── ACTIVITY BUILDER — AAR FILL ───────────────────────────────────────────────
 
 // Apply parsed AAR content to an existing activity card
-function abApplyAarToActivity(actId, aarData) {
+function abApplyAarToActivity(actId, aarData, silent) {
   var aarEl = document.getElementById(actId + '-aar');
-  if (!aarEl) { showToast('Could not find AAR table for ' + actId); return; }
-  // Remove dimming
+  if (!aarEl) { if (!silent) showToast('Could not find AAR table for ' + actId); return; }
+
+  // Remove dimming unconditionally
   aarEl.style.opacity = '1';
   aarEl.style.pointerEvents = '';
-  // Update "We'll return to this" badge
-  var badge = aarEl.querySelector('span[style*="rgba(255,255,255,0.15)"]');
-  if (badge) badge.style.display = 'none';
+  aarEl.style.border = aarEl.style.border.replace('opacity:0.5', '');
+
+  // Hide "We'll return to this" badge — match by text content as fallback
+  aarEl.querySelectorAll('span').forEach(function(span) {
+    if (span.textContent.trim() === "We'll return to this") span.style.display = 'none';
+  });
+
   // Fill cells by data-aar-cell attribute
-  var cellMap = { intended: 'intended', know: 'know', actual: 'actual', caused: 'caused', sustain: 'sustain', next: 'next' };
-  Object.keys(cellMap).forEach(function(cellKey) {
+  Object.keys(aarData).forEach(function(cellKey) {
     var cell = aarEl.querySelector('[data-aar-cell="' + cellKey + '"]');
     if (cell && aarData[cellKey]) {
       cell.style.fontStyle = 'normal';
+      cell.style.color = 'var(--vip-midnight-soft)';
       cell.textContent = aarData[cellKey];
     }
   });
-  // Save to Drive + GitHub
-  publishedWidgets[actId + '-aar'] = JSON.stringify(aarData);
-  savePublishState();
-  abCommitToGitHub('AAR filled: ' + actId);
-  showToast('✓ AAR content applied to ' + actId);
+
+  if (!silent) {
+    // Save to Drive + GitHub only on new apply, not on restore
+    publishedWidgets[actId + '-aar'] = JSON.stringify(aarData);
+    savePublishState();
+    abCommitToGitHub('AAR filled: ' + actId);
+    showToast('✓ AAR content applied to ' + actId);
+  }
 }
 
-// Restore AAR content from Drive on page load
+// Restore AAR content from Drive on page load (silent — no toast, no commit)
 function abRestoreAarContent() {
   ACTIVITY_IDS.forEach(function(actId) {
     var key = actId + '-aar';
     if (!publishedWidgets[key]) return;
     try {
       var aarData = JSON.parse(publishedWidgets[key]);
-      abApplyAarToActivity(actId, aarData);
+      abApplyAarToActivity(actId, aarData, true); // silent=true
     } catch(e) {}
   });
 }
@@ -6918,6 +7028,8 @@ abSetMode = function(mode) {
     step4.style.display = 'block';
     document.getElementById('ab-generate-btns').innerHTML =
       '<span style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Select an activity above to load its fields</span>';
+    // Refresh picker to include any generated activities
+    if (typeof abPopulateActivityPicker === 'function') abPopulateActivityPicker();
     return;
   }
   // Show subcategory panel only for new-bar
@@ -7080,6 +7192,61 @@ abGenerate = async function(genMode) {
 function abRestoreAll() {
   abRestoreGeneratedActivities();
   abRestoreAarContent();
+}
+
+// ── FIDELITY TREND ───────────────────────────────────────────────────────────
+
+function renderFidelityTrend() {
+  var container = document.getElementById('fidelity-trend');
+  if (!container) return;
+
+  var signalOrder = ['Showing up', 'Partial', 'Not yet visible', 'Contradicted'];
+  var signalDots = {
+    'Showing up':      { color: '#1a6b3e', label: '●' },
+    'Partial':         { color: '#b97a2a', label: '●' },
+    'Not yet visible': { color: '#999',    label: '●' },
+    'Contradicted':    { color: '#9E1F63', label: '●' },
+    null:              { color: '#e0e0e0', label: '○' }
+  };
+
+  if (!fidelityData.markers.length) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">No markers defined yet.</div>';
+    return;
+  }
+
+  container.innerHTML = fidelityData.markers.map(function(m) {
+    var s1 = m.sprint1 || null;
+    var s2 = m.sprint2 || null;
+    var dot1 = signalDots[s1] || signalDots[null];
+    var dot2 = signalDots[s2] || signalDots[null];
+
+    // Arrow direction
+    var arrowHtml = '';
+    if (s1 && s2) {
+      var s1idx = signalOrder.indexOf(s1);
+      var s2idx = signalOrder.indexOf(s2);
+      if (s2idx < s1idx) arrowHtml = '<span style="color:#1a6b3e;font-size:14px;">↑</span>';
+      else if (s2idx > s1idx) arrowHtml = '<span style="color:#9E1F63;font-size:14px;">↓</span>';
+      else arrowHtml = '<span style="color:var(--vip-midnight-muted);font-size:14px;">→</span>';
+    }
+
+    return '<div style="background:white;border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:14px;">' +
+      '<div style="flex:1;font-size:13px;color:var(--vip-midnight-soft);line-height:1.5;">' + pvEscape(m.text) + '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">' +
+        '<div style="text-align:center;min-width:60px;">' +
+          '<div style="font-size:9px;font-weight:700;color:var(--vip-midnight-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Sprint 1</div>' +
+          '<div style="font-size:13px;font-weight:700;color:' + dot1.color + ';">' + dot1.label + '</div>' +
+          '<div style="font-size:10px;color:' + dot1.color + ';white-space:nowrap;">' + (s1 || '—') + '</div>' +
+        '</div>' +
+        (arrowHtml ? '<div>' + arrowHtml + '</div>' : '<div style="width:18px;"></div>') +
+        '<div style="text-align:center;min-width:60px;">' +
+          '<div style="font-size:9px;font-weight:700;color:var(--vip-midnight-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Sprint 2</div>' +
+          '<div style="font-size:13px;font-weight:700;color:' + dot2.color + ';">' + dot2.label + '</div>' +
+          '<div style="font-size:10px;color:' + dot2.color + ';white-space:nowrap;">' + (s2 || '—') + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
 // ── SPRINT LAUNCH ─────────────────────────────────────────────────────────────
@@ -8018,6 +8185,7 @@ function initInlineEditing() {
     // Page-level
     { sel: '#view-village [style*="font-size:24px"][style*="font-weight:800"]', key: 'village-page-title', type: 'text' },
     { sel: '#view-village [style*="font-size:14px"][style*="rgba(255,255,255,0.8)"]', key: 'village-page-subtitle', type: 'text' },
+    { sel: '#village-welcome-text', key: 'village-welcome', type: 'textarea' },
 
     // Nav labels (sidebar)
     { sel: '#residentsNav .nav-item:nth-child(1) span:last-child', key: 'nav-act-1', type: 'text' },
@@ -8267,7 +8435,27 @@ function ieRestoreEdits() {
 
 </script>
 
-<!-- Inline edit popover -->
+<!-- Mobile back-to-top button (village URL only) -->
+<div id="mobile-back-top" onclick="mobileScrollTop()" style="display:none;position:fixed;bottom:24px;right:20px;z-index:9000;width:44px;height:44px;border-radius:50%;background:var(--vip-blue);color:white;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(15,35,40,0.25);align-items:center;justify-content:center;font-size:18px;transition:opacity 0.2s;">↑</div>
+
+<script>
+(function() {
+  if (window.location.search.indexOf('mode=village') === -1) return;
+  var btn = document.getElementById('mobile-back-top');
+  var container = document.getElementById('mainContentArea');
+  if (!btn || !container) return;
+
+  function checkScroll() {
+    btn.style.display = container.scrollTop > 300 ? 'flex' : 'none';
+  }
+  container.addEventListener('scroll', checkScroll, { passive: true });
+})();
+
+function mobileScrollTop() {
+  var container = document.getElementById('mainContentArea');
+  if (container) container.scrollTop = 0;
+}
+</script>
 <div id="inline-edit-popover">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
     <div id="ie-pop-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-blue);">Edit text</div>
