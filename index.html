@@ -86,9 +86,8 @@
   /* True village URL only: hide unpublished themes from residents */
   body.mode-residents.hide-eval .themes-panel-unpublished,
   body.mode-village .themes-panel-unpublished { display: none !important; }
-  /* Evaluator in Village mode: show unpublished themes at full opacity — badge provides context */
-  #view-village .themes-panel-unpublished { opacity: 1; }
-  #view-village .themes-panel-unpublished .themes-body-content { opacity: 0.45; }
+  /* Evaluator in Village mode: show unpublished themes dimmed */
+  #view-village .themes-panel-unpublished { opacity: 0.5; }
   body.mode-residents.hide-eval #view-village .themes-panel-unpublished { display: none !important; }
 
   /* INLINE EDITING — evaluator only, persists across all view modes */
@@ -1857,7 +1856,7 @@
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-1-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-1-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -1967,7 +1966,7 @@
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-2-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-2-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2066,7 +2065,7 @@
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-3-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-3-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2169,7 +2168,7 @@
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
               </div>
-              <div id="res-act-4-theme-cards" class="themes-body-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
+              <div id="res-act-4-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:70%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:90%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:55%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:85%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
                 <div style="border:1.5px dashed rgba(158,31,99,0.2);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:10px;"><div style="width:32px;height:4px;background:rgba(158,31,99,0.25);border-radius:2px;"></div><div style="width:75%;height:12px;background:rgba(158,31,99,0.1);border-radius:4px;"></div><div style="width:80%;height:8px;background:rgba(158,31,99,0.07);border-radius:4px;"></div></div>
@@ -2645,8 +2644,8 @@ function setMode(mode) {
     document.getElementById('residentsNav').style.display = 'block';
     var ptRes = document.getElementById('pageTitle');
     if (ptRes) ptRes.innerHTML = '<span style="color:var(--vip-blue);font-weight:800;">Buckeye EcoVillage</span> <span style="color:var(--vip-midnight);font-weight:600;">Developmental Evaluation</span>';
-    // Apply unpublished activity badges (evaluator switching to village view)
-    _restoreActivityVisibility();
+    // Only restore activity visibility when switching from evaluator (not on village URL init)
+    if (urlMode !== 'village') _restoreActivityVisibility();
   } else {
     showView('evaluator', document.querySelector('[onclick*="home"]'));
     var _pb2 = document.getElementById('phaseBadge'); if(_pb2) _pb2.style.display = 'inline-block';
