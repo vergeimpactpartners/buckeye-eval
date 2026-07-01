@@ -6748,12 +6748,11 @@ function abLoadEditFields(actId) {
     if (detectedSubcats.length) {
       detectedSubcats.forEach(function(sc) { abEditAddSubcatField(sc); });
     } else {
-      // No subcategories — add one blank field
       abEditAddSubcatField('');
     }
 
-    // Populate subcategory dropdown for source type
-    abPopulateSubcatDropdown(detectedSubcats);
+    // Populate subcategory dropdown after DOM renders
+    setTimeout(abRefreshSubcatDropdown, 50);
   }
 
   // BAR row fields
@@ -6781,7 +6780,7 @@ function abEditAddSubcatField(value) {
   var row = document.createElement('div');
   row.style.cssText = 'display:flex;gap:8px;align-items:center;';
   row.innerHTML =
-    '<input type="text" value="' + pvEscape(value) + '" placeholder="Subcategory name" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
+    '<input type="text" value="' + pvEscape(value) + '" placeholder="Subcategory name" oninput="abRefreshSubcatDropdown()" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
     '<button onclick="this.parentElement.remove();abRefreshSubcatDropdown();" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;font-family:var(--sans);">✕</button>';
   list.appendChild(row);
 }
@@ -6858,8 +6857,13 @@ async function abGenerateEditBar(actId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, system: systemPrompt, messages: [{ role: 'user', content: userMsg }] })
     });
+    if (!response.ok) {
+      throw new Error('API error: ' + response.status);
+    }
     var data = await response.json();
-    var reply = data.content?.[0]?.text || 'Something went wrong.';
+    if (data.error) throw new Error(data.error.message || 'API error');
+    var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
+    if (!reply) throw new Error('Empty response from API');
     thinkingEl.style.display = 'none';
     outputTextEl.style.display = 'block';
     outputTextEl.textContent = reply;
@@ -6873,16 +6877,30 @@ async function abGenerateEditBar(actId) {
     btn.textContent = 'Apply to activity';
     btn.style.cssText = 'margin-top:12px;padding:7px 18px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);display:block;';
     btn.onclick = function() {
-      // Parse reply and apply to BAR rows
+      var applied = 0;
       rowsToFill.forEach(function(rowName) {
-        var re = new RegExp(rowName.toUpperCase() + '\\s*\\n([\\s\\S]*?)(?=\\n[A-Z][A-Z\\s]+\\n|$)', 'i');
+        // More robust regex: match row name (case insensitive) then capture text until next all-caps line or end
+        var escapedName = rowName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var re = new RegExp('(?:^|\\n)' + escapedName + '[:\\s]*\\n([\\s\\S]*?)(?=\\n[A-Z][A-Z]|$)', 'i');
         var m = reply.match(re);
-        if (!m) return;
+        if (!m) {
+          // Try simpler: just find the row name and take everything after it
+          var idx = reply.toUpperCase().indexOf(rowName.toUpperCase());
+          if (idx !== -1) {
+            var after = reply.slice(idx + rowName.length).replace(/^[:\s]+/, '');
+            // Take until next line that looks like a section header (all caps word)
+            var nextHeader = after.search(/\n[A-Z][A-Z\s]{2,}\n/);
+            m = [null, nextHeader !== -1 ? after.slice(0, nextHeader).trim() : after.trim()];
+          }
+        }
+        if (!m || !m[1]) return;
         var newText = m[1].trim();
+        if (!newText) return;
+        applied++;
         // Update textarea in edit panel
         var textarea = document.querySelector('[data-edit-bar-row="' + rowName + '"]');
         if (textarea) textarea.value = newText;
-        // Update DOM directly
+        // Update DOM directly in activity card
         var actEl = document.getElementById(actId);
         if (actEl) {
           var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
@@ -6892,10 +6910,14 @@ async function abGenerateEditBar(actId) {
           }
         }
       });
+      if (applied === 0) {
+        showToast('Could not parse AI output — check the response text');
+        return;
+      }
       publishedWidgets[actId + '-bar-ai-edit'] = JSON.stringify({ rows: rowsToFill, reply: reply });
       savePublishState();
       if (typeof abCommitToGitHub === 'function') abCommitToGitHub('BAR AI edit: ' + actId);
-      showToast('✓ BAR content applied');
+      showToast('✓ BAR content applied to ' + applied + ' row' + (applied > 1 ? 's' : ''));
       btn.textContent = '✓ Applied';
       btn.style.background = '#1a6b3e';
       btn.onclick = null;
@@ -6904,7 +6926,7 @@ async function abGenerateEditBar(actId) {
   } catch(err) {
     thinkingEl.style.display = 'none';
     outputTextEl.style.display = 'block';
-    outputTextEl.textContent = 'Connection error. Please try again.';
+    outputTextEl.textContent = 'Error: ' + (err.message || 'Something went wrong. Please try again.');
   }
 }
 
