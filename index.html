@@ -1533,20 +1533,16 @@
                 <div style="font-size:11px;opacity:0.7;font-weight:400;">Create a full new data collection card</div>
               </button>
               <button onclick="abSetMode('new-photovoice')" id="ab-mode-new-photovoice" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;">
-                <div style="font-size:14px;margin-bottom:2px;">New Photovoice activity</div>
-                <div style="font-size:11px;opacity:0.6;font-weight:400;">Create a new submission activity card</div>
-              </button>
-              <button onclick="abSetMode('add-aar')" id="ab-mode-add-aar" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;">
-                <div style="font-size:14px;margin-bottom:2px;">Add AAR to existing activity</div>
-                <div style="font-size:11px;opacity:0.6;font-weight:400;">Fill the After Action Review on an existing card</div>
+                <div style="font-size:14px;margin-bottom:2px;">Create new data submission</div>
+                <div style="font-size:11px;opacity:0.6;font-weight:400;">Photo, video, written story, or audio</div>
               </button>
               <button onclick="abSetMode('fill-themes')" id="ab-mode-fill-themes" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;">
                 <div style="font-size:14px;margin-bottom:2px;">Fill themes box</div>
-                <div style="font-size:11px;opacity:0.6;font-weight:400;">Add emerging themes via AI or direct input</div>
+                <div style="font-size:11px;opacity:0.6;font-weight:400;">Add emerging themes with title and description</div>
               </button>
-              <button onclick="abSetMode('edit-existing')" id="ab-mode-edit-existing" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;grid-column:1/-1;">
+              <button onclick="abSetMode('edit-existing')" id="ab-mode-edit-existing" class="ab-mode-btn" style="padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);text-align:left;line-height:1.4;">
                 <div style="font-size:14px;margin-bottom:2px;">✏️ Edit existing activity</div>
-                <div style="font-size:11px;opacity:0.6;font-weight:400;">Update BAR content, framing question, or action label — with AI or manual input</div>
+                <div style="font-size:11px;opacity:0.6;font-weight:400;">Update BAR content, AAR, framing, or action label</div>
               </button>
             </div>
           </div>
@@ -1672,22 +1668,48 @@
                 </div>
               </div>
             </div><!-- /ab-ctx-edit-fields -->
-            <!-- For fill-themes: also show input method -->
-            <div id="ab-ctx-themes-method" style="display:none;margin-top:12px;">
-              <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">How do you want to fill themes?</label>
-              <div style="display:flex;gap:8px;">
-                <button onclick="abSetThemesMethod('ai')" id="ab-themes-ai" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--vip-magenta);background:var(--vip-magenta);color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ AI sensemaking</button>
-                <button onclick="abSetThemesMethod('manual')" id="ab-themes-manual" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Type them in</button>
+            <!-- For new data submission (photovoice) — type selector only -->
+            <div id="ab-ctx-photovoice" style="display:none;">
+              <div style="margin-bottom:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Activity name</label>
+                <input type="text" id="ab-pv-name" placeholder="e.g. Submit Data: Tasty" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
               </div>
-              <!-- Manual theme input -->
-              <div id="ab-themes-manual-input" style="display:none;margin-top:10px;">
-                <div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:8px;">Add each theme — press Enter to add another</div>
-                <div id="ab-themes-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;"></div>
-                <div style="display:flex;gap:8px;">
-                  <input type="text" id="ab-theme-input" placeholder="Theme name" onkeydown="if(event.key==='Enter'){abAddTheme();event.preventDefault();}" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">
-                  <button onclick="abAddTheme()" style="padding:7px 14px;border-radius:8px;background:var(--vip-magenta);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Add</button>
+              <div style="margin-bottom:10px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What type of submission will this activity collect?</label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abPvSetType('photo')">
+                    <input type="radio" name="ab-pv-type" value="photo" checked> <div><div style="font-weight:600;">📷 Photo</div></div>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abPvSetType('video')">
+                    <input type="radio" name="ab-pv-type" value="video"> <div><div style="font-weight:600;">🎥 Video</div></div>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abPvSetType('story')">
+                    <input type="radio" name="ab-pv-type" value="story"> <div><div style="font-weight:600;">✍️ Written story</div></div>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;" onclick="abPvSetType('audio')">
+                    <input type="radio" name="ab-pv-type" value="audio"> <div><div style="font-weight:600;">🎙 Audio</div></div>
+                  </label>
                 </div>
-                <button onclick="abPublishThemesManual()" style="margin-top:10px;padding:7px 18px;border-radius:20px;background:var(--vip-magenta);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Publish themes to activity</button>
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Prompt / description <span style="font-weight:400;font-style:italic;">(optional)</span></label>
+                <textarea id="ab-pv-prompt" rows="2" placeholder="e.g. Share a photo of what community means to you." style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+              </div>
+            </div>
+            <!-- For fill-themes: manual only -->
+            <div id="ab-ctx-themes-method" style="display:none;margin-top:4px;">
+              <div style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);margin-bottom:8px;">Which activity?</div>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;" id="ab-themes-activity-picker">
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;"><input type="radio" name="ab-themes-act" value="res-act-1"> Data Collection: Planning for EVB Kickoff</label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;"><input type="radio" name="ab-themes-act" value="res-act-2"> Data Collection: Group and Individual Roles</label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;"><input type="radio" name="ab-themes-act" value="res-act-3"> Submit Data: Tasty</label>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;"><input type="radio" name="ab-themes-act" value="res-act-4"> Submit Data: Trust</label>
+              </div>
+              <!-- Manual theme entry -->
+              <div id="ab-themes-manual-input">
+                <div style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);margin-bottom:8px;">Themes</div>
+                <div id="ab-themes-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+                <button onclick="abAddManualThemeField()" style="padding:5px 14px;border-radius:20px;border:1.5px dashed rgba(158,31,99,0.4);background:white;color:var(--vip-magenta);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add theme</button>
               </div>
             </div>
           </div>
@@ -4361,6 +4383,8 @@ function _applyPublishedState() {
   });
 
   restoreMeetingData();
+  // Restore BAR row content and activity edits from Drive
+  if (typeof abRestoreBarContent === 'function') abRestoreBarContent();
   // Restore generated activities and AAR content from Drive
   if (typeof abRestoreAll === 'function') abRestoreAll();
   // Restore sprint launch state
@@ -6002,8 +6026,9 @@ For BAR synthesis specifically: Write in first-person plural "we" voice. Each ro
 
 var abCurrentMode = null;
 var abCurrentSource = 'paste';
-var abThemesMethod = 'ai';
+var abThemesMethod = 'manual';
 var abManualThemes = [];
+var abPvType = 'photo';
 
 function abSetMode(mode) {
   abCurrentMode = mode;
@@ -6021,59 +6046,111 @@ function abSetMode(mode) {
   var step4 = document.getElementById('ab-step4');
   var ctxNew = document.getElementById('ab-ctx-new');
   var ctxExisting = document.getElementById('ab-ctx-existing');
+  var ctxPhotovoice = document.getElementById('ab-ctx-photovoice');
   var ctxThemesMethod = document.getElementById('ab-ctx-themes-method');
   var genBtns = document.getElementById('ab-generate-btns');
 
-  // Reset output
+  // Reset all contexts
+  [ctxNew, ctxExisting, ctxPhotovoice, ctxThemesMethod].forEach(function(el) { if (el) el.style.display = 'none'; });
   document.getElementById('ab-output').style.display = 'none';
 
   if (mode === 'new-bar') {
     step2.style.display = 'block';
-    ctxNew.style.display = 'block'; ctxExisting.style.display = 'none'; ctxThemesMethod.style.display = 'none';
-    step3.style.display = 'block';
+    ctxNew.style.display = 'block';
+    document.getElementById('ab-subcats-wrap').style.display = 'block';
+    step3.style.display = 'none';
     step4.style.display = 'block';
-    genBtns.innerHTML = [
-      '<button onclick="abGenerate(&quot;bar&quot;)" style="padding:7px 16px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">BAR Table synthesis</button>',
-      '<button onclick="abGenerate(&quot;both&quot;)" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ BAR + Theme codes</button>'
-    ].join('');
+    genBtns.innerHTML = '<button onclick="abPublishNewBarFromForm()" class="btn btn-primary">Create activity card in Village</button>';
+
   } else if (mode === 'new-photovoice') {
     step2.style.display = 'block';
-    ctxNew.style.display = 'block'; ctxExisting.style.display = 'none'; ctxThemesMethod.style.display = 'none';
-    step3.style.display = 'block';
+    ctxPhotovoice.style.display = 'block';
+    step3.style.display = 'none';
     step4.style.display = 'block';
-    genBtns.innerHTML = '<button onclick="abGenerate(&quot;photovoice&quot;)" style="padding:7px 16px;border-radius:20px;background:var(--vip-amber);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Generate Photovoice activity</button>';
-  } else if (mode === 'add-aar') {
-    step2.style.display = 'block';
-    ctxNew.style.display = 'none'; ctxExisting.style.display = 'block'; ctxThemesMethod.style.display = 'none';
-    step3.style.display = 'block';
-    step4.style.display = 'block';
-    genBtns.innerHTML = '<button onclick="abGenerate(&quot;aar&quot;)" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Generate AAR content</button>';
+    genBtns.innerHTML = '<button onclick="abPublishPhotovoiceFromBuilder()" class="btn btn-primary">Create data submission activity</button>';
+
   } else if (mode === 'fill-themes') {
     step2.style.display = 'block';
-    ctxNew.style.display = 'none'; ctxExisting.style.display = 'block'; ctxThemesMethod.style.display = 'block';
-    step3.style.display = 'none'; // shown conditionally when AI method selected
-    step4.style.display = 'none';
-    genBtns.innerHTML = '';
+    ctxThemesMethod.style.display = 'block';
+    step3.style.display = 'none';
+    step4.style.display = 'block';
+    // Seed one empty theme field if none exist
+    var list = document.getElementById('ab-themes-list');
+    if (list && list.children.length === 0) abAddManualThemeField();
+    genBtns.innerHTML = '<button onclick="abPublishManualThemes()" class="btn" style="background:var(--vip-magenta);color:white;border-color:var(--vip-magenta);">Publish themes to activity</button>';
+
+  } else if (mode === 'edit-existing') {
+    // Handled by the patch below
+    return;
   }
 }
 
-function abSetThemesMethod(method) {
-  abThemesMethod = method;
-  ['ai','manual'].forEach(function(m) {
-    var btn = document.getElementById('ab-themes-' + m);
-    if (!btn) return;
-    btn.style.background = m === method ? 'var(--vip-magenta)' : 'white';
-    btn.style.color = m === method ? 'white' : 'var(--vip-midnight)';
-    btn.style.borderColor = m === method ? 'var(--vip-magenta)' : 'var(--border)';
+function abPvSetType(type) {
+  abPvType = type;
+}
+
+function abPublishPhotovoiceFromBuilder() {
+  var name = (document.getElementById('ab-pv-name').value || '').trim();
+  var prompt = (document.getElementById('ab-pv-prompt').value || '').trim();
+  var type = abPvType;
+  if (!name) { showToast('Please enter an activity name'); return; }
+  abPublishPhotovoiceActivity(name, '', prompt, type);
+}
+
+function abPublishNewBarFromForm() {
+  var name = (document.getElementById('ab-act-name').value || '').trim();
+  var label = (document.getElementById('ab-act-label').value || '').trim();
+  var framingEl = document.getElementById('ab-framing');
+  var framing = framingEl ? (framingEl.innerHTML || framingEl.value || '').trim() : '';
+  var subcats = abGetSubcats();
+  var subcatHeader = (document.getElementById('ab-subcat-header') ? document.getElementById('ab-subcat-header').value || '' : '').trim();
+
+  if (!name) { showToast('Please enter an activity name'); return; }
+
+  // Collect BAR content from any pre-filled fields (empty for new activity)
+  var barContent = {};
+
+  abPublishBarActivity(name, label, framing, name, subcats, subcatHeader, barContent);
+}
+
+function abAddManualThemeField() {
+  var list = document.getElementById('ab-themes-list');
+  if (!list) return;
+  var row = document.createElement('div');
+  row.style.cssText = 'background:white;border:1px solid var(--border);border-radius:8px;padding:10px 12px;position:relative;';
+  row.innerHTML =
+    '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">' +
+      '<input type="text" placeholder="Theme title" style="flex:1;padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--sans);font-weight:600;" data-theme-title>' +
+      '<button onclick="this.closest(\'div[style]\').remove()" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;">✕</button>' +
+    '</div>' +
+    '<textarea placeholder="Description (optional)" rows="2" style="width:100%;padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:var(--sans);resize:vertical;box-sizing:border-box;" data-theme-note></textarea>';
+  list.appendChild(row);
+}
+
+function abPublishManualThemes() {
+  // Get selected activity
+  var actRadio = document.querySelector('input[name="ab-themes-act"]:checked');
+  if (!actRadio) { showToast('Please select an activity first'); return; }
+  var actId = actRadio.value;
+
+  // Collect themes
+  var themes = [];
+  document.querySelectorAll('#ab-themes-list [data-theme-title]').forEach(function(titleEl) {
+    var title = titleEl.value.trim();
+    if (!title) return;
+    var noteEl = titleEl.closest('div[style]').querySelector('[data-theme-note]');
+    var note = noteEl ? noteEl.value.trim() : '';
+    themes.push({ name: title, note: note });
   });
-  document.getElementById('ab-step3').style.display = method === 'ai' ? 'block' : 'none';
-  document.getElementById('ab-themes-manual-input').style.display = method === 'manual' ? 'block' : 'none';
-  if (method === 'ai') {
-    document.getElementById('ab-step4').style.display = 'block';
-    document.getElementById('ab-generate-btns').innerHTML = '<button onclick="abGenerate(&quot;themes&quot;)" style="padding:7px 16px;border-radius:20px;background:var(--vip-magenta);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ Suggest themes</button>';
-  } else {
-    document.getElementById('ab-step4').style.display = 'none';
-  }
+
+  if (!themes.length) { showToast('Please add at least one theme'); return; }
+
+  abRenderThemesInActivity(actId, themes);
+  showToast('✓ Themes published to ' + actId);
+
+  // Reset fields
+  document.getElementById('ab-themes-list').innerHTML = '';
+  abAddManualThemeField();
 }
 
 function abSetSource(src) {
@@ -7061,6 +7138,16 @@ function abSaveEditedActivity(actId) {
     publishedWidgets[actId + '-aar'] = JSON.stringify(aarData);
   }
 
+  // Save BAR row content separately for restore on page load
+  var barRowData = {};
+  document.querySelectorAll('[data-edit-bar-row]').forEach(function(textarea) {
+    var rowName = textarea.getAttribute('data-edit-bar-row');
+    if (textarea.value.trim()) barRowData[rowName] = textarea.value.trim();
+  });
+  if (Object.keys(barRowData).length) {
+    publishedWidgets[actId + '-bar-content'] = JSON.stringify(barRowData);
+  }
+
   // Save to Drive + GitHub
   publishedWidgets[actId + '-edits'] = JSON.stringify({ name: newName, framing: newFraming, action: newAction });
   savePublishState();
@@ -7107,10 +7194,9 @@ async function _doGithubCommit(message) {
 
 // ── ACTIVITY BUILDER — abSetMode EXTENSION ────────────────────────────────────
 
-// Patch abSetMode to handle new modes (edit-existing)
+// Patch abSetMode to handle edit-existing mode
 var _abSetModeOriginal = abSetMode;
 abSetMode = function(mode) {
-  // Handle new mode
   if (mode === 'edit-existing') {
     abCurrentMode = mode;
     document.querySelectorAll('.ab-mode-btn').forEach(function(btn) {
@@ -7119,34 +7205,23 @@ abSetMode = function(mode) {
       btn.style.color = isActive ? 'white' : 'var(--vip-midnight)';
       btn.style.borderColor = isActive ? 'var(--vip-midnight)' : 'var(--border)';
     });
-    var step2 = document.getElementById('ab-step2');
-    var step3 = document.getElementById('ab-step3');
-    var step4 = document.getElementById('ab-step4');
-    var ctxNew = document.getElementById('ab-ctx-new');
-    var ctxExisting = document.getElementById('ab-ctx-existing');
-    var ctxThemesMethod = document.getElementById('ab-ctx-themes-method');
-    var ctxEditFields = document.getElementById('ab-ctx-edit-fields');
+    ['ab-ctx-new','ab-ctx-existing','ab-ctx-photovoice','ab-ctx-themes-method','ab-ctx-edit-fields'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
     document.getElementById('ab-output').style.display = 'none';
-    step2.style.display = 'block';
-    ctxNew.style.display = 'none';
-    ctxExisting.style.display = 'block';
-    if (ctxThemesMethod) ctxThemesMethod.style.display = 'none';
-    if (ctxEditFields) ctxEditFields.style.display = 'none';
-    // Hide Step 3 (source material) — not needed for manual entry
-    if (step3) step3.style.display = 'none';
-    if (step4) step4.style.display = 'block';
+    document.getElementById('ab-step2').style.display = 'block';
+    document.getElementById('ab-ctx-existing').style.display = 'block';
+    var step3 = document.getElementById('ab-step3'); if (step3) step3.style.display = 'none';
+    var step4 = document.getElementById('ab-step4'); if (step4) step4.style.display = 'block';
     document.getElementById('ab-generate-btns').innerHTML =
       '<span style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Select an activity above to load its fields</span>';
-    // Refresh picker to include any generated activities
     if (typeof abPopulateActivityPicker === 'function') abPopulateActivityPicker();
     return;
   }
-  // Show subcategory panel only for new-bar
-  var subcatsWrap = document.getElementById('ab-subcats-wrap');
-  if (subcatsWrap) subcatsWrap.style.display = (mode === 'new-bar') ? 'block' : 'none';
-  // Hide edit fields for other modes
-  var ctxEditFields2 = document.getElementById('ab-ctx-edit-fields');
-  if (ctxEditFields2) ctxEditFields2.style.display = 'none';
+  // Hide photovoice and edit contexts for other modes
+  ['ab-ctx-photovoice','ab-ctx-edit-fields','ab-edit-bar-aar-section'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
   _abSetModeOriginal(mode);
 };
 
@@ -7356,6 +7431,53 @@ function renderFidelityTrend() {
       '</div>' +
     '</div>';
   }).join('');
+}
+
+// ── ACTIVITY BUILDER — RESTORE BAR CONTENT ────────────────────────────────────
+
+function abRestoreBarContent() {
+  ACTIVITY_IDS.forEach(function(actId) {
+    var actEl = document.getElementById(actId);
+    if (!actEl) return;
+
+    // Restore activity-level edits (name, framing, action)
+    var editsKey = actId + '-edits';
+    if (publishedWidgets[editsKey]) {
+      try {
+        var edits = JSON.parse(publishedWidgets[editsKey]);
+        if (edits.name) {
+          var nameEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
+          if (nameEl) nameEl.textContent = edits.name;
+        }
+        if (edits.framing) {
+          var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
+          if (framingEl) framingEl.innerHTML = edits.framing;
+        }
+        if (edits.action) {
+          var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
+          if (actionEl) actionEl.textContent = edits.action;
+        }
+      } catch(e) {}
+    }
+
+    // Restore BAR row content
+    var barKey = actId + '-bar-content';
+    if (publishedWidgets[barKey]) {
+      try {
+        var barData = JSON.parse(publishedWidgets[barKey]);
+        Object.keys(barData).forEach(function(rowName) {
+          var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
+          if (barRow) {
+            var contentEl = barRow.querySelector('[style*="font-size:13px"]');
+            if (contentEl) {
+              contentEl.textContent = barData[rowName];
+              contentEl.style.fontStyle = 'normal';
+            }
+          }
+        });
+      } catch(e) {}
+    }
+  });
 }
 
 // ── SPRINT LAUNCH ─────────────────────────────────────────────────────────────
