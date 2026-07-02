@@ -1590,6 +1590,17 @@
                   <button onclick="abAddSubcat()" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:white;color:var(--vip-blue);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add subcategory</button>
                 </div>
               </div>
+              <!-- BAR content fields — shown always, updates when subcats change -->
+              <div id="ab-new-bar-content" style="margin-top:12px;padding:14px;background:var(--vip-blue-pale);border:1px solid var(--vip-blue-light);border-radius:10px;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-blue);margin-bottom:10px;">Before Action Review — What will make us successful?</div>
+                <div id="ab-new-bar-inputs" style="display:flex;flex-direction:column;gap:10px;">
+                  <!-- Populated by abUpdateNewBarFields() -->
+                  <div>
+                    <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Overall</label>
+                    <textarea data-new-bar-row="Overall" rows="3" placeholder="What will make us successful?" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- For add-aar, fill-themes, edit-existing: pick existing activity -->
             <div id="ab-ctx-existing" style="display:none;">
@@ -6107,8 +6118,12 @@ function abPublishNewBarFromForm() {
 
   if (!name) { showToast('Please enter an activity name'); return; }
 
-  // Collect BAR content from any pre-filled fields (empty for new activity)
+  // Collect BAR content from form fields
   var barContent = {};
+  document.querySelectorAll('[data-new-bar-row]').forEach(function(ta) {
+    var rowName = ta.getAttribute('data-new-bar-row');
+    if (ta.value.trim()) barContent[rowName] = ta.value.trim();
+  });
 
   abPublishBarActivity(name, label, framing, name, subcats, subcatHeader, barContent);
 }
@@ -6419,6 +6434,7 @@ function abToggleSubcats(enabled) {
   document.getElementById('ab-subcats-no').style.borderColor = !enabled ? 'var(--vip-blue)' : 'var(--border)';
   document.getElementById('ab-subcats-fields').style.display = enabled ? 'block' : 'none';
   if (enabled && abSubcatCount === 0) abAddSubcat();
+  abUpdateNewBarFields();
 }
 
 function abAddSubcat() {
@@ -6427,9 +6443,29 @@ function abAddSubcat() {
   var row = document.createElement('div');
   row.style.cssText = 'display:flex;gap:8px;align-items:center;';
   row.innerHTML =
-    '<input type="text" placeholder="Subcategory name" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
-    '<button onclick="this.parentElement.remove();abSubcatCount--;" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;font-family:var(--sans);">✕</button>';
+    '<input type="text" placeholder="Subcategory name" oninput="abUpdateNewBarFields()" style="flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);">' +
+    '<button onclick="this.parentElement.remove();abSubcatCount--;abUpdateNewBarFields();" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;color:var(--vip-midnight-muted);font-size:12px;cursor:pointer;font-family:var(--sans);">✕</button>';
   list.appendChild(row);
+}
+
+function abUpdateNewBarFields() {
+  var container = document.getElementById('ab-new-bar-inputs');
+  if (!container) return;
+  var subcats = abGetSubcats();
+  var rows = subcats.length ? subcats : ['Overall'];
+  // Preserve existing values
+  var existing = {};
+  container.querySelectorAll('[data-new-bar-row]').forEach(function(ta) {
+    existing[ta.getAttribute('data-new-bar-row')] = ta.value;
+  });
+  container.innerHTML = '';
+  rows.forEach(function(sc) {
+    var field = document.createElement('div');
+    field.innerHTML =
+      '<label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">' + pvEscape(sc) + '</label>' +
+      '<textarea data-new-bar-row="' + pvEscape(sc) + '" rows="3" placeholder="What will make us successful?" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(existing[sc] || '') + '</textarea>';
+    container.appendChild(field);
+  });
 }
 
 function abGetSubcats() {
@@ -7936,6 +7972,51 @@ function ppUpdateAllProgress() {
     if (count) count.textContent = done + '/' + total + ' tasks complete';
     if (bar) bar.style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
   });
+  // Update top progress bar steps
+  ppUpdateProgressBarFromTasks();
+}
+
+// Step number → ppStepPhases key mapping
+var ppStepToSid = { 1: 's1step1', 2: 's1step2', 3: 's1step3', 4: 's1step4' };
+
+function ppUpdateProgressBarFromTasks() {
+  [1,2,3,4].forEach(function(stepNum) {
+    var sid = ppStepToSid[stepNum];
+    var phases = ppStepPhases[sid] || [];
+    var total = 0, done = 0;
+    phases.forEach(function(pi) {
+      var n = ppTaskCounts[pi] || 0;
+      total += n;
+      for (var ti = 0; ti < n; ti++) {
+        var btn = document.getElementById('task-p' + pi + 't' + ti);
+        if (btn && btn.getAttribute('data-done') === '1') done++;
+      }
+    });
+
+    var stepEl = document.getElementById('pb-s1-step' + stepNum);
+    if (!stepEl) return;
+    var bar = stepEl.querySelector('div[style*="height:4px"]');
+    var label = stepEl.querySelector('div[style*="font-size:10px"]');
+
+    if (total === 0) return; // no tasks defined yet
+
+    if (done === total) {
+      // All done — green
+      stepEl.style.opacity = '1';
+      if (bar) { bar.style.background = '#1a6b3e'; bar.style.borderRadius = ''; }
+      if (label) { label.style.color = '#1a6b3e'; label.textContent = '✓ ' + label.textContent.replace(/^✓\s*/, ''); }
+    } else if (done > 0) {
+      // Some done — blue (in progress)
+      stepEl.style.opacity = '1';
+      if (bar) { bar.style.background = 'var(--vip-blue)'; }
+      if (label) { label.style.color = 'var(--vip-blue)'; label.textContent = label.textContent.replace(/^✓\s*/, ''); }
+    } else {
+      // Nothing done — upcoming gray
+      stepEl.style.opacity = stepNum === 1 ? '1' : '0.45';
+      if (bar) { bar.style.background = 'var(--border)'; }
+      if (label) { label.style.color = 'var(--vip-midnight-soft)'; label.textContent = label.textContent.replace(/^✓\s*/, ''); }
+    }
+  });
 }
 
 function ppSaveTask(tid, done) {
@@ -7978,6 +8059,8 @@ function ppRestoreState() {
   });
   // Restore content cards
   ppRestoreCards();
+  // Update top progress bar to reflect restored task state
+  if (typeof ppUpdateProgressBarFromTasks === 'function') ppUpdateProgressBarFromTasks();
 }
 
 // ── CONTENT CARDS ─────────────────────────────────────────────────────────────
