@@ -1622,7 +1622,12 @@
               </div>
               <div style="margin-bottom:10px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Framing question</label>
-                <textarea id="ab-edit-framing" rows="2" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
+                <div id="ab-edit-framing-toolbar" style="display:flex;gap:4px;padding:4px 6px;background:var(--paper-mid);border:1.5px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;">
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('bold',false,null)" title="Bold" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);font-weight:700;">B</button>
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('italic',false,null)" title="Italic" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);font-style:italic;">I</button>
+                  <button type="button" onmousedown="event.preventDefault();document.execCommand('underline',false,null)" title="Underline" style="padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:var(--sans);color:var(--vip-midnight);text-decoration:underline;">U</button>
+                </div>
+                <div id="ab-edit-framing" contenteditable="true" style="min-height:52px;padding:8px 12px;border:1.5px solid var(--border);border-radius:0 0 8px 8px;font-size:13px;font-family:var(--sans);line-height:1.6;color:var(--vip-midnight);outline:none;background:white;" onfocus="this.style.borderColor='var(--vip-blue)';document.getElementById('ab-edit-framing-toolbar').style.borderColor='var(--vip-blue)';" onblur="this.style.borderColor='var(--border)';document.getElementById('ab-edit-framing-toolbar').style.borderColor='var(--border)';"></div>
               </div>
               <div style="margin-bottom:10px;">
                 <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">Action label <span style="font-weight:400;font-style:italic;">(the dark bubble)</span></label>
@@ -1794,23 +1799,23 @@
                     <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);">What will make us successful?</div>
                   </div>
                   <div style="padding:14px;">
-                    <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7fa;border-radius:8px;">
+                    <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7fa;border-radius:8px;" data-bar-row="Overall">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Overall</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We need to make a strategic outreach plan for the entire summer, using unique outreach strategies and meeting people where they are already gathering, to ensure we have a great turnout for the kickoff and that Buckeye residents understand the context of EVB and feel welcomed and empowered to share their input.</div>
                     </div>
-                    <div style="margin-bottom:16px;padding:12px 14px;background:#f5f0fb;border-radius:8px;">
+                    <div style="margin-bottom:16px;padding:12px 14px;background:#f5f0fb;border-radius:8px;" data-bar-row="Residents set priorities">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Residents set priorities</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">Every outreach touchpoint with the community is an opportunity to share about the EVB process and have the community share their own goals. We need to innovate the way we do this outreach, focusing beyond door knocking and instead build a strategy for neighboring in unique ways that invite in those who traditionally don't participate (like youth).</div>
                     </div>
-                    <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7f1;border-radius:8px;">
+                    <div style="margin-bottom:16px;padding:12px 14px;background:#f0f7f1;border-radius:8px;" data-bar-row="Space to disagree">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Space to disagree</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We acknowledge that disagreement is a common part of any process, but the way we respond to disagreement is important. We need to establish a process that makes sure that everyone involved feels heard and that their contribution is valued. Our response needs to remind everyone that we are on the same team and have shared goals.</div>
                     </div>
-                    <div style="margin-bottom:16px;padding:12px 14px;background:#fdf7f0;border-radius:8px;">
+                    <div style="margin-bottom:16px;padding:12px 14px;background:#fdf7f0;border-radius:8px;" data-bar-row="Different outcomes">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Different outcomes</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">To get to different outcomes (high turnout and consistent engagement) we need to meet and invite the community at places and times where they are already gathering and where trust is established. We hope this will help us recruit people who are excited and ready to participate and take on the EVB work.</div>
                     </div>
-                    <div style="padding:12px 14px;background:#fdf2f2;border-radius:8px;">
+                    <div style="padding:12px 14px;background:#fdf2f2;border-radius:8px;" data-bar-row="Values">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:6px;">Values</div>
                       <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">We need to remind ourselves and the community at large what our shared values are and why we have set them to be that. The way we engage with each other and the community need to bring these values to life.</div>
                     </div>
@@ -1909,15 +1914,15 @@
                     <div style="font-size:15px;font-weight:700;color:var(--vip-midnight);">What will make us successful?</div>
                   </div>
                   <div style="padding:14px;">
-                    <div style="margin-bottom:12px;padding:12px 14px;background:#EBF6FB;border-radius:8px;">
+                    <div style="margin-bottom:12px;padding:12px 14px;background:#EBF6FB;border-radius:8px;" data-bar-row="Setting Up Green Spaces &amp; the Pod">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
-                    <div style="margin-bottom:12px;padding:12px 14px;background:#f5f0fb;border-radius:8px;">
+                    <div style="margin-bottom:12px;padding:12px 14px;background:#f5f0fb;border-radius:8px;" data-bar-row="Storytelling">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Storytelling</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
-                    <div style="padding:12px 14px;background:#f0f7f1;border-radius:8px;">
+                    <div style="padding:12px 14px;background:#f0f7f1;border-radius:8px;" data-bar-row="Establishing Resident-Derived Priorities">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
                       <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
                     </div>
@@ -6720,7 +6725,7 @@ function abLoadEditFields(actId) {
   // Framing
   var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
   var framingInput = document.getElementById('ab-edit-framing');
-  if (framingInput && framingEl) framingInput.value = framingEl.textContent.trim();
+  if (framingInput && framingEl) framingInput.innerHTML = framingEl.innerHTML || framingEl.textContent.trim();
 
   // Action label
   var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
@@ -6851,6 +6856,14 @@ async function abGenerateEditBar(actId) {
   var sourceLabel = sourceType === 'transcript' ? 'MEETING TRANSCRIPT' : sourceType === 'specific-subcat' ? 'SOURCE MATERIAL for ' + targetSubcat : 'SOURCE MATERIAL';
   var userMsg = sourceLabel + ':\n' + sourceText + '\n\nFor the BAR question "What will make us successful?", write synthesis for the following rows:\n\n' + rowsInstruction + '\n\nFormat exactly as shown — row name in caps, then text below. Do not include any other sections.';
 
+  // Check if running locally — API calls require deployment
+  if (window.location.protocol === 'file:') {
+    thinkingEl.style.display = 'none';
+    outputTextEl.style.display = 'block';
+    outputTextEl.textContent = 'AI synthesis requires the platform to be deployed to GitHub Pages. Open the deployed URL and try again.';
+    return;
+  }
+
   try {
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -6940,10 +6953,12 @@ function abSaveEditedActivity(actId) {
     if (nameEl) nameEl.textContent = newName;
   }
   // Update framing
-  var newFraming = (document.getElementById('ab-edit-framing').value || '').trim();
+  var newFramingEl = document.getElementById('ab-edit-framing');
+  var newFraming = newFramingEl ? (newFramingEl.innerHTML || newFramingEl.value || '').trim() : '';
   if (newFraming) {
     var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
-    if (framingEl) framingEl.textContent = newFraming;
+    var framingEl2 = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
+    if (framingEl2) framingEl2.innerHTML = newFraming;
   }
   // Update action label
   var newAction = (document.getElementById('ab-edit-action').value || '').trim();
