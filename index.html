@@ -1647,7 +1647,31 @@
                 <button onclick="abEditAddSubcat()" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--vip-blue);background:white;color:var(--vip-blue);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">+ Add subcategory</button>
               </div>
               <div id="ab-edit-bar-fields" style="margin-bottom:10px;"></div>
-            </div>
+              <!-- BAR + AAR manual entry — populated by abLoadEditFields -->
+              <div id="ab-edit-bar-aar-section" style="display:none;margin-top:8px;">
+                <!-- BAR section -->
+                <div style="background:var(--vip-blue-pale);border:1px solid var(--vip-blue-light);border-radius:10px;padding:14px;margin-bottom:12px;">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-blue);margin-bottom:10px;">Before Action Review — What will make us successful?</div>
+                  <div id="ab-edit-bar-inputs" style="display:flex;flex-direction:column;gap:10px;"></div>
+                </div>
+                <!-- AAR section -->
+                <div style="background:rgba(158,31,99,0.04);border:1px solid rgba(158,31,99,0.15);border-radius:10px;padding:14px;">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-magenta);margin-bottom:10px;">After Action Review</div>
+                  <div id="ab-edit-aar-actual" style="margin-bottom:12px;">
+                    <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">What were our ACTUAL results?</div>
+                    <div id="ab-edit-aar-actual-inputs" style="display:flex;flex-direction:column;gap:8px;"></div>
+                  </div>
+                  <div id="ab-edit-aar-caused" style="margin-bottom:12px;">
+                    <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">What caused our results?</div>
+                    <div id="ab-edit-aar-caused-inputs" style="display:flex;flex-direction:column;gap:8px;"></div>
+                  </div>
+                  <div id="ab-edit-aar-sustain">
+                    <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">What will we sustain/improve?</div>
+                    <div id="ab-edit-aar-sustain-inputs" style="display:flex;flex-direction:column;gap:8px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /ab-ctx-edit-fields -->
             <!-- For fill-themes: also show input method -->
             <div id="ab-ctx-themes-method" style="display:none;margin-top:12px;">
               <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">How do you want to fill themes?</label>
@@ -5884,6 +5908,16 @@ function loadPhotovoiceGalleries() {
   });
 }
 
+function pvThumbFallback(imgEl, viewUrl) {
+  var link = document.createElement('a');
+  link.href = viewUrl;
+  link.target = '_blank';
+  link.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f5f5f5;border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--vip-blue);text-decoration:none;';
+  link.textContent = '📷 Open photo in Drive';
+  var parent = imgEl.parentElement;
+  if (parent) parent.replaceWith(link);
+}
+
 function pvAddToGalleryFromMeta(actId, meta) {
   var gallery = document.getElementById(actId + '-gallery');
   if (!gallery) return;
@@ -5901,8 +5935,11 @@ function pvAddToGalleryFromMeta(actId, meta) {
   var thumbUrl = meta.thumbUrl  || (files.length > 0 ? files[0].thumbnailUrl : '');
 
   if (meta.type === 'photo' && thumbUrl) {
-    mediaHtml = '<a href="' + viewUrl + '" target="_blank" style="display:block;margin-bottom:10px;">' +
-      '<img src="' + thumbUrl + '" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;">' +
+    var lh3Url = thumbUrl.indexOf('drive.google.com/thumbnail') !== -1
+      ? 'https://lh3.googleusercontent.com/d/' + thumbUrl.replace(/.*[?&]id=([^&]+).*/, '$1')
+      : thumbUrl;
+    mediaHtml = '<a href="' + pvEscape(viewUrl) + '" target="_blank" style="display:block;margin-bottom:10px;">' +
+      '<img src="' + pvEscape(lh3Url) + '" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;">' +
       '</a>';
   } else if (meta.type === 'story' && meta.storyText) {
     mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--vip-midnight);line-height:1.6;border-left:3px solid var(--vip-amber);">' + pvEscape(meta.storyText) + '</div>';
@@ -6699,20 +6736,9 @@ function abLoadEditFields(actId) {
   if (!editPanel) return;
   editPanel.style.display = 'block';
 
-  // Show source type selector in Step 3 for edit mode
-  var sourceTypeWrap = document.getElementById('ab-source-type-wrap');
-  if (sourceTypeWrap) sourceTypeWrap.style.display = 'block';
-
-  // Show Step 3 and Step 4
-  var step3 = document.getElementById('ab-step3');
-  var step4 = document.getElementById('ab-step4');
-  if (step3) step3.style.display = 'block';
-  if (step4) step4.style.display = 'block';
-
-  // Update generate button for this activity
+  // Update generate button to Save only (no AI)
   document.getElementById('ab-generate-btns').innerHTML =
-    '<button onclick="abGenerateEditBar(\'' + actId + '\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-midnight);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">✦ AI: Synthesize BAR content</button>' +
-    '<button onclick="abSaveEditedActivity(\'' + actId + '\')" style="padding:7px 16px;border-radius:20px;background:var(--vip-blue);color:white;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);">Save changes to activity</button>';
+    '<button onclick="abSaveEditedActivity(\'' + actId + '\')" class="btn btn-primary">Save changes to activity</button>';
 
   var actEl = document.getElementById(actId);
   if (!actEl) return;
@@ -6732,51 +6758,77 @@ function abLoadEditFields(actId) {
   var actionInput = document.getElementById('ab-edit-action');
   if (actionInput && actionEl) actionInput.value = actionEl.textContent.trim();
 
-  // Subcategories — detect from existing framing banner boxes and BAR rows
+  // Subcategories — detect from BAR rows
   var subcatList = document.getElementById('ab-edit-subcat-list');
   if (subcatList) {
     subcatList.innerHTML = '';
-    // Detect subcategory header
     var subcatHeaderEl = actEl.querySelector('[style*="text-transform:uppercase"][style*="letter-spacing:0.07em"]');
     var headerInput = document.getElementById('ab-edit-subcat-header');
     if (headerInput && subcatHeaderEl) headerInput.value = subcatHeaderEl.textContent.trim();
-
-    // Detect existing subcategory names from BAR rows
     var barRows = actEl.querySelectorAll('[data-bar-row]');
     var detectedSubcats = [];
     barRows.forEach(function(row) {
       var name = row.getAttribute('data-bar-row');
       if (name && name !== 'Overall') detectedSubcats.push(name);
     });
-
-    // Populate subcat fields
     if (detectedSubcats.length) {
       detectedSubcats.forEach(function(sc) { abEditAddSubcatField(sc); });
     } else {
       abEditAddSubcatField('');
     }
-
-    // Populate subcategory dropdown after DOM renders
     setTimeout(abRefreshSubcatDropdown, 50);
   }
 
-  // BAR row fields
-  var barFields = document.getElementById('ab-edit-bar-fields');
-  if (barFields) {
-    barFields.innerHTML = '';
-    var barRows2 = actEl.querySelectorAll('[data-bar-row]');
-    barRows2.forEach(function(row) {
-      var rowName = row.getAttribute('data-bar-row');
-      var contentEl = row.querySelector('[style*="font-size:13px"]');
+  // Detect subcats from DOM for BAR+AAR inputs
+  var barRowEls = actEl.querySelectorAll('[data-bar-row]');
+  var subcats = [];
+  barRowEls.forEach(function(r) { subcats.push(r.getAttribute('data-bar-row')); });
+  if (!subcats.length) subcats = ['Overall'];
+
+  // Build BAR input fields
+  var barInputs = document.getElementById('ab-edit-bar-inputs');
+  if (barInputs) {
+    barInputs.innerHTML = '';
+    subcats.forEach(function(sc) {
+      var row = barRowEls.length ? actEl.querySelector('[data-bar-row="' + sc + '"]') : null;
+      var contentEl = row ? row.querySelector('[style*="font-size:13px"]') : null;
       var currentText = (contentEl && contentEl.textContent.trim() !== '—') ? contentEl.textContent.trim() : '';
       var field = document.createElement('div');
-      field.style.marginBottom = '10px';
       field.innerHTML =
-        '<label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">' + pvEscape(rowName) + '</label>' +
-        '<textarea data-edit-bar-row="' + pvEscape(rowName) + '" rows="3" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(currentText) + '</textarea>';
-      barFields.appendChild(field);
+        '<label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">' + pvEscape(sc) + '</label>' +
+        '<textarea data-edit-bar-row="' + pvEscape(sc) + '" rows="3" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(currentText) + '</textarea>';
+      barInputs.appendChild(field);
     });
   }
+
+  // Build AAR input fields — 3 questions × N subcategories
+  var aarQuestions = [
+    { key: 'actual', containerId: 'ab-edit-aar-actual-inputs', cellAttr: 'actual' },
+    { key: 'caused', containerId: 'ab-edit-aar-caused-inputs', cellAttr: 'caused' },
+    { key: 'sustain', containerId: 'ab-edit-aar-sustain-inputs', cellAttr: 'sustain' }
+  ];
+  var aarEl = actEl.querySelector('[id$="-aar"]');
+  aarQuestions.forEach(function(q) {
+    var container = document.getElementById(q.containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    subcats.forEach(function(sc) {
+      // Try to find existing AAR cell content for this subcategory
+      var cellEl = aarEl ? aarEl.querySelector('[data-aar-cell="' + q.cellAttr + '"][data-subcat="' + sc + '"]') : null;
+      // Fallback: single AAR cell (no subcategory split)
+      if (!cellEl && subcats.length === 1 && aarEl) cellEl = aarEl.querySelector('[data-aar-cell="' + q.cellAttr + '"]');
+      var currentText = (cellEl && cellEl.textContent.trim() !== '—') ? cellEl.textContent.trim() : '';
+      var field = document.createElement('div');
+      field.innerHTML =
+        '<label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);display:block;margin-bottom:4px;">' + pvEscape(sc) + '</label>' +
+        '<textarea data-edit-aar-' + q.key + '="' + pvEscape(sc) + '" rows="3" style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;">' + pvEscape(currentText) + '</textarea>';
+      container.appendChild(field);
+    });
+  });
+
+  // Show the BAR+AAR section
+  var barAarSection = document.getElementById('ab-edit-bar-aar-section');
+  if (barAarSection) barAarSection.style.display = 'block';
 }
 
 function abEditAddSubcatField(value) {
@@ -6946,26 +6998,29 @@ async function abGenerateEditBar(actId) {
 function abSaveEditedActivity(actId) {
   var actEl = document.getElementById(actId);
   if (!actEl) return;
+
   // Update name
   var newName = (document.getElementById('ab-edit-name').value || '').trim();
   if (newName) {
     var nameEl = actEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]');
     if (nameEl) nameEl.textContent = newName;
   }
-  // Update framing
+
+  // Update framing (innerHTML preserves bold/italic/underline)
   var newFramingEl = document.getElementById('ab-edit-framing');
   var newFraming = newFramingEl ? (newFramingEl.innerHTML || newFramingEl.value || '').trim() : '';
   if (newFraming) {
-    var framingEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
-    var framingEl2 = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
-    if (framingEl2) framingEl2.innerHTML = newFraming;
+    var framingDomEl = actEl.querySelector('[style*="font-style:italic"][style*="font-size:20px"]');
+    if (framingDomEl) framingDomEl.innerHTML = newFraming;
   }
+
   // Update action label
   var newAction = (document.getElementById('ab-edit-action').value || '').trim();
   if (newAction) {
     var actionEl = actEl.querySelector('[style*="font-size:12px"][style*="font-weight:700"][style*="text-align:center"]');
     if (actionEl) actionEl.textContent = newAction;
   }
+
   // Update BAR rows
   document.querySelectorAll('[data-edit-bar-row]').forEach(function(textarea) {
     var rowName = textarea.getAttribute('data-edit-bar-row');
@@ -6974,22 +7029,43 @@ function abSaveEditedActivity(actId) {
     var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
     if (barRow) {
       var contentEl = barRow.querySelector('[style*="font-size:13px"]');
-      if (contentEl) {
-        contentEl.textContent = newText;
-        contentEl.style.fontStyle = 'normal';
-      }
+      if (contentEl) { contentEl.textContent = newText; contentEl.style.fontStyle = 'normal'; }
     }
   });
-  // Save edit data to Drive + GitHub
-  var editKey = actId + '-edits';
-  publishedWidgets[editKey] = JSON.stringify({
-    name: newName,
-    framing: newFraming,
-    action: newAction
+
+  // Update AAR fields
+  var aarData = {};
+  var hasAar = false;
+  var aarEl = document.getElementById(actId + '-aar');
+  ['actual','caused','sustain'].forEach(function(key) {
+    document.querySelectorAll('[data-edit-aar-' + key + ']').forEach(function(textarea) {
+      var sc = textarea.getAttribute('data-edit-aar-' + key);
+      var newText = textarea.value.trim();
+      if (!newText) return;
+      hasAar = true;
+      if (!aarData[key]) aarData[key] = {};
+      aarData[key][sc] = newText;
+      if (aarEl) {
+        var cell = aarEl.querySelector('[data-aar-cell="' + key + '"]');
+        if (cell) { cell.textContent = newText; cell.style.fontStyle = 'normal'; cell.style.color = 'var(--vip-midnight-soft)'; }
+      }
+    });
   });
+
+  if (hasAar && aarEl) {
+    aarEl.style.opacity = '1';
+    aarEl.style.pointerEvents = '';
+    aarEl.querySelectorAll('span').forEach(function(span) {
+      if (span.textContent.trim() === "We'll return to this") span.style.display = 'none';
+    });
+    publishedWidgets[actId + '-aar'] = JSON.stringify(aarData);
+  }
+
+  // Save to Drive + GitHub
+  publishedWidgets[actId + '-edits'] = JSON.stringify({ name: newName, framing: newFraming, action: newAction });
   savePublishState();
   abCommitToGitHub('Activity edited: ' + actId);
-  showToast('✓ Changes saved to ' + actId);
+  showToast('✓ Changes saved to activity');
 }
 
 // ── ACTIVITY BUILDER — GITHUB AUTO-COMMIT ─────────────────────────────────────
@@ -7056,8 +7132,9 @@ abSetMode = function(mode) {
     ctxExisting.style.display = 'block';
     if (ctxThemesMethod) ctxThemesMethod.style.display = 'none';
     if (ctxEditFields) ctxEditFields.style.display = 'none';
-    step3.style.display = 'block';
-    step4.style.display = 'block';
+    // Hide Step 3 (source material) — not needed for manual entry
+    if (step3) step3.style.display = 'none';
+    if (step4) step4.style.display = 'block';
     document.getElementById('ab-generate-btns').innerHTML =
       '<span style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;">Select an activity above to load its fields</span>';
     // Refresh picker to include any generated activities
