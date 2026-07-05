@@ -80,6 +80,8 @@
   .view.active { display: block; position: relative; max-width: 100%; }
   .eval-only { display: inline-block; }
   body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   body.hide-eval .sidebar-mode, body.mode-village .sidebar-mode { display: none !important; }
   body.hide-eval #view-village { opacity: 0; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
@@ -530,19 +532,19 @@
         <!-- Sprint 1 label + steps (default) -->
         <div style="font-size:10px;font-weight:700;color:var(--vip-blue);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;margin-right:10px;" id="pb-active-label">Sprint 1</div>
         <div style="display:flex;align-items:center;gap:0;flex:1;">
-          <div class="sprint-step sprint-step-done" id="pb-s1-step1" onclick="navigateToStep(1)" title="Step 1 · Set up &amp; Design" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
-            <div style="width:100%;height:4px;background:#1a6b3e;border-radius:2px 0 0 2px;"></div>
-            <div style="font-size:10px;font-weight:600;color:#1a6b3e;white-space:nowrap;">✓ Set up</div>
+          <div class="sprint-step" id="pb-s1-step1" onclick="navigateToStep(1)" title="Step 1 · Set up &amp; Design" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
+            <div style="width:100%;height:4px;background:var(--border);border-radius:2px 0 0 2px;"></div>
+            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Set up</div>
           </div>
-          <div class="sprint-step sprint-step-active" id="pb-s1-step2" onclick="navigateToStep(2)" title="Step 2 · Learning Loop" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
-            <div style="width:100%;height:4px;background:var(--vip-blue);border-radius:0;position:relative;"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--vip-blue);border:2px solid white;box-shadow:0 0 0 2px var(--vip-blue);"></div></div>
-            <div style="font-size:10px;font-weight:700;color:var(--vip-blue);white-space:nowrap;">Learning Loop</div>
+          <div class="sprint-step" id="pb-s1-step2" onclick="navigateToStep(2)" title="Step 2 · Learning Loop" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
+            <div style="width:100%;height:4px;background:var(--border);border-radius:0;"></div>
+            <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Learning Loop</div>
           </div>
-          <div class="sprint-step sprint-step-upcoming" id="pb-s1-step3" onclick="navigateToStep(3)" title="Step 3 · Adapt &amp; Document" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
+          <div class="sprint-step" id="pb-s1-step3" onclick="navigateToStep(3)" title="Step 3 · Adapt &amp; Document" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
             <div style="width:100%;height:4px;background:var(--border);border-radius:0;"></div>
             <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Adapt</div>
           </div>
-          <div class="sprint-step sprint-step-upcoming" id="pb-s1-step4" onclick="navigateToStep(4)" title="Step 4 · Close / Prep Next Sprint" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;opacity:0.45;">
+          <div class="sprint-step" id="pb-s1-step4" onclick="navigateToStep(4)" title="Step 4 · Close / Prep Next Sprint" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:0 4px;">
             <div style="width:100%;height:4px;background:var(--border);border-radius:0 2px 2px 0;"></div>
             <div style="font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;">Close</div>
           </div>
@@ -1777,7 +1779,6 @@
       <!-- ═══════════════════════════════ /VILLAGE EXPERIENCE ══════════════════════════ -->
       <div id="view-village" class="view">
 
-        <!-- Header -->
         <div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;">
           <div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>
           <div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>
@@ -1973,15 +1974,15 @@
                   <div style="padding:14px;">
                     <div style="margin-bottom:12px;padding:12px 14px;background:#EBF6FB;border-radius:8px;" data-bar-row="Setting Up Green Spaces &amp; the Pod">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
-                      <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
                     </div>
                     <div style="margin-bottom:12px;padding:12px 14px;background:#f5f0fb;border-radius:8px;" data-bar-row="Storytelling">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Storytelling</div>
-                      <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
                     </div>
                     <div style="padding:12px 14px;background:#f0f7f1;border-radius:8px;" data-bar-row="Establishing Resident-Derived Priorities">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
-                      <span style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">—</span>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
                     </div>
                   </div>
                 </div>
@@ -2643,10 +2644,20 @@ let storyCount = 0;
 let codedCount = 0;
 let activeCodes = [];
 
+var lastEvalView = 'evaluator'; // tracks last active evaluator view
+var lastEvalNavEl = null;
+
 function showView(name, navEl) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + name);
   if (target) target.classList.add('active');
+
+  // Track last evaluator view
+  var evalViews = ['evaluator','guide','overview','themes','fidelity','ai','village-experience','coding'];
+  if (evalViews.indexOf(name) !== -1) {
+    lastEvalView = name;
+    lastEvalNavEl = navEl;
+  }
 
   const titles = {
     evaluator: 'Project Planning', home: 'Project Planning', guide: 'Platform Guide', overview: 'Overview', stories: 'Stories', photos: 'Photovoice',
@@ -2659,11 +2670,9 @@ function showView(name, navEl) {
   if (titleText !== null) document.getElementById('pageTitle').textContent = titleText || name;
 
   if (navEl) {
-    // Remove active from ALL nav items across all groups
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     navEl.classList.add('active');
   }
-  // Re-render timeline when navigating to views that contain it
   if (name === 'village-experience' || name === 'village') {
     setTimeout(function() { if (typeof renderTimeline === 'function') renderTimeline(); }, 50);
   }
@@ -2709,7 +2718,8 @@ function setMode(mode) {
     // Only restore activity visibility when switching from evaluator (not on village URL init)
     if (urlMode !== 'village') _restoreActivityVisibility();
   } else {
-    showView('evaluator', document.querySelector('[onclick*="home"]'));
+    // Restore last active evaluator view rather than always going to Project Planning
+    showView(lastEvalView, lastEvalNavEl);
     var _pb2 = document.getElementById('phaseBadge'); if(_pb2) _pb2.style.display = 'inline-block';
   }
 }
@@ -4180,8 +4190,25 @@ if (urlMode === 'ehw') {
   // Scroll container
   var ca = document.getElementById('mainContentArea');
   if (ca) { ca.style.overflowY = 'scroll'; ca.style.maxHeight = 'calc(100vh - 60px)'; }
-  // Hide village content until Drive state is applied — prevents flash of wrong state
-  var vv = document.getElementById('view-village');
+  // Inject loading overlay — village URL only
+  var vvLoad = document.getElementById('view-village');
+  if (vvLoad) {
+    var loader = document.createElement('div');
+    loader.id = 'village-loading';
+    loader.style.cssText = 'position:absolute;inset:0;z-index:100;background:white;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:40px;';
+    loader.innerHTML =
+      '<div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;width:100%;max-width:680px;box-sizing:border-box;position:relative;overflow:hidden;">' +
+        '<div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>' +
+        '<div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">VIPIlluminate</div>' +
+        '<div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:8px;">Village Hub</div>' +
+        '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;">A shared record of our process — what we planned, what happened, and what we learned together.</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;color:var(--vip-midnight-muted);font-size:13px;">' +
+        '<div style="width:18px;height:18px;border:2px solid var(--vip-blue-light);border-top-color:var(--vip-blue);border-radius:50%;animation:spin 0.8s linear infinite;"></div>' +
+        'Loading your evaluation space\u2026' +
+      '</div>';
+    vvLoad.insertBefore(loader, vvLoad.firstChild);
+  }
 } else {
   // Evaluator context (no mode param, or ?mode=eval) — enable inline editing
   document.body.classList.add('is-evaluator');
@@ -4420,7 +4447,9 @@ function _applyPublishedState() {
   if (typeof urlMode !== 'undefined' && urlMode === 'village') {
     var vv = document.getElementById('view-village');
     if (vv) {
-      // Remove hide-eval opacity on view-village directly — keep hide-eval on body
+      // Remove loading overlay and reveal village content
+      var loader = document.getElementById('village-loading');
+      if (loader) loader.remove();
       vv.style.opacity = '1';
       vv.style.display = 'block';
     }
@@ -7145,7 +7174,12 @@ function abSaveEditedActivity(actId) {
     var barRow = actEl.querySelector('[data-bar-row="' + rowName + '"]');
     if (barRow) {
       var contentEl = barRow.querySelector('[style*="font-size:13px"]');
-      if (contentEl) { contentEl.textContent = newText; contentEl.style.fontStyle = 'normal'; }
+      if (contentEl) {
+        contentEl.textContent = newText;
+        contentEl.style.fontStyle = 'normal';
+        contentEl.style.color = 'var(--vip-midnight)';
+        contentEl.style.lineHeight = '1.7';
+      }
     }
   });
 
@@ -7511,6 +7545,8 @@ function abRestoreBarContent() {
             if (contentEl) {
               contentEl.textContent = barData[rowName];
               contentEl.style.fontStyle = 'normal';
+              contentEl.style.color = 'var(--vip-midnight)';
+              contentEl.style.lineHeight = '1.7';
             }
           }
         });
@@ -7982,11 +8018,18 @@ function ppUpdateAllProgress() {
 // Step number → ppStepPhases key mapping
 var ppStepToSid = { 1: 's1step1', 2: 's1step2', 3: 's1step3', 4: 's1step4' };
 
+// Step label text (without ✓ prefix)
+var ppStepLabels = { 1: 'Set up', 2: 'Learning Loop', 3: 'Adapt', 4: 'Close' };
+
+// Border radius per step position
+var ppStepRadius = { 1: '2px 0 0 2px', 2: '0', 3: '0', 4: '0 2px 2px 0' };
+
 function ppUpdateProgressBarFromTasks() {
   [1,2,3,4].forEach(function(stepNum) {
     var sid = ppStepToSid[stepNum];
     var phases = ppStepPhases[sid] || [];
     var total = 0, done = 0;
+
     phases.forEach(function(pi) {
       var n = ppTaskCounts[pi] || 0;
       total += n;
@@ -7998,26 +8041,34 @@ function ppUpdateProgressBarFromTasks() {
 
     var stepEl = document.getElementById('pb-s1-step' + stepNum);
     if (!stepEl) return;
-    var bar = stepEl.querySelector('div[style*="height:4px"]');
-    var label = stepEl.querySelector('div[style*="font-size:10px"]');
 
-    if (total === 0) return; // no tasks defined yet
+    var barDiv = stepEl.querySelector('div:first-child');
+    var labelDiv = stepEl.querySelector('div:last-child');
+    if (!barDiv || !labelDiv) return;
 
-    if (done === total) {
+    var radius = ppStepRadius[stepNum];
+    var baseLabel = ppStepLabels[stepNum];
+
+    if (total === 0) {
+      // No tasks defined — neutral
+      barDiv.style.cssText = 'width:100%;height:4px;background:var(--border);border-radius:' + radius + ';';
+      labelDiv.style.cssText = 'font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;';
+      labelDiv.textContent = baseLabel;
+    } else if (done === total) {
       // All done — green
-      stepEl.style.opacity = '1';
-      if (bar) { bar.style.background = '#1a6b3e'; bar.style.borderRadius = ''; }
-      if (label) { label.style.color = '#1a6b3e'; label.textContent = '✓ ' + label.textContent.replace(/^✓\s*/, ''); }
+      barDiv.style.cssText = 'width:100%;height:4px;background:#1a6b3e;border-radius:' + radius + ';';
+      labelDiv.style.cssText = 'font-size:10px;font-weight:700;color:#1a6b3e;white-space:nowrap;';
+      labelDiv.textContent = '✓ ' + baseLabel;
     } else if (done > 0) {
-      // Some done — blue (in progress)
-      stepEl.style.opacity = '1';
-      if (bar) { bar.style.background = 'var(--vip-blue)'; }
-      if (label) { label.style.color = 'var(--vip-blue)'; label.textContent = label.textContent.replace(/^✓\s*/, ''); }
+      // In progress — blue
+      barDiv.style.cssText = 'width:100%;height:4px;background:var(--vip-blue);border-radius:' + radius + ';';
+      labelDiv.style.cssText = 'font-size:10px;font-weight:700;color:var(--vip-blue);white-space:nowrap;';
+      labelDiv.textContent = baseLabel;
     } else {
-      // Nothing done — upcoming gray
-      stepEl.style.opacity = stepNum === 1 ? '1' : '0.45';
-      if (bar) { bar.style.background = 'var(--border)'; }
-      if (label) { label.style.color = 'var(--vip-midnight-soft)'; label.textContent = label.textContent.replace(/^✓\s*/, ''); }
+      // Nothing done — gray
+      barDiv.style.cssText = 'width:100%;height:4px;background:var(--border);border-radius:' + radius + ';';
+      labelDiv.style.cssText = 'font-size:10px;font-weight:500;color:var(--vip-midnight-soft);white-space:nowrap;';
+      labelDiv.textContent = baseLabel;
     }
   });
 }
