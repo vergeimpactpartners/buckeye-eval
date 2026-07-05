@@ -4250,6 +4250,9 @@ async function drivePost(action, payload) {
     }
     const json = await res.json();
     _driveOnline = true;
+    // load_photovoice returns { ok, topic, submissions } — return full json
+    // load_publish/fetch_doc return { ok, data } — return json.data
+    if (action === 'load_photovoice') return json.ok ? json : null;
     return json.ok ? json.data : null;
   } catch(e) {
     _driveOnline = false;
