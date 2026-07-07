@@ -82,6 +82,13 @@
   body.mode-village .eval-only, body.mode-residents.hide-eval .eval-only { display: none !important; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Lightbox */
+  #pv-lightbox { position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out; }
+  #pv-lightbox.open { display:flex; }
+  #pv-lightbox img { max-width:92vw;max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.6); }
+  #pv-lightbox-close { position:fixed;top:18px;right:22px;color:white;font-size:28px;cursor:pointer;line-height:1;font-weight:300;opacity:0.8; }
+  #pv-lightbox-close:hover { opacity:1; }
+
   body.hide-eval .sidebar-mode, body.mode-village .sidebar-mode { display: none !important; }
   body.hide-eval #view-village { opacity: 0; }
   body.mode-residents.hide-eval .eval-only { display: none !important; }
@@ -1060,7 +1067,7 @@
             <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Meeting Timeline</span> — Set and advance the current meeting. Edit and advance using the ✏ Edit button on the Up Next meeting.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activities table</span> — Three columns per activity: Default (which activity opens first for residents), Visibility (Published/Hidden), Themes (Unpublished/✓ Published). Changes save to Drive immediately.</div>
-              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity Builder</span> — Five modes: (1) New BAR/AAR — create a full new activity with optional subcategories; (2) New Photovoice — create a new submission activity; (3) Add AAR to existing — fill the After Action Review on an existing card; (4) Fill themes box — add emerging themes via AI or direct input; (5) Edit existing activity — select an activity, fields pre-populate from the current content including detected subcategories, then use AI synthesis from pasted source material or edit manually. All structural changes auto-commit to GitHub.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity Builder</span> — Four modes: (1) New BAR/AAR — create a full new activity with name, framing question (with bold/italic/underline formatting), optional subcategories, and BAR content filled in before publishing; (2) Create new data submission — create a Photovoice-style submission activity selecting type (photo, video, written story, audio); (3) Fill themes box — manually add themes with title and description to any activity, then publish to Village; (4) Edit existing activity — select any activity to pre-populate all fields including BAR rows and AAR questions (Actual results, Caused results, Sustain/improve) per subcategory. All structural changes auto-commit to GitHub.</div>
             </div>
           </div>
 
@@ -1086,6 +1093,7 @@
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Activity visibility</span> — Toggle Published/Hidden per activity in the Village Experience table. Hidden activities are invisible to residents on the Village URL. In evaluator Village mode they appear dimmed with a "Publish to Village" button.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Emerging themes</span> — Each activity has a magenta themes panel. Toggle Unpublished/Published in the Village Experience table, or use the "Publish to Village" button on the panel itself. Unpublished themes are hidden from residents; visible to evaluators at 50% opacity.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Default activity</span> — The activity residents land on when opening the Village link. Set in the Village Experience table. Persists to Drive.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Submissions open/closed</span> — For Photovoice activities, an amber "Open/Closed" button in the Village Experience table controls whether residents can submit. When closed, the submission form is hidden and replaced with a notice; the gallery remains visible. State persists to Drive.</div>
             </div>
           </div>
 
@@ -1107,12 +1115,15 @@
             <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Drive sync</div>
             <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 10px;">Data syncs to Google Drive via César's <code>vergeimpactpartners.com</code> account through a Google Apps Script. The following are synced across all evaluator devices:</p>
             <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
-              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Publish state — activity visibility, default activity, theme publish status</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Publish state — activity visibility, default activity, theme publish status, submissions open/closed</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">BAR row content — "What will make us successful?" text per subcategory, restored on every page load</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">AAR content — Actual results, Caused results, Sustain/improve per activity, restores and undims AAR table on load</div>
               <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Theme card content — theme names and notes for each activity, restored on every page load</div>
               <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Inline text edits — any text edited directly on the village page (activity titles, framing questions, descriptions, etc.)</div>
-              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Photovoice submissions — saved to Google Drive with media files and metadata</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Photovoice submissions — saved to Google Sheet with media files in Drive; gallery restores on every page load</div>
               <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Generated activities — new activities created via the Activity Builder, restored on every page load</div>
-              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Sprint state — which sprint is active, task completions, phase notes</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Sprint state — which sprint is active, task completions, phase notes, content cards</div>
+              <div style="padding:6px 12px;background:var(--paper);border-radius:6px;border:1px solid var(--border);">Fidelity tracker — sprint assessments and trend data across sprints</div>
             </div>
             <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;font-size:13px;">
               <div style="padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;"><span style="color:#1a6b3e;font-weight:600;">● Drive</span> — Data syncing to Google Drive. All evaluators see the same state.</div>
@@ -1174,6 +1185,40 @@
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Launching Sprint 2</span> — In the Project Planning page, Sprint 2 shows as ⏳ Upcoming with a "Ready to begin Sprint 2?" prompt. Clicking Launch Sprint 2 → populates Sprint 2 with the same phase and task structure as Sprint 1, switches the progress bar to Sprint 2, and saves the launch state to Drive + GitHub.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Additional sprints</span> — A "Launch next loop →" button appears at the bottom of each sprint's Step 4 once that sprint is active. This generates a new sprint dynamically with the same structure. Works for any number of sprints — designed to support future projects beyond EVB's two-sprint structure.</div>
               <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Progress bar</span> — Shows only the active sprint's steps, with a "Sprint X of Y" indicator when more than one sprint exists. Clicking a step in the bar navigates directly to that step in Project Planning.</div>
+            </div>
+          </div>
+
+          <!-- Photovoice gallery -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Photovoice gallery</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">Submissions appear immediately in the gallery after submit. On page reload, submissions are restored from the Google Sheet via the GAS backend.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">Clicking any photo opens it full-screen in a lightbox overlay. Click anywhere, press Escape, or click ✕ to close. Does not open a new tab.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">To delete a submission: remove the row from the <code>photovoice_submissions</code> spreadsheet in the VIPIlluminate Drive folder. The media file in the <code>photovoice/</code> subfolder must be deleted separately. There is no in-platform delete button currently.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">Use the Open/Closed toggle in the Village Experience table to close submissions without hiding the gallery.</div>
+            </div>
+          </div>
+
+          <!-- Sprint progress bar -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">Sprint progress bar</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);">The bar at the top of Project Planning shows four steps (Set up, Learning Loop, Adapt, Close). It updates automatically as you check off tasks.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Gray</span> — no tasks checked. <span style="font-weight:600;color:var(--vip-blue);">Blue</span> — some tasks checked (in progress). <span style="font-weight:600;color:#1a6b3e;">Green ✓</span> — all tasks complete. Multiple steps can be blue simultaneously.</div>
+            </div>
+          </div>
+
+          <!-- AI features -->
+          <div class="card" style="margin-bottom:0;">
+            <div style="font-size:16px;font-weight:700;color:var(--vip-midnight);margin-bottom:10px;">AI features — current status</div>
+            <p style="font-size:14px;color:var(--vip-midnight-soft);line-height:1.7;margin:0 0 12px;">The platform includes AI features for BAR synthesis, sensemaking, and theme analysis. These currently do not work on the deployed GitHub Pages URL.</p>
+            <div style="padding:12px 14px;background:#fff7ed;border-radius:10px;border:1px solid #fed7aa;margin-bottom:12px;">
+              <div style="font-size:13px;font-weight:700;color:#c2410c;margin-bottom:6px;">Why they don't work on the deployed URL</div>
+              <div style="font-size:13px;color:var(--vip-midnight-soft);line-height:1.7;">The features call the Anthropic API directly from the browser. This works inside Claude.ai's environment but is blocked from external sites like GitHub Pages — likely due to CORS restrictions or authentication requirements specific to Anthropic's API.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">What would fix it</span> — Routing AI calls through the GAS backend (a proxy function with an Anthropic API key in Script Properties). Requires an Anthropic API account with billing. The code changes are ready to build when this is prioritized.</div>
+              <div style="padding:8px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);"><span style="font-weight:600;">Current workaround</span> — Do AI synthesis directly in Claude.ai using the EVB DE system prompt. Paste source material, receive BAR content, enter it manually via Activity Builder → Edit existing activity.</div>
             </div>
           </div>
 
@@ -1914,7 +1959,7 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-1-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-1')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span><button id="res-act-1-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-1')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
@@ -1974,15 +2019,15 @@
                   <div style="padding:14px;">
                     <div style="margin-bottom:12px;padding:12px 14px;background:#EBF6FB;border-radius:8px;" data-bar-row="Setting Up Green Spaces &amp; the Pod">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Setting Up Green Spaces &amp; the Pod</div>
-                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">This work requires a real team — one person cannot carry it alone. We need volunteers who are motivated by purposeful causes, youth involvement especially in summer, and partnerships with organizations already doing youth programming. Land access through the city or land banks needs to be navigated early. The community needs to feel ownership over what gets built. We have a group that is aligned and wants to see this through — that's a real asset.</div>
                     </div>
                     <div style="margin-bottom:12px;padding:12px 14px;background:#f5f0fb;border-radius:8px;" data-bar-row="Storytelling">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Storytelling</div>
-                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">Success means people feel proud of their neighborhood and good about being asked to share — not just that stories get collected. Capturing stories in multiple formats matters because literacy and camera shyness are real barriers; meeting people where they are is part of the method. Leading with good faith and good intentions — especially when navigating roles across partners and spaces — is what keeps the work grounded when collaboration gets complicated. And the proof of concept is already there: we know this creates something that lands in people's heart space. Build on that feeling.</div>
                     </div>
                     <div style="padding:12px 14px;background:#f0f7f1;border-radius:8px;" data-bar-row="Establishing Resident-Derived Priorities">
                       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--vip-midnight-soft);margin-bottom:8px;">Establishing Resident-Derived Priorities</div>
-                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">—</div>
+                      <div style="font-size:13px;color:var(--vip-midnight);line-height:1.7;">Success means residents can explain the EcoVillage — what eco, village, and sustainability mean — in their own words, and feel ready to invite someone else in. We're building from lessons already learned: different approaches work for different people and ages, and we need ambassadors who can hold space for disagreement without losing the relationship. Planning ahead for known barriers — childcare, transportation, work, conflict — is part of the work, not an afterthought.</div>
                     </div>
                   </div>
                 </div>
@@ -2022,8 +2067,8 @@
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
-                  <span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>
-                  <button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>
+                  <span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span>
+                  <button id="res-act-2-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-2')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button>
                 </div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
@@ -2046,6 +2091,7 @@
               <div style="font-size:11px;opacity:0.85;">Photovoice</div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
+              <button id="res-act-3-sub-btn" class="eval-only" onclick="event.stopPropagation();toggleSubmissions('res-act-3')" style="background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Open for Submissions</button>
               <span id="res-act-3-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
             </div>
           </div>
@@ -2060,7 +2106,10 @@
 
             <!-- Submission form -->
             <div id="res-act-3-form-wrap" style="background:white;padding:22px;">
-              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em;">Add a Submission</div>
+              <!-- Closed submissions notice — hidden by default -->
+              <div id="res-act-3-closed-notice" style="display:none;padding:14px 18px;background:var(--paper);border-radius:8px;border:1px solid var(--border);font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;">Submissions are currently closed for this activity.</div>
+              <!-- Submission form content -->
+              <div id="res-act-3-submit-content">
 
               <!-- Media type selector -->
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
@@ -2106,6 +2155,7 @@
 
               <button onclick="pvSubmit('act3','tasty')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
               <div id="act3-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
+            </div><!-- /res-act-3-submit-content -->
             </div>
 
             <!-- Gallery -->
@@ -2123,7 +2173,7 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-3-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-3')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span><button id="res-act-3-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-3')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
@@ -2148,6 +2198,7 @@
               <div style="margin-top:6px;"><span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.2);color:white;padding:2px 10px;border-radius:20px;letter-spacing:0.04em;">The Model</span></div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
+              <button id="res-act-4-sub-btn" class="eval-only" onclick="event.stopPropagation();toggleSubmissions('res-act-4')" style="background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Open for Submissions</button>
               <span id="res-act-4-chevron" style="font-size:14px;transform:rotate(180deg);transition:transform 0.2s;">&#9650;</span>
             </div>
           </div>
@@ -2163,7 +2214,10 @@
 
             <!-- Submission form -->
             <div id="res-act-4-form-wrap" style="background:white;padding:22px;">
-              <div style="font-size:13px;font-weight:700;color:var(--vip-midnight);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em;">Add a Submission</div>
+              <!-- Closed submissions notice — hidden by default -->
+              <div id="res-act-4-closed-notice" style="display:none;padding:14px 18px;background:var(--paper);border-radius:8px;border:1px solid var(--border);font-size:13px;color:var(--vip-midnight-muted);font-style:italic;text-align:center;">Submissions are currently closed for this activity.</div>
+              <!-- Submission form content -->
+              <div id="res-act-4-submit-content">
 
               <!-- Media type selector -->
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
@@ -2209,6 +2263,7 @@
 
               <button onclick="pvSubmit('act4','trust')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
               <div id="act4-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
+            </div><!-- /res-act-4-submit-content -->
             </div>
 
             <!-- Gallery -->
@@ -2226,7 +2281,7 @@
                   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--vip-magenta);opacity:0.8;margin-bottom:4px;">Sensemaking</div>
                   <div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span><button id="res-act-4-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-4')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span><button id="res-act-4-themes-pub-btn" class="eval-only" onclick="publishThemes('res-act-4')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button></div>
               </div>
               <div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">
                 <span style="font-size:12px;color:var(--vip-magenta);opacity:0.5;font-style:italic;">Themes will emerge from sensemaking after the activity is complete</span>
@@ -4195,7 +4250,7 @@ if (urlMode === 'ehw') {
   if (vvLoad) {
     var loader = document.createElement('div');
     loader.id = 'village-loading';
-    loader.style.cssText = 'position:absolute;inset:0;z-index:100;background:white;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:40px;';
+    loader.style.cssText = 'position:fixed;inset:0;z-index:9999;background:white;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;box-sizing:border-box;';
     loader.innerHTML =
       '<div style="background:var(--vip-blue);border-radius:14px;padding:28px 32px;margin-bottom:24px;width:100%;max-width:680px;box-sizing:border-box;position:relative;overflow:hidden;">' +
         '<div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>' +
@@ -4438,6 +4493,8 @@ function _applyPublishedState() {
     if (typeof renderFidelityList === 'function') renderFidelityList();
     if (typeof renderFidelityTrend === 'function') renderFidelityTrend();
   }
+  // Restore submissions open/closed state
+  if (typeof restoreSubmissionsState === 'function') restoreSubmissionsState();
   // Refresh themes view and context panel
   setTimeout(function() {
     if (typeof smRefreshThemes === 'function') smRefreshThemes();
@@ -4487,16 +4544,17 @@ function _applyPublishedState() {
         var targetEl = document.getElementById('res-act-' + activeActivityId);
         if (!targetEl) return;
         var container = document.getElementById('mainContentArea');
-        var containerOverflow = container ? getComputedStyle(container).overflowY : 'visible';
-        var useContainer = container && (containerOverflow === 'auto' || containerOverflow === 'scroll');
-        if (useContainer) {
-          container.scrollTop = Math.max(0, targetEl.offsetTop - 20);
-        } else {
-          targetEl.scrollIntoView({ behavior: 'instant', block: 'start' });
+        // Try container scroll first
+        if (container) {
+          container.scrollTop = 0; // reset first to force reflow
+          var targetTop = targetEl.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 20;
+          container.scrollTop = Math.max(0, targetTop);
         }
+        // Also try scrollIntoView as fallback for mobile
+        targetEl.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
-      setTimeout(doScrollToActive, 300);
-      setTimeout(doScrollToActive, 1000);
+      setTimeout(doScrollToActive, 500);
+      setTimeout(doScrollToActive, 1500);
       renderTimeline();
       ACTIVITIES.forEach(function(act) {
         var key = 'act-' + act.num + '-visible';
@@ -5813,7 +5871,8 @@ function pvAddToGallery(actId, topic, type, code, desc, payload, driveResult) {
   var mediaHtml = '';
 
   if (type === 'photo' && payload.fileData) {
-    mediaHtml = '<img src="data:' + payload.mimeType + ';base64,' + payload.fileData + '" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;">';
+    var imgSrc = 'data:' + payload.mimeType + ';base64,' + payload.fileData;
+    mediaHtml = '<img src="' + imgSrc + '" onclick="pvOpenLightbox(this.src)" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
   } else if (type === 'video' && payload.fileData) {
     mediaHtml = '<video controls style="width:100%;border-radius:8px;margin-bottom:10px;"><source src="data:' + payload.mimeType + ';base64,' + payload.fileData + '"></video>';
   } else if (type === 'story') {
@@ -5985,6 +6044,53 @@ function pvThumbFallback(imgEl, viewUrl) {
   if (parent) parent.replaceWith(link);
 }
 
+function toggleSubmissions(actId) {
+  var key = actId + '-submissions-closed';
+  var isClosed = publishedWidgets[key] || false;
+  var newState = !isClosed;
+  publishedWidgets[key] = newState;
+  savePublishState();
+  _applySubmissionsState(actId, newState);
+  showToast(newState ? '✓ Submissions closed' : '✓ Submissions open');
+}
+
+function _applySubmissionsState(actId, closed) {
+  var submitContent = document.getElementById(actId + '-submit-content');
+  var closedNotice = document.getElementById(actId + '-closed-notice');
+  // Header button — on the activity card itself
+  var actNum = actId.replace(/[^0-9]/g, '');
+  var headerBtn = document.getElementById(actId + '-sub-btn') || document.getElementById('res-act-' + actNum + '-sub-btn');
+  // VE column button — kept for legacy but may not exist
+  var veBtn = document.getElementById('ve-submissions-btn-' + actNum);
+
+  if (submitContent) submitContent.style.display = closed ? 'none' : 'block';
+  if (closedNotice) closedNotice.style.display = closed ? 'block' : 'none';
+
+  [headerBtn, veBtn].forEach(function(btn) {
+    if (!btn) return;
+    if (closed) {
+      btn.textContent = 'Closed for Submissions';
+      btn.style.background = 'rgba(0,0,0,0.25)';
+      btn.style.borderColor = 'rgba(255,255,255,0.3)';
+    } else {
+      btn.textContent = 'Open for Submissions';
+      btn.style.background = 'rgba(255,255,255,0.2)';
+      btn.style.borderColor = 'rgba(255,255,255,0.5)';
+    }
+  });
+}
+
+function restoreSubmissionsState() {
+  ['res-act-3', 'res-act-4'].forEach(function(actId) {
+    var key = actId + '-submissions-closed';
+    if (publishedWidgets[key]) _applySubmissionsState(actId, true);
+  });
+  // Also check any generated photovoice activities
+  ACTIVITY_IDS.forEach(function(actId) {
+    var key = actId + '-submissions-closed';
+    if (publishedWidgets[key]) _applySubmissionsState(actId, true);
+  });
+}
 function pvAddToGalleryFromMeta(actId, meta) {
   var gallery = document.getElementById(actId + '-gallery');
   if (!gallery) return;
@@ -6005,9 +6111,7 @@ function pvAddToGalleryFromMeta(actId, meta) {
     var lh3Url = thumbUrl.indexOf('drive.google.com/thumbnail') !== -1
       ? 'https://lh3.googleusercontent.com/d/' + thumbUrl.replace(/.*[?&]id=([^&]+).*/, '$1')
       : thumbUrl;
-    mediaHtml = '<a href="' + pvEscape(viewUrl) + '" target="_blank" style="display:block;margin-bottom:10px;">' +
-      '<img src="' + pvEscape(lh3Url) + '" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;">' +
-      '</a>';
+    mediaHtml = '<img src="' + pvEscape(lh3Url) + '" onclick="pvOpenLightbox(this.src)" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
   } else if (meta.type === 'story' && meta.storyText) {
     mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--vip-midnight);line-height:1.6;border-left:3px solid var(--vip-amber);">' + pvEscape(meta.storyText) + '</div>';
   } else if (viewUrl) {
@@ -6678,8 +6782,8 @@ function abBuildBarCardHtml(id, num, name, label, framing, actionLabel, subcats,
               '<div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>' +
             '</div>' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
-              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
-              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>' +
+              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button>' +
             '</div>' +
           '</div>' +
           '<div style="margin-bottom:16px;padding:12px 16px;background:rgba(158,31,99,0.05);border-radius:10px;border:1px solid rgba(158,31,99,0.15);text-align:center;">' +
@@ -6781,8 +6885,8 @@ function abPublishPhotovoiceActivity(name, label, framing, topic) {
               '<div style="font-size:17px;font-weight:800;color:var(--vip-midnight);letter-spacing:-0.01em;">Emerging Themes</div>' +
             '</div>' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
-              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);opacity:0.6;font-style:italic;">Evaluator view only until published</span>' +
-              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:rgba(158,31,99,0.12);color:var(--vip-magenta);border-color:rgba(158,31,99,0.3);">Publish to Village</button>' +
+              '<span class="eval-only" style="font-size:11px;color:var(--vip-magenta);font-style:italic;font-weight:500;">Evaluator view only until published</span>' +
+              '<button id="' + id + '-themes-pub-btn" class="eval-only" onclick="publishThemes(\'' + id + '\')" class="btn" style="background:white;color:var(--vip-magenta);border:1.5px solid var(--vip-magenta);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);">Publish to Village</button>' +
             '</div>' +
           '</div>' +
           '<div id="' + id + '-theme-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>' +
@@ -8847,5 +8951,28 @@ document.addEventListener('click', function(e) {
 });
 </script>
 </div><!-- /app -->
+<!-- Photovoice lightbox -->
+<div id="pv-lightbox" onclick="pvCloseLightbox()">
+  <span id="pv-lightbox-close" onclick="pvCloseLightbox()">✕</span>
+  <img id="pv-lightbox-img" src="" alt="">
+</div>
+
+<script>
+function pvOpenLightbox(src) {
+  var lb = document.getElementById('pv-lightbox');
+  var img = document.getElementById('pv-lightbox-img');
+  if (!lb || !img) return;
+  img.src = src;
+  lb.classList.add('open');
+}
+function pvCloseLightbox() {
+  var lb = document.getElementById('pv-lightbox');
+  if (lb) lb.classList.remove('open');
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') pvCloseLightbox();
+});
+</script>
+
 </body>
 </html>
