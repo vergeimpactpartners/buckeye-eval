@@ -2742,7 +2742,14 @@ function showView(name, navEl) {
     ehw: null, village: null, 'village-experience': 'Village Experience',
     questions: 'Questions & design', community: null
   };
-  const titleText = titles[name];
+  var titleText = titles[name];
+  // Handle dynamic DC activity views
+  if (titleText === undefined && name.startsWith('dc-')) {
+    var dcActId = name.replace('dc-', '');
+    var dcActEl = document.getElementById(dcActId);
+    var dcTitleEl = dcActEl ? dcActEl.querySelector('[style*="font-size:15px"][style*="font-weight:700"]') : null;
+    titleText = dcTitleEl ? dcTitleEl.textContent.trim() : name;
+  }
   if (titleText !== null) document.getElementById('pageTitle').textContent = titleText || name;
 
   if (navEl) {
@@ -4453,12 +4460,12 @@ function restorePublishedState() {
       }
     }
     _applyPublishedState();
-    loadPhotovoiceGalleries();
+    setTimeout(function() { loadPhotovoiceGalleries(); }, 350);
   }).catch(function() {
     // Drive unreachable — use localStorage as-is
     showDriveStatus('fail');
     _applyPublishedState();
-    loadPhotovoiceGalleries();
+    setTimeout(function() { loadPhotovoiceGalleries(); }, 350);
   });
 }
 
@@ -5254,7 +5261,7 @@ renderTimeline();
 
 initScrollSpy();
 
-// Init inline editing immediately — does not require Drive
+// Init inline editing, DC, and activity picker after ACTIVITIES is populated
 setTimeout(function() {
   if (typeof initInlineEditing === 'function') initInlineEditing();
   if (typeof dcInit === 'function') dcInit();
@@ -6232,6 +6239,7 @@ function pvAddToGalleryFromMeta(actId, meta) {
     var lh3Url = thumbUrl.indexOf('drive.google.com/thumbnail') !== -1
       ? 'https://lh3.googleusercontent.com/d/' + thumbUrl.replace(/.*[?&]id=([^&]+).*/, '$1')
       : thumbUrl;
+    var metaThemes = meta.code ? meta.code.split(',').map(function(t){return t.trim();}).filter(Boolean) : [];
     var metaThemesStr = metaThemes.join('|');
     var metaDesc2 = (meta.description || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     mediaHtml = '<img src="' + pvEscape(lh3Url) + '" data-themes="' + pvEscape(metaThemesStr) + '" data-desc="' + metaDesc2 + '" onclick="pvOpenLightboxFromEl(this)" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
@@ -8725,6 +8733,9 @@ function dcUpdateStats(actId, submissions) {
   if (pCountEl) pCountEl.textContent = stats.count;
   if (pSubEl) pSubEl.textContent = stats.submitters.size;
   if (pLastEl) pLastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
+
+  // Refresh overview cards to reflect updated stats
+  if (typeof dcBuildOverview === 'function') dcBuildOverview();
 }
 
 // Add a submission card to both the village gallery AND the evaluator dc page
