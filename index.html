@@ -85,8 +85,7 @@
   /* Lightbox */
   #pv-lightbox { position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out; }
   #pv-lightbox.open { display:flex; }
-  #pv-lightbox img { max-width:92vw;max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.6); }
-  #pv-lightbox-close { position:fixed;top:18px;right:22px;color:white;font-size:28px;cursor:pointer;line-height:1;font-weight:300;opacity:0.8; }
+  #pv-lightbox-close { position:fixed;top:18px;right:22px;color:white;font-size:28px;cursor:pointer;line-height:1;font-weight:300;opacity:0.8;z-index:1; }
   #pv-lightbox-close:hover { opacity:1; }
 
   body.hide-eval .sidebar-mode, body.mode-village .sidebar-mode { display: none !important; }
@@ -2141,10 +2140,21 @@
                 <div id="act3-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>
               </div>
 
-              <!-- Code -->
+              <!-- Submission themes — selectable chips (options set by evaluator) -->
               <div style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;font-style:italic;">(Refer back to our construct map)</span></label>
-                <input type="text" id="act3-code" placeholder="" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;color:var(--vip-amber);">*Required — select at least one</span></label>
+                <div id="act3-theme-chips" style="display:flex;flex-wrap:wrap;gap:8px;min-height:36px;">
+                  <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;padding:6px 0;">No themes set yet — evaluator will add options.</div>
+                </div>
+                <input type="hidden" id="act3-code" value="">
+              </div>
+
+              <!-- Eval-only: theme options editor -->
+              <div id="act3-theme-editor" class="eval-only" style="margin-bottom:14px;padding:12px 14px;background:rgba(230,138,0,0.06);border-radius:8px;border:1px dashed rgba(230,138,0,0.4);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-amber);margin-bottom:8px;">Edit submission theme options</div>
+                <div id="act3-theme-options-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+                <button onclick="pvAddThemeOption('act3')" style="font-size:12px;color:var(--vip-amber);background:white;border:1px solid rgba(230,138,0,0.4);border-radius:6px;padding:4px 12px;cursor:pointer;font-family:var(--sans);">+ Add option</button>
+                <button onclick="pvSaveThemeOptions('act3','tasty')" style="font-size:12px;color:white;background:var(--vip-amber);border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:var(--sans);margin-left:6px;">Save options</button>
               </div>
 
               <!-- Description -->
@@ -2249,10 +2259,21 @@
                 <div id="act4-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>
               </div>
 
-              <!-- Code -->
+              <!-- Submission themes — selectable chips -->
               <div style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;font-style:italic;">(Refer back to our construct map)</span></label>
-                <input type="text" id="act4-code" placeholder="e.g. Access, Trust, Belonging…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;color:var(--vip-amber);">*Required — select at least one</span></label>
+                <div id="act4-theme-chips" style="display:flex;flex-wrap:wrap;gap:8px;min-height:36px;">
+                  <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;padding:6px 0;">No themes set yet — evaluator will add options.</div>
+                </div>
+                <input type="hidden" id="act4-code" value="">
+              </div>
+
+              <!-- Eval-only: theme options editor -->
+              <div id="act4-theme-editor" class="eval-only" style="margin-bottom:14px;padding:12px 14px;background:rgba(230,138,0,0.06);border-radius:8px;border:1px dashed rgba(230,138,0,0.4);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--vip-amber);margin-bottom:8px;">Edit submission theme options</div>
+                <div id="act4-theme-options-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+                <button onclick="pvAddThemeOption('act4')" style="font-size:12px;color:var(--vip-amber);background:white;border:1px solid rgba(230,138,0,0.4);border-radius:6px;padding:4px 12px;cursor:pointer;font-family:var(--sans);">+ Add option</button>
+                <button onclick="pvSaveThemeOptions('act4','trust')" style="font-size:12px;color:white;background:var(--vip-amber);border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:var(--sans);margin-left:6px;">Save options</button>
               </div>
 
               <!-- Description -->
@@ -4495,6 +4516,8 @@ function _applyPublishedState() {
   }
   // Restore submissions open/closed state
   if (typeof restoreSubmissionsState === 'function') restoreSubmissionsState();
+  // Restore photovoice submission theme options
+  if (typeof pvRestoreThemeOptions === 'function') pvRestoreThemeOptions();
   // Refresh themes view and context panel
   setTimeout(function() {
     if (typeof smRefreshThemes === 'function') smRefreshThemes();
@@ -5786,7 +5809,7 @@ async function pvSubmit(actId, topic) {
   var desc = (document.getElementById(actId + '-description').value || '').trim();
   var statusEl = document.getElementById(actId + '-submit-status');
 
-  if (!code) { showToast('Please enter a code for this submission'); return; }
+  if (!code) { showToast('Please select at least one theme before submitting'); return; }
 
   statusEl.textContent = 'Preparing submission…';
 
@@ -5872,7 +5895,9 @@ function pvAddToGallery(actId, topic, type, code, desc, payload, driveResult) {
 
   if (type === 'photo' && payload.fileData) {
     var imgSrc = 'data:' + payload.mimeType + ';base64,' + payload.fileData;
-    mediaHtml = '<img src="' + imgSrc + '" onclick="pvOpenLightbox(this.src)" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
+    var themesArr = code ? code.split(',').map(function(t){return t.trim();}).filter(Boolean) : [];
+    var themesJson = JSON.stringify(themesArr).replace(/'/g, "\\'");
+    mediaHtml = '<img src="' + imgSrc + '" onclick="pvOpenLightbox(this.src,' + themesJson + ',\'' + pvEscape(desc).replace(/'/g,"\\'") + '\')" style="width:100%;max-height:260px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
   } else if (type === 'video' && payload.fileData) {
     mediaHtml = '<video controls style="width:100%;border-radius:8px;margin-bottom:10px;"><source src="data:' + payload.mimeType + ';base64,' + payload.fileData + '"></video>';
   } else if (type === 'story') {
@@ -5921,6 +5946,13 @@ function pvResetForm(actId) {
   }
   var c = document.getElementById(actId+'-code'); if(c) c.value='';
   var d = document.getElementById(actId+'-description'); if(d) d.value='';
+  // Reset chip selections
+  var chips = document.querySelectorAll('#' + actId + '-theme-chips [data-theme]');
+  chips.forEach(function(chip) {
+    chip.dataset.selected = '0';
+    chip.style.background = 'white';
+    chip.style.color = 'var(--vip-amber)';
+  });
 }
 
 
@@ -6034,6 +6066,95 @@ function loadPhotovoiceGalleries() {
   });
 }
 
+// ── PHOTOVOICE SUBMISSION THEME OPTIONS ───────────────────────────────────────
+
+function pvAddThemeOption(actId) {
+  var list = document.getElementById(actId + '-theme-options-list');
+  if (!list) return;
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:6px;align-items:center;';
+  row.innerHTML =
+    '<div style="width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;background:white;"></div>' +
+    '<input type="text" placeholder="Option name" style="flex:1;padding:5px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--sans);">' +
+    '<button onclick="this.parentElement.remove()" style="color:var(--vip-midnight-muted);background:none;border:none;cursor:pointer;font-size:14px;padding:0 4px;">✕</button>';
+  list.appendChild(row);
+}
+
+function pvSaveThemeOptions(actId, topic) {
+  var inputs = document.querySelectorAll('#' + actId + '-theme-options-list input[type="text"]');
+  var options = [];
+  inputs.forEach(function(inp) {
+    var v = inp.value.trim();
+    if (v) options.push(v);
+  });
+  if (!options.length) { showToast('Please add at least one option'); return; }
+  publishedWidgets[actId + '-theme-options'] = JSON.stringify(options);
+  savePublishState();
+  pvRenderThemeChips(actId, options);
+  showToast('✓ Theme options saved');
+}
+
+function pvRenderThemeChips(actId, options) {
+  var chipsContainer = document.getElementById(actId + '-theme-chips');
+  var codeInput = document.getElementById(actId + '-code');
+  if (!chipsContainer) return;
+  chipsContainer.innerHTML = '';
+  if (!options || !options.length) {
+    chipsContainer.innerHTML = '<div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;padding:6px 0;">No themes set yet — evaluator will add options.</div>';
+    return;
+  }
+  options.forEach(function(opt) {
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.textContent = opt;
+    chip.dataset.theme = opt;
+    chip.style.cssText = 'padding:6px 14px;border-radius:20px;border:1.5px solid var(--vip-amber);background:white;color:var(--vip-amber);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all 0.15s;';
+    chip.onclick = function() {
+      var selected = chip.dataset.selected === '1';
+      chip.dataset.selected = selected ? '0' : '1';
+      chip.style.background = selected ? 'white' : 'var(--vip-amber)';
+      chip.style.color = selected ? 'var(--vip-amber)' : 'white';
+      // Update hidden code input with selected themes
+      var selectedThemes = [];
+      chipsContainer.querySelectorAll('[data-selected="1"]').forEach(function(c) {
+        selectedThemes.push(c.dataset.theme);
+      });
+      if (codeInput) codeInput.value = selectedThemes.join(', ');
+    };
+    chipsContainer.appendChild(chip);
+  });
+  // Also populate editor list
+  pvRestoreEditorList(actId, options);
+}
+
+function pvRestoreEditorList(actId, options) {
+  var list = document.getElementById(actId + '-theme-options-list');
+  if (!list) return;
+  list.innerHTML = '';
+  options.forEach(function(opt) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;align-items:center;';
+    row.innerHTML =
+      '<div style="width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;background:white;"></div>' +
+      '<input type="text" value="' + pvEscape(opt) + '" style="flex:1;padding:5px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--sans);">' +
+      '<button onclick="this.parentElement.remove()" style="color:var(--vip-midnight-muted);background:none;border:none;cursor:pointer;font-size:14px;padding:0 4px;">✕</button>';
+    list.appendChild(row);
+  });
+}
+
+function pvRestoreThemeOptions() {
+  ['act3', 'act4'].forEach(function(actId) {
+    var key = actId + '-theme-options';
+    if (!publishedWidgets[key]) return;
+    try {
+      var options = JSON.parse(publishedWidgets[key]);
+      if (options && options.length) pvRenderThemeChips(actId, options);
+    } catch(e) {}
+  });
+}
+
+// ── END PHOTOVOICE SUBMISSION THEME OPTIONS ────────────────────────────────────
+
 function pvThumbFallback(imgEl, viewUrl) {
   var link = document.createElement('a');
   link.href = viewUrl;
@@ -6111,7 +6232,10 @@ function pvAddToGalleryFromMeta(actId, meta) {
     var lh3Url = thumbUrl.indexOf('drive.google.com/thumbnail') !== -1
       ? 'https://lh3.googleusercontent.com/d/' + thumbUrl.replace(/.*[?&]id=([^&]+).*/, '$1')
       : thumbUrl;
-    mediaHtml = '<img src="' + pvEscape(lh3Url) + '" onclick="pvOpenLightbox(this.src)" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
+    var metaThemes = meta.code ? meta.code.split(',').map(function(t){return t.trim();}).filter(Boolean) : [];
+    var metaThemesJson = JSON.stringify(metaThemes).replace(/'/g, "\\'");
+    var metaDesc = (meta.description || '').replace(/'/g, "\\'");
+    mediaHtml = '<img src="' + pvEscape(lh3Url) + '" onclick="pvOpenLightbox(this.src,' + metaThemesJson + ',\'' + metaDesc + '\')" onerror="pvThumbFallback(this,\'' + pvEscape(viewUrl) + '\')" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;cursor:zoom-in;">';
   } else if (meta.type === 'story' && meta.storyText) {
     mediaHtml = '<div style="background:#FFFBF2;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;color:var(--vip-midnight);line-height:1.6;border-left:3px solid var(--vip-amber);">' + pvEscape(meta.storyText) + '</div>';
   } else if (viewUrl) {
@@ -8954,15 +9078,44 @@ document.addEventListener('click', function(e) {
 <!-- Photovoice lightbox -->
 <div id="pv-lightbox" onclick="pvCloseLightbox()">
   <span id="pv-lightbox-close" onclick="pvCloseLightbox()">✕</span>
-  <img id="pv-lightbox-img" src="" alt="">
+  <div onclick="event.stopPropagation()" style="display:flex;flex-direction:column;align-items:center;max-width:92vw;max-height:92vh;">
+    <img id="pv-lightbox-img" src="" alt="" style="max-width:92vw;max-height:72vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.6);">
+    <div id="pv-lightbox-meta" style="display:none;margin-top:14px;background:rgba(255,255,255,0.08);border-radius:10px;padding:12px 18px;max-width:560px;width:100%;text-align:left;">
+      <div id="pv-lightbox-themes" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;"></div>
+      <div id="pv-lightbox-desc" style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-function pvOpenLightbox(src) {
+function pvOpenLightbox(src, themes, desc) {
   var lb = document.getElementById('pv-lightbox');
   var img = document.getElementById('pv-lightbox-img');
+  var meta = document.getElementById('pv-lightbox-meta');
+  var themesEl = document.getElementById('pv-lightbox-themes');
+  var descEl = document.getElementById('pv-lightbox-desc');
   if (!lb || !img) return;
   img.src = src;
+
+  // Render metadata
+  if ((themes && themes.length) || desc) {
+    meta.style.display = 'block';
+    // Theme pills
+    themesEl.innerHTML = '';
+    if (themes && themes.length) {
+      themes.forEach(function(t) {
+        var pill = document.createElement('span');
+        pill.textContent = t.trim();
+        pill.style.cssText = 'background:var(--vip-amber);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;';
+        themesEl.appendChild(pill);
+      });
+    }
+    descEl.textContent = desc || '';
+    descEl.style.display = desc ? 'block' : 'none';
+  } else {
+    meta.style.display = 'none';
+  }
+
   lb.classList.add('open');
 }
 function pvCloseLightbox() {
