@@ -8634,23 +8634,23 @@ function dcBuildActivityViewHtml(actId, actNum, name) {
     '<div style="position:absolute;right:-20px;top:-20px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none;"></div>' +
     '<div style="font-size:11px;color:rgba(255,255,255,0.65);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Data Collection</div>' +
     '<div style="font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:6px;">' + pvEscape(name) + '</div>' +
-    '<div style="display:flex;gap:20px;margin-top:12px;">' +
+    '<div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;">' +
       '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
         '<div id="dc-stat-count-' + actId + '" style="font-size:24px;font-weight:800;color:white;">0</div>' +
         '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">submissions</div>' +
       '</div>' +
-      '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
-        '<div id="dc-stat-submitters-' + actId + '" style="font-size:24px;font-weight:800;color:white;">0</div>' +
-        '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">submitters</div>' +
-      '</div>' +
-      '<div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;text-align:center;">' +
-        '<div id="dc-stat-last-' + actId + '" style="font-size:13px;font-weight:700;color:white;line-height:1.3;">—</div>' +
-        '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">last submission</div>' +
-      '</div>' +
+    '</div>' +
+    '<div style="margin-top:10px;background:rgba(255,255,255,0.15);border-radius:10px;padding:8px 18px;display:inline-flex;align-items:center;gap:8px;">' +
+      '<div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600;">Last submission:</div>' +
+      '<div id="dc-stat-last-' + actId + '" style="font-size:13px;font-weight:700;color:white;">—</div>' +
     '</div>' +
   '</div>' +
-  '<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;">' +
-    '<div style="font-size:13px;font-weight:700;color:var(--vip-midnight);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;">Submissions Gallery</div>' +
+  '<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:16px;">' +
+    '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:12px;">Theme Tally</div>' +
+    '<div id="dc-theme-tally-' + actId + '" style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">No submissions yet.</div>' +
+  '</div>' +
+  '<div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px 22px;">' +
+    '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--vip-amber);margin-bottom:14px;">Submissions Gallery</div>' +
     '<div id="dc-gallery-' + actId + '" style="display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;">' +
       '<div id="dc-gallery-empty-' + actId + '" style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;padding:20px 0;">No submissions yet.</div>' +
     '</div>' +
@@ -8688,10 +8688,6 @@ function dcBuildOverview() {
           '<div id="dc-ov-count-' + act.id + '" style="font-size:22px;font-weight:800;color:var(--vip-amber);">' + stats.count + '</div>' +
           '<div style="font-size:11px;color:var(--vip-midnight-muted);font-weight:600;">submissions</div>' +
         '</div>' +
-        '<div style="text-align:center;">' +
-          '<div id="dc-ov-submitters-' + act.id + '" style="font-size:22px;font-weight:800;color:var(--vip-midnight);">' + stats.submitters.size + '</div>' +
-          '<div style="font-size:11px;color:var(--vip-midnight-muted);font-weight:600;">submitters</div>' +
-        '</div>' +
         '<div style="text-align:right;">' +
           '<div id="dc-ov-last-' + act.id + '" style="font-size:12px;font-weight:600;color:var(--vip-midnight-muted);">' + (stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—') + '</div>' +
           '<div style="font-size:11px;color:var(--vip-midnight-muted);">last submission</div>' +
@@ -8707,34 +8703,57 @@ function dcUpdateStats(actId, submissions) {
   if (!dcSubmissions[actId]) dcSubmissions[actId] = { count: 0, submitters: new Set(), lastDate: null };
   var stats = dcSubmissions[actId];
   stats.count = submissions.length;
-  stats.submitters = new Set();
+  var themeCounts = {};
   var lastTs = null;
   submissions.forEach(function(meta) {
-    if (meta.submitter) stats.submitters.add(meta.submitter);
-    else if (meta.name) stats.submitters.add(meta.name);
+    if (meta.code) {
+      meta.code.split(',').forEach(function(t) {
+        var trimmed = t.trim();
+        if (trimmed) themeCounts[trimmed] = (themeCounts[trimmed] || 0) + 1;
+      });
+    }
     if (meta.timestamp) {
       if (!lastTs || new Date(meta.timestamp) > new Date(lastTs)) lastTs = meta.timestamp;
     }
   });
   stats.lastDate = lastTs;
-
-  // Update overview card
-  var countEl = document.getElementById('dc-ov-count-' + actId);
-  var subEl = document.getElementById('dc-ov-submitters-' + actId);
-  var lastEl = document.getElementById('dc-ov-last-' + actId);
-  if (countEl) countEl.textContent = stats.count;
-  if (subEl) subEl.textContent = stats.submitters.size;
-  if (lastEl) lastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
+  stats.themeCounts = themeCounts;
 
   // Update activity page stats
   var pCountEl = document.getElementById('dc-stat-count-' + actId);
-  var pSubEl = document.getElementById('dc-stat-submitters-' + actId);
   var pLastEl = document.getElementById('dc-stat-last-' + actId);
   if (pCountEl) pCountEl.textContent = stats.count;
-  if (pSubEl) pSubEl.textContent = stats.submitters.size;
   if (pLastEl) pLastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
 
-  // Refresh overview cards to reflect updated stats
+  // Render theme tally
+  var tallyEl = document.getElementById('dc-theme-tally-' + actId);
+  if (tallyEl) {
+    var keys = Object.keys(themeCounts);
+    if (!keys.length) {
+      tallyEl.innerHTML = '<span style="font-style:italic;color:var(--vip-midnight-muted);">No themes tagged yet.</span>';
+    } else {
+      var maxCount = Math.max.apply(null, keys.map(function(k) { return themeCounts[k]; }));
+      tallyEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px;">' +
+        keys.sort(function(a,b){return themeCounts[b]-themeCounts[a];}).map(function(theme) {
+          var pct = Math.round(themeCounts[theme] / maxCount * 100);
+          return '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<div style="width:120px;font-size:12px;font-weight:600;color:var(--vip-midnight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + pvEscape(theme) + '</div>' +
+            '<div style="flex:1;background:var(--paper);border-radius:4px;height:10px;overflow:hidden;">' +
+              '<div style="width:' + pct + '%;height:100%;background:var(--vip-amber);border-radius:4px;transition:width 0.4s;"></div>' +
+            '</div>' +
+            '<div style="font-size:12px;font-weight:700;color:var(--vip-amber);min-width:24px;text-align:right;">' + themeCounts[theme] + '</div>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+  }
+
+  // Update overview card
+  var countEl = document.getElementById('dc-ov-count-' + actId);
+  var lastEl = document.getElementById('dc-ov-last-' + actId);
+  if (countEl) countEl.textContent = stats.count;
+  if (lastEl) lastEl.textContent = stats.lastDate ? new Date(stats.lastDate).toLocaleDateString() : '—';
+
+  // Refresh overview
   if (typeof dcBuildOverview === 'function') dcBuildOverview();
 }
 
