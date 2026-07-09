@@ -2229,8 +2229,9 @@
               <!-- Submission form content -->
               <div id="res-act-4-submit-content">
 
-              <!-- Media type selector -->
-              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+              <!-- Step 1 -->
+              <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">Step 1 — Select what type of evidence you want to submit:</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
                 <button onclick="pvSetType('act4','photo')" id="act4-type-photo" class="pv-type-btn pv-type-active" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--vip-amber);background:var(--vip-amber);color:white;font-size:12px;font-weight:600;cursor:pointer;">&#128247; Photo</button>
                 <button onclick="pvSetType('act4','video')" id="act4-type-video" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127909; Video</button>
                 <button onclick="pvSetType('act4','story')" id="act4-type-story" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#128221; Written Story</button>
@@ -2238,21 +2239,19 @@
                 <button onclick="pvSetType('act4','self-assessment')" id="act4-type-self-assessment" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#9997;&#65039; Self-Assessment</button>
               </div>
 
-              <!-- File upload (photo/video) -->
+              <!-- Step 2 -->
+              <div id="act4-step2-label" style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">Step 2 — Choose the file from your phone or other device:</div>
+
               <div id="act4-input-photo" class="pv-input-section" style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Photo</label>
                 <input type="file" id="act4-file-photo" accept="image/*" style="font-size:13px;width:100%;">
               </div>
               <div id="act4-input-video" class="pv-input-section" style="display:none;margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Upload Video</label>
                 <input type="file" id="act4-file-video" accept="video/*" style="font-size:13px;width:100%;">
               </div>
               <div id="act4-input-story" class="pv-input-section" style="display:none;margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Write your story</label>
                 <textarea id="act4-story-text" rows="4" placeholder="Share your story here..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
               </div>
               <div id="act4-input-audio" class="pv-input-section" style="display:none;margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Record or Upload Audio</label>
                 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                   <button onclick="pvToggleRecord('act4')" id="act4-record-btn" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--vip-amber);background:white;color:var(--vip-amber);font-size:12px;font-weight:600;cursor:pointer;">&#9679; Start Recording</button>
                   <input type="file" id="act4-file-audio" accept="audio/*" style="font-size:12px;flex:1;">
@@ -2260,7 +2259,7 @@
                 <div id="act4-record-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:6px;"></div>
               </div>
 
-              <!-- Self-assessment input -->
+              <!-- Self-assessment (replaces steps 2-3 with its own questions) -->
               <div id="act4-input-self-assessment" class="pv-input-section" style="display:none;margin-bottom:14px;">
                 <div style="display:flex;flex-direction:column;gap:16px;">
                   <div>
@@ -2281,13 +2280,16 @@
                 </div>
               </div>
 
-              <!-- Submission themes — selectable chips -->
-              <div style="margin-bottom:14px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">What themes are showing up? <span style="font-weight:400;color:var(--vip-amber);">*Required — select at least one</span></label>
-                <div id="act4-theme-chips" style="display:flex;flex-wrap:wrap;gap:8px;min-height:36px;">
-                  <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;padding:6px 0;">No themes set yet — evaluator will add options.</div>
+              <!-- Step 3 — themes -->
+              <div id="act4-step3-wrap">
+                <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;margin-top:4px;">Step 3 — Select the TRUST themes your evidence highlights:</div>
+                <div style="margin-bottom:14px;">
+                  <div id="act4-theme-chips" style="display:flex;flex-wrap:wrap;gap:8px;min-height:36px;">
+                    <div style="font-size:12px;color:var(--vip-midnight-muted);font-style:italic;padding:6px 0;">No themes set yet — evaluator will add options.</div>
+                  </div>
+                  <div style="font-size:11px;color:var(--vip-amber);margin-top:4px;">*Required — select at least one</div>
+                  <input type="hidden" id="act4-code" value="">
                 </div>
-                <input type="hidden" id="act4-code" value="">
               </div>
 
               <!-- Eval-only: theme options editor -->
@@ -2298,9 +2300,9 @@
                 <button onclick="pvSaveThemeOptions('act4','trust')" style="font-size:12px;color:white;background:var(--vip-amber);border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-family:var(--sans);margin-left:6px;">Save options</button>
               </div>
 
-              <!-- Description -->
+              <!-- Step 4 -->
+              <div style="font-size:12px;font-weight:700;color:var(--vip-midnight);margin-bottom:8px;">Step 4 — Share any information you think will help everyone better understand your evidence:</div>
               <div style="margin-bottom:18px;">
-                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight-soft);display:block;margin-bottom:6px;">Anything else we should know about your submission?</label>
                 <textarea id="act4-description" rows="3" placeholder="Description, location, context, etc." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
               </div>
 
