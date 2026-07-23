@@ -1556,7 +1556,6 @@
               <button id="vis-btn-act4" onclick="toggleActivityVisibility(4)" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">&#9675; Hidden</button>
               <button id="ve-themes-btn-4" onclick="toggleThemesPublish('res-act-4')" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);border:1.5px solid var(--border);background:white;color:var(--vip-midnight-muted);white-space:nowrap;width:100%;text-align:center;">Unpublished</button>
             </div>
-          </div>
           <div style="display:grid;grid-template-columns:1fr 130px 130px 130px;align-items:center;gap:8px;padding:10px 14px;background:var(--paper);border:1px solid var(--border);border-radius:8px;">
             <div>
               <div style="font-size:13px;font-weight:600;color:var(--vip-midnight);">Alignment Check</div>
@@ -2168,6 +2167,11 @@
                 <textarea id="act3-description" rows="3" placeholder="Description, location, context, etc." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);resize:vertical;box-sizing:border-box;"></textarea>
               </div>
 
+              <div style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight);display:block;margin-bottom:4px;">Your name</label>
+                <input type="text" id="act3-submitter-name" placeholder="First name or nickname" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:4px;font-style:italic;">Only evaluators will be able to see your name</div>
+              </div>
               <button onclick="pvSubmit('act3','tasty')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
               <div id="act3-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
             </div><!-- /res-act-3-submit-content -->
@@ -2241,7 +2245,6 @@
                 <button onclick="pvSetType('act4','video')" id="act4-type-video" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127909; Video</button>
                 <button onclick="pvSetType('act4','story')" id="act4-type-story" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#128221; Written Story</button>
                 <button onclick="pvSetType('act4','audio')" id="act4-type-audio" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#127908; Audio</button>
-                <button onclick="pvSetType('act4','self-assessment')" id="act4-type-self-assessment" class="pv-type-btn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;color:var(--vip-midnight);font-size:12px;font-weight:600;cursor:pointer;">&#9997;&#65039; Alignment Check</button>
               </div>
 
               <!-- Step 2 -->
@@ -2338,6 +2341,11 @@
                 </div>
               </div>
 
+              <div style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight);display:block;margin-bottom:4px;">Your name</label>
+                <input type="text" id="act4-submitter-name" placeholder="First name or nickname" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:4px;font-style:italic;">Only evaluators will be able to see your name</div>
+              </div>
               <button onclick="pvSubmit('act4','trust')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
               <div id="act4-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
             </div><!-- /res-act-4-submit-content -->
@@ -2454,6 +2462,11 @@
                 </div>
               </div>
 
+              <div style="margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:600;color:var(--vip-midnight);display:block;margin-bottom:4px;">Your name</label>
+                <input type="text" id="act5-submitter-name" placeholder="First name or nickname" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);box-sizing:border-box;">
+                <div style="font-size:11px;color:var(--vip-midnight-muted);margin-top:4px;font-style:italic;">Only evaluators will be able to see your name</div>
+              </div>
               <button onclick="pvSubmitAlignment('act5','alignment')" style="background:var(--vip-amber);color:white;border:none;border-radius:22px;padding:10px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);">Submit &#8594;</button>
               <div id="act5-submit-status" style="font-size:12px;color:var(--vip-midnight-muted);margin-top:8px;min-height:18px;"></div>
             </div><!-- /res-act-5-submit-content -->
@@ -6008,7 +6021,8 @@ function pvToggleRecord(actId) {
 async function pvSubmit(actId, topic) {
   var type = pvCurrentType[actId] || 'photo';
   var code = (document.getElementById(actId + '-code').value || '').trim();
-  var desc = (document.getElementById(actId + '-description').value || '').trim();
+  var desc = (document.getElementById(actId + '-description') ? document.getElementById(actId + '-description').value || '' : '').trim();
+  var name = (document.getElementById(actId + '-submitter-name') ? document.getElementById(actId + '-submitter-name').value || '' : '').trim();
   var statusEl = document.getElementById(actId + '-submit-status');
 
   if (!code) { showToast('Please select at least one theme before submitting'); return; }
@@ -6021,6 +6035,7 @@ async function pvSubmit(actId, topic) {
     type: type,
     code: code,
     description: desc,
+    submitterName: name,
     timestamp: new Date().toISOString()
   };
 
@@ -6170,6 +6185,7 @@ function pvResetForm(actId) {
   }
   var c = document.getElementById(actId+'-code'); if(c) c.value='';
   var d = document.getElementById(actId+'-description'); if(d) d.value='';
+  var n = document.getElementById(actId+'-submitter-name'); if(n) n.value='';
   // Reset chip selections
   var chips = document.querySelectorAll('#' + actId + '-theme-chips [data-theme]');
   chips.forEach(function(chip) {
@@ -6306,12 +6322,16 @@ function loadPhotovoiceGalleries() {
 async function pvSubmitAlignment(actId, topic) {
   var statusEl = document.getElementById(actId + '-submit-status');
   var q1 = (document.getElementById(actId + '-sa-q1').value || '').trim();
+  var name = (document.getElementById(actId + '-submitter-name') ? document.getElementById(actId + '-submitter-name').value || '' : '').trim();
   var q2a = saScaleGetValue(actId + '-sa-q2a');
   var q2b = saScaleGetValue(actId + '-sa-q2b');
   var q2c = saScaleGetValue(actId + '-sa-q2c');
   var q2d = saScaleGetValue(actId + '-sa-q2d');
+  var why2a = document.getElementById(actId+'-sa-q2a-why') ? document.getElementById(actId+'-sa-q2a-why').value.trim() : '';
+  var why2b = document.getElementById(actId+'-sa-q2b-why') ? document.getElementById(actId+'-sa-q2b-why').value.trim() : '';
+  var why2c = document.getElementById(actId+'-sa-q2c-why') ? document.getElementById(actId+'-sa-q2c-why').value.trim() : '';
+  var why2d = document.getElementById(actId+'-sa-q2d-why') ? document.getElementById(actId+'-sa-q2d-why').value.trim() : '';
 
-  // Collect themes
   var themes = [];
   document.querySelectorAll('#' + actId + '-theme-chips [data-selected="1"]').forEach(function(c) {
     themes.push(c.dataset.theme);
@@ -6322,20 +6342,22 @@ async function pvSubmitAlignment(actId, topic) {
   statusEl.textContent = 'Submitting…';
 
   var storyText =
+    'SUBMITTER: ' + (name || '(anonymous)') + '\n\n' +
     'SITUATION:\n' + q1 + '\n\n' +
     'THEMES: ' + themes.join(', ') + '\n\n' +
     'ALIGNMENT CHECK:\n' +
-    'Walking the talk: ' + q2a + (document.getElementById(actId+'-sa-q2a-why') && document.getElementById(actId+'-sa-q2a-why').value.trim() ? '\nWhy: ' + document.getElementById(actId+'-sa-q2a-why').value.trim() : '') + '\n' +
-    "I'm clear on what we're doing: " + q2b + (document.getElementById(actId+'-sa-q2b-why') && document.getElementById(actId+'-sa-q2b-why').value.trim() ? '\nWhy: ' + document.getElementById(actId+'-sa-q2b-why').value.trim() : '') + '\n' +
-    'I believe in what we are doing: ' + q2c + (document.getElementById(actId+'-sa-q2c-why') && document.getElementById(actId+'-sa-q2c-why').value.trim() ? '\nWhy: ' + document.getElementById(actId+'-sa-q2c-why').value.trim() : '') + '\n' +
-    'I am comfortable inviting others: ' + q2d + (document.getElementById(actId+'-sa-q2d-why') && document.getElementById(actId+'-sa-q2d-why').value.trim() ? '\nWhy: ' + document.getElementById(actId+'-sa-q2d-why').value.trim() : '');
+    'Walking the talk: ' + q2a + (why2a ? '\nWhy: ' + why2a : '') + '\n' +
+    "I'm clear on what we're doing: " + q2b + (why2b ? '\nWhy: ' + why2b : '') + '\n' +
+    'I believe in what we are doing: ' + q2c + (why2c ? '\nWhy: ' + why2c : '') + '\n' +
+    'I am comfortable inviting others: ' + q2d + (why2d ? '\nWhy: ' + why2d : '');
 
   var payload = {
     action: 'save_photovoice',
     topic: topic,
     type: 'self-assessment',
     code: themes.join(', '),
-    description: '',
+    description: storyText,
+    submitterName: name,
     storyText: storyText,
     timestamp: new Date().toISOString()
   };
@@ -6343,11 +6365,10 @@ async function pvSubmitAlignment(actId, topic) {
   var result = await drivePost('save_photovoice', payload);
   if (result) {
     statusEl.textContent = '✓ Submitted';
-    // Add to gallery
     var meta = { type: 'self-assessment', code: themes.join(', '), description: storyText, timestamp: payload.timestamp };
     pvAddToGalleryFromMeta(actId, meta);
-    // Reset form
     var saQ1 = document.getElementById(actId + '-sa-q1'); if(saQ1) saQ1.value = '';
+    var saName = document.getElementById(actId + '-submitter-name'); if(saName) saName.value = '';
     ['q2a','q2b','q2c','q2d'].forEach(function(q) {
       var why = document.getElementById(actId + '-sa-' + q + '-why'); if(why) why.value = '';
     });
