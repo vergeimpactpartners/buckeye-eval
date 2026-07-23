@@ -72,6 +72,7 @@
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 2px solid var(--vip-blue-light); background: var(--white); flex-shrink: 0; }
   .content-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 28px 32px; position: relative; }
   body.mode-residents .content-area { padding-top: 0; }
+  body.mode-residents #view-village { display: block !important; opacity: 1 !important; }
   body.mode-residents #sprintProgressBarWrap,
   body.mode-ehw #sprintProgressBarWrap { display: none !important; }
 
@@ -2962,18 +2963,15 @@ function setMode(mode) {
       if (window._updateActiveNav) window._updateActiveNav();
     }, 150);
   } else if (mode === 'residents') {
-    // Apply activity state BEFORE showing the view to avoid visible flash
-    if (activeActivityId) applyActiveActivity(activeActivityId, true);
     showView('village', null);
     var _pb3 = document.getElementById('phaseBadge'); if(_pb3) _pb3.style.display = 'none';
     var projCycle = document.querySelector('.proj-cycle'); if(projCycle) projCycle.style.display = 'none';
     document.getElementById('residentsNav').style.display = 'block';
     var ptRes = document.getElementById('pageTitle');
     if (ptRes) ptRes.innerHTML = '<span style="color:var(--vip-blue);font-weight:800;">Buckeye EcoVillage</span> <span style="color:var(--vip-midnight);font-weight:600;">Developmental Evaluation</span>';
-    // Only restore activity visibility when switching from evaluator (not on village URL init)
+    if (activeActivityId) applyActiveActivity(activeActivityId, true);
     if (urlMode !== 'village') _restoreActivityVisibility();
   } else {
-    // Restore last active evaluator view rather than always going to Project Planning
     showView(lastEvalView, lastEvalNavEl);
     var _pb2 = document.getElementById('phaseBadge'); if(_pb2) _pb2.style.display = 'inline-block';
   }
