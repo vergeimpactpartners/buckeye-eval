@@ -6494,6 +6494,7 @@ function pvRestoreThemeOptions() {
 
 var SCALE_LABELS = ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'];
 var SCALE_EMOJIS = { 'Strongly disagree': '😟', 'Disagree': '😕', 'Neutral': '😐', 'Agree': '🙂', 'Strongly agree': '😊' };
+var SCALE_COLORS = { 'Strongly disagree': '#E24B4A', 'Disagree': '#F09595', 'Neutral': '#B4B2A9', 'Agree': '#97C459', 'Strongly agree': '#639922' };
 
 function acCurrentMonth() {
   var d = new Date();
@@ -6519,36 +6520,38 @@ function acRenderTallyTable(tally, statements, total, container) {
     return;
   }
 
-  var html = '<div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:10px;">' + total + ' response' + (total !== 1 ? 's' : '') + '</div>';
-  html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
-  // Header
-  html += '<tr><th style="text-align:left;padding:6px 8px;border-bottom:2px solid var(--border);font-weight:700;color:var(--vip-midnight);">Statement</th>';
+  var html = '<div style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:14px;">' + total + ' response' + (total !== 1 ? 's' : '') + '</div>';
+
+  html += '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;">';
   SCALE_LABELS.forEach(function(sl) {
-    html += '<th style="text-align:center;padding:6px 8px;border-bottom:2px solid var(--border);font-weight:600;color:var(--vip-midnight-soft);white-space:nowrap;">' + SCALE_EMOJIS[sl] + '<br>' + sl + '</th>';
+    html += '<span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--vip-midnight-soft);">';
+    html += '<span style="width:10px;height:10px;border-radius:2px;background:' + SCALE_COLORS[sl] + ';display:inline-block;"></span>';
+    html += SCALE_EMOJIS[sl] + ' ' + sl + '</span>';
   });
-  html += '</tr>';
-  // Rows
-  statements.forEach(function(stmt, i) {
-    var bg = i % 2 === 0 ? 'var(--paper)' : 'white';
-    html += '<tr style="background:' + bg + ';">';
-    html += '<td style="padding:8px;border-bottom:1px solid var(--border);font-style:italic;color:var(--vip-midnight-soft);">' + pvEscape(stmt) + '</td>';
+  html += '</div>';
+
+  html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+  statements.forEach(function(stmt) {
+    html += '<div>';
+    html += '<div style="font-size:12px;color:var(--vip-midnight-soft);font-style:italic;margin-bottom:4px;">' + pvEscape(stmt) + '</div>';
+    html += '<div style="display:flex;height:24px;border-radius:4px;overflow:hidden;background:var(--paper);">';
     SCALE_LABELS.forEach(function(sl) {
       var count = (tally[stmt] && tally[stmt][sl]) ? tally[stmt][sl] : 0;
       var pct = total > 0 ? Math.round(count / total * 100) : 0;
-      html += '<td style="text-align:center;padding:8px;border-bottom:1px solid var(--border);">';
-      if (count > 0) {
-        html += '<div style="font-size:15px;font-weight:700;color:var(--vip-amber);">' + count + '</div>';
-        html += '<div style="font-size:10px;color:var(--vip-midnight-muted);">' + pct + '%</div>';
-      } else {
-        html += '<span style="color:var(--border);">—</span>';
+      if (pct > 0) {
+        html += '<div title="' + sl + ': ' + count + ' (' + pct + '%)" style="width:' + pct + '%;background:' + SCALE_COLORS[sl] + ';display:flex;align-items:center;justify-content:center;">';
+        if (pct >= 12) html += '<span style="font-size:10px;color:white;font-weight:700;">' + count + '</span>';
+        html += '</div>';
       }
-      html += '</td>';
     });
-    html += '</tr>';
+    html += '</div>';
+    html += '</div>';
   });
-  html += '</table></div>';
+  html += '</div>';
+
   container.innerHTML = html;
 }
+
 
 function acLoadTally() {
   var tableEl = document.getElementById('act5-tally-table');
