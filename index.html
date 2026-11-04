@@ -458,6 +458,42 @@
 </style>
 </head>
 <body>
+<!-- LOGIN GATE: evaluator + EHW modes require a password. Village (?mode=village) stays open. -->
+<script>
+(function(){
+  var qs=window.location.search||'';
+  if(qs.indexOf('mode=village')!==-1) return;               // village stays open
+  var HASH='97639dcf5a618908278a27a5eaf1031831d58df7d818ca5dc6b5ec6847a44fae', SALT='vipilluminate-v1', KEY='vip_eval_auth', DAYS=30;
+  function authed(){try{var v=JSON.parse(localStorage.getItem(KEY)||'null');return v&&v.h===HASH&&(Date.now()-v.t)<DAYS*864e5}catch(e){return false}}
+  window.vipLogout=function(){try{localStorage.removeItem(KEY)}catch(e){} location.reload()};
+  if(authed()) return;
+  var st=document.createElement('style');
+  st.id='vip-gate-style';
+  st.textContent='body>*:not(#vip-gate){display:none !important}';
+  document.head.appendChild(st);
+  var g=document.createElement('div');g.id='vip-gate';
+  g.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#f8fafb;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Outfit,system-ui,sans-serif;';
+  g.innerHTML='<div style="background:#fff;border:1px solid rgba(15,35,40,.12);border-radius:14px;padding:30px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.08);">'+
+   '<div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4A6B73;margin-bottom:6px;">VIPIlluminate</div>'+
+   '<div style="font-size:20px;font-weight:700;color:#0F2328;margin-bottom:6px;">Evaluation team login</div>'+
+   '<div style="font-size:13px;color:#4A6B73;margin-bottom:18px;">Enter the team password to continue.</div>'+
+   '<input id="vip-pw" type="password" autocomplete="current-password" placeholder="Password" style="width:100%;box-sizing:border-box;padding:11px 12px;border:1.5px solid rgba(15,35,40,.22);border-radius:10px;font:inherit;font-size:15px;margin-bottom:12px;">'+
+   '<button id="vip-go" style="width:100%;padding:12px;border:0;border-radius:10px;background:#0F2328;color:#fff;font:inherit;font-weight:700;font-size:15px;cursor:pointer;">Log in</button>'+
+   '<div id="vip-err" style="color:#b3261e;font-size:13px;font-weight:600;margin-top:10px;min-height:18px;"></div></div>';
+  function mount(){document.body.appendChild(g);var i=document.getElementById('vip-pw');if(i)i.focus()}
+  if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount);
+  async function sha(t){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+  async function tryLogin(){
+    var e=document.getElementById('vip-err'),v=document.getElementById('vip-pw').value;
+    if(!window.crypto||!crypto.subtle){e.textContent='This browser cannot check the password. Please open the page over https.';return}
+    if(await sha(SALT+v)===HASH){try{localStorage.setItem(KEY,JSON.stringify({h:HASH,t:Date.now()}))}catch(x){} location.reload()}
+    else{e.textContent='That password is not correct.'}
+  }
+  document.addEventListener('click',function(ev){if(ev.target&&ev.target.id==='vip-go')tryLogin()});
+  document.addEventListener('keydown',function(ev){if(ev.key==='Enter'&&document.getElementById('vip-pw')&&document.activeElement.id==='vip-pw')tryLogin()});
+})();
+</script>
+
 
 <div class="app">
   <div class="sidebar">
@@ -482,10 +518,12 @@
       <div id="dc-nav-items">
         <!-- Populated dynamically from ACTIVITIES (photovoice only) -->
       </div>
+      <div class="nav-item" data-color="orange" onclick="window.open('feedback.html','_blank')"><span class="nav-dot" style="background:var(--vip-orange);"></span> <span style="color:var(--vip-orange);">Event Feedback ↗</span></div>
       <div class="nav-group-label" style="margin-top:8px;color:var(--vip-midnight);">Sensemaking</div>
       <div class="nav-item" data-color="midnight" onclick="showView('ai', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Sensemaking</span></div>
       <div class="nav-item" data-color="midnight" onclick="showView('themes', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Themes</span></div>
       <div class="nav-item" data-color="midnight" onclick="showView('fidelity', this)"><span class="nav-dot" style="background:var(--vip-midnight);"></span> <span style="color:var(--vip-midnight);">Fidelity Tracker</span></div>
+      <div class="nav-item" style="margin-top:14px;opacity:.7;" onclick="vipLogout()"><span class="nav-dot" style="background:var(--vip-midnight-muted);"></span> <span style="color:var(--vip-midnight-soft);">Log out</span></div>
     </div>
 
     <div id="residentsNav" class="nav-group" style="display:none;">
