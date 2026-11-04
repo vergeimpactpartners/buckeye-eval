@@ -16,57 +16,65 @@ body{margin:0;background:var(--paper);font-family:'Outfit',system-ui,sans-serif;
 h1{font-size:1.4rem;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
 .intro{margin:0;color:var(--ink-mid)}
 form{padding:26px}
-.step{margin-bottom:24px}
-label.q{display:block;font-weight:600;margin-bottom:8px;color:var(--ink)}
-.bigq{font-size:1.35rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
-.hint{font-style:italic;font-size:.85rem;color:var(--ink-soft);font-weight:400}
+.step{margin-bottom:26px}
+label.q{display:block;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:10px;color:var(--ink)}
+.hint{font-style:italic;font-size:.85rem;color:var(--ink-soft);font-weight:400;letter-spacing:0}
 input[type=text],textarea{width:100%;padding:11px 12px;border:1.5px solid var(--border-strong);border-radius:10px;font:inherit;color:var(--ink);background:#fff}
-textarea{min-height:140px;resize:vertical}
+textarea{min-height:130px;resize:vertical}
 input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-pale)}
 .opts{display:flex;gap:10px;flex-wrap:wrap}
-.opt{flex:1;min-width:130px;padding:12px;border:1.5px solid var(--border-strong);border-radius:10px;background:#fff;cursor:pointer;font:inherit;font-weight:600;color:var(--ink-mid)}
+.opt{flex:1;min-width:110px;padding:12px;border:1.5px solid var(--border-strong);border-radius:10px;background:#fff;cursor:pointer;font:inherit;font-weight:600;color:var(--ink-mid)}
 .opt:hover{border-color:var(--blue)}
 .opt.on{background:var(--blue);color:#fff;border-color:var(--blue)}
-.btn{padding:10px 16px;border-radius:10px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font:inherit;font-weight:600;cursor:pointer}
-.btn:disabled{opacity:.7;cursor:default}
-.btn.rec-on{background:var(--magenta);color:#fff;border-color:var(--magenta)}
-.emailbox{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:10px;padding:14px 16px;color:var(--ink-mid)}
-.emailbox a{color:var(--blue);font-weight:600}
 .submit{width:100%;padding:14px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:1rem;cursor:pointer}
 .submit:hover{background:var(--ink-mid)}
 .submit:disabled{opacity:.6}
+.hide{display:none}
+.btn{padding:10px 16px;border-radius:10px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font:inherit;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.rec-on{background:var(--magenta);color:#fff;border-color:var(--magenta)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.prog{font-size:.85rem;color:var(--ink-soft);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+audio{width:100%;margin-top:6px}
+.next{padding:12px 22px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.next:disabled{opacity:.4;cursor:default}
 #status{margin-top:12px;font-weight:600}
 .err{color:#b3261e}.ok{color:var(--blue)}
-.hide{display:none}
-audio{width:100%;margin-top:10px}
 </style></head><body>
 <div class="topbar">VIPIlluminate<span>EcoVillage Buckeye</span></div>
 <div class="wrap"><div class="card"><div class="head"><div class="badge">Event Feedback</div>
 <h1>EcoVillage Buckeye Event Feedback</h1>
 <p class="intro">We appreciate your willingness to share your feedback on EcoVillage Buckeye's events!</p></div>
 <form id="f" onsubmit="return submitFb(event)">
+
 <div class="step"><label class="q" for="ev">What event did you attend?</label>
 <input type="text" id="ev" required></div>
 
+<div class="step"><label class="q">Reflecting on this event, was TRUST built?</label>
+<div class="opts" id="trustOpts">
+<button type="button" class="opt" data-v="Yes">Yes</button>
+<button type="button" class="opt" data-v="No">No</button>
+<button type="button" class="opt" data-v="I don't know">I don't know</button></div></div>
 
-<div class="step"><label class="q">How do you want to submit your reflection?</label>
-<div class="opts"><button type="button" class="opt on" id="bw" onclick="setT('written')">✍️ Write it out</button>
-<button type="button" class="opt" id="ba" onclick="setT('audio')">🎙️ Audio</button>
-<button type="button" class="opt" id="be" onclick="setT('email')">✉️ Send by email</button></div></div>
+<div class="step"><label class="q">How would you like to submit your reflection about this moment?</label>
+<div class="opts" id="modeOpts">
+<button type="button" class="opt" data-m="written">✍️ Written</button>
+<button type="button" class="opt" data-m="audio">🎙️ Audio</button></div></div>
 
-<div class="step" id="reflstep"><div class="bigq" id="reflq">Reflecting on this event, [question to be added]</div></div>
-
-<div class="step" id="wbox"><label class="q" for="rt">Please share your reflection with us:</label>
-<textarea id="rt"></textarea></div>
-
-<div class="step hide" id="abox"><label class="q">Please share your reflection with us:</label>
-<div class="rec"><button type="button" class="btn" id="recbtn" onclick="toggleRec()">🎙️ Start recording</button>
+<div id="writtenBox" class="hide">
+<div class="step"><label class="q" for="story">Tell us a story about this moment:</label>
+<textarea id="story"></textarea></div>
+<div class="step"><label class="q" for="reason">What do you think was the main reason this happened?</label>
+<textarea id="reason"></textarea></div>
 </div>
-<audio id="player" controls class="hide"></audio></div>
 
-<div class="step hide" id="ebox"><div class="emailbox">You can share your response by email by reaching out to Shayanna at <a href="mailto:shayanna@vergeimpactpartners.com">shayanna@vergeimpactpartners.com</a></div></div>
+<div id="audioBox" class="hide">
+<div class="step"><label class="q">Hit record and tell us, FIRST, a story about this moment, and SECOND, what you think was the main reason this happened.</label>
+<div class="row"><button type="button" class="btn" id="rec1">🎙️ Start recording</button></div>
+<audio id="pl1" controls class="hide"></audio></div>
+</div>
 
-<div class="step" id="nmbox"><label class="q" for="nm">What's your name? <span class="hint">Only the evaluation team will see this.</span></label>
+<div class="step"><label class="q" for="nm">What's your name? <span class="hint">Only the evaluation team will see this.</span></label>
 <input type="text" id="nm" required></div>
 
 <button class="submit" id="sub" type="submit">Submit</button>
@@ -74,39 +82,53 @@ audio{width:100%;margin-top:10px}
 </form></div></div>
 <script>
 var GAS_URL='https://script.google.com/a/macros/vergeimpactpartners.com/s/AKfycbzqo40RgZNNxY1vSswxi8Wu7m5R4lYQ66NEOp_j6IXiBP-Egrr80LvLmDtqLkybsAm_eA/exec';
-var type='written',blob=null,mr=null,chunks=[],recording=false;
+var trust='',mode='',clips={story:null},links={},rec={on:false,mr:null,chunks:[]};
 function $(i){return document.getElementById(i)}
-function setT(t){type=t;$('bw').classList.toggle('on',t==='written');$('ba').classList.toggle('on',t==='audio');
- $('wbox').classList.toggle('hide',t!=='written');$('abox').classList.toggle('hide',t!=='audio');
- $('be').classList.toggle('on',t==='email');$('ebox').classList.toggle('hide',t!=='email');
- $('nmbox').classList.toggle('hide',t==='email');$('reflstep').classList.toggle('hide',t==='email');$('sub').classList.toggle('hide',t==='email');$('nm').required=(t!=='email')}
-function toggleRec(){
- if(recording){mr.stop();return}
- if(blob)return;
- if(!navigator.mediaDevices||!window.MediaRecorder){alert('Recording is not supported on this device.');return}
- navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-  chunks=[];mr=new MediaRecorder(s);
-  mr.ondataavailable=function(e){if(e.data.size)chunks.push(e.data)};
-  mr.onstop=function(){s.getTracks().forEach(function(t){t.stop()});
-   blob=new Blob(chunks,{type:mr.mimeType||'audio/webm'});recording=false;
-   $('recbtn').textContent='✓ Recording saved';$('recbtn').classList.remove('rec-on');$('recbtn').disabled=true;
-   var p=$('player');p.src=URL.createObjectURL(blob);p.classList.remove('hide')};
-  mr.start();recording=true;$('recbtn').textContent='⏹ Stop recording';$('recbtn').classList.add('rec-on');
- }).catch(function(){alert('Microphone access was blocked. Please allow microphone access and try again.')})}
+document.querySelectorAll('#trustOpts .opt').forEach(function(b){b.onclick=function(){trust=b.getAttribute('data-v');document.querySelectorAll('#trustOpts .opt').forEach(function(o){o.classList.toggle('on',o===b)})}});
+document.querySelectorAll('#modeOpts .opt').forEach(function(b){b.onclick=function(){mode=b.getAttribute('data-m');
+ document.querySelectorAll('#modeOpts .opt').forEach(function(o){o.classList.toggle('on',o===b)});
+ $('writtenBox').classList.toggle('hide',mode!=='written');$('audioBox').classList.toggle('hide',mode!=='audio')}});
+function setupRec(key,btnId,plId){
+ var rb=$(btnId);
+ rb.onclick=function(){
+  if(rec.on){rec.mr.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){alert('Recording is not supported on this device. Please choose Written instead.');return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+   rec.chunks=[];rec.mr=new MediaRecorder(s);
+   rec.mr.ondataavailable=function(e){if(e.data.size)rec.chunks.push(e.data)};
+   rec.mr.onstop=function(){s.getTracks().forEach(function(t){t.stop()});
+    clips[key]=new Blob(rec.chunks,{type:rec.mr.mimeType||'audio/webm'});rec.on=false;
+    rb.textContent='✓ Recording saved';rb.classList.remove('rec-on');rb.disabled=true;
+    var pl=$(plId);pl.src=URL.createObjectURL(clips[key]);pl.classList.remove('hide');setLock(false)};
+   rec.mr.start();rec.on=true;rb.textContent='⏹ Done recording';rb.classList.add('rec-on');setLock(true)
+  }).catch(function(){alert('Microphone access was blocked. Please allow microphone access and try again, or choose Written.')})}}
+function setLock(on){['rec1'].forEach(function(id){var b=$(id);if(!b.classList.contains('rec-on')&&b.textContent.indexOf('saved')<0)b.disabled=on})}
+setupRec('story','rec1','pl1');
 function b64(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1])};r.onerror=rej;r.readAsDataURL(b)})}
+function post(action,payload){return fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:action,payload:payload})}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw new Error(j.error||'Save failed');return j})}
 async function submitFb(e){
  e.preventDefault();var st=$('status');st.className='';st.textContent='';
- if(type==='written'&&!$('rt').value.trim()){st.className='err';st.textContent='Please write your reflection.';return false}
- if(type==='audio'&&!blob){st.className='err';st.textContent='Please record your audio.';return false}
- var payload={event:$('ev').value.trim(),type:type,submitterName:$('nm').value.trim(),timestamp:new Date().toISOString()};
+ function bad(m){st.className='err';st.textContent=m;return false}
+ if(!trust)return bad('Please choose Yes, No, or I don\'t know.');
+ if(!mode)return bad('Please choose Written or Audio.');
+ if(mode==='written'&&(!$('story').value.trim()||!$('reason').value.trim()))return bad('Please answer both questions.');
+ if(mode==='audio'&&!clips.story)return bad('Please record your answer.');
+ if(rec.on)return bad('Please press "Done recording" first.');
+ var id='fb_'+Date.now();
+ var payload={event:$('ev').value.trim(),trustBuilt:trust,submitterName:$('nm').value.trim(),timestamp:new Date().toISOString()};
  try{
-  if(type==='written')payload.reflection=$('rt').value.trim();
-  else{payload.fileData=await b64(blob);payload.mimeType=(blob.type||'audio/webm').split(';')[0];
-   payload.filename=blob.name||('feedback.'+(payload.mimeType.split('/')[1]||'webm'))}
-  $('sub').disabled=true;st.textContent='Submitting…';
-  var r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'save_feedback',payload:payload})});
-  var j=await r.json();
-  if(!j.ok)throw new Error(j.error||'Save failed');
+  $('sub').disabled=true;
+  if(mode==='written'){payload.format='written';payload.story=$('story').value.trim();payload.reason=$('reason').value.trim()}
+  else{
+   payload.format='audio';
+   if(!links.story){st.textContent='Uploading recording…';
+    var mt=(clips.story.type||'audio/webm').split(';')[0];
+    var res=await post('save_feedback_audio',{id:id,field:'reflection',fileData:await b64(clips.story),mimeType:mt,filename:'reflection.'+(mt.split('/')[1]||'webm')});
+    links.story=res.link}
+   payload.story=links.story;payload.reason='Included in the audio recording';
+  }
+  st.textContent='Submitting…';
+  await post('save_feedback',payload);
   $('f').innerHTML='<p class="ok" style="font-size:1.1rem;font-weight:600">Your response has been received.</p>';
  }catch(err){$('sub').disabled=false;st.className='err';st.textContent='Sorry, something went wrong. Please try again. ('+err.message+')'}
  return false}
