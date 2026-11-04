@@ -2478,7 +2478,6 @@
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--vip-amber);margin-bottom:4px;">Monthly Tally</div>
               <div id="act5-tally-month-label" style="font-size:12px;color:var(--vip-midnight-muted);margin-bottom:12px;"></div>
               <div id="act5-tally-table" style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Loading...</div>
-              <div id="act5-tally-archives"></div>
             </div>
 
             <!-- Themes panel -->
@@ -2496,6 +2495,7 @@
               <div style="background:rgba(158,31,99,0.04);border:1px dashed rgba(158,31,99,0.25);border-radius:10px;padding:16px;font-size:13px;color:rgba(158,31,99,0.5);font-style:italic;text-align:center;">Themes will emerge from sensemaking after the activity is complete</div>
               <div id="res-act-5-theme-cards" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;"></div>
             </div>
+            <div id="act5-tally-archives" style="padding:0 24px 20px;"></div>
           </div><!-- /res-act-5-body -->
         </div><!-- /res-act-5 -->
 
@@ -5892,40 +5892,6 @@ function _updateVeThemesBtn(actId, published) {
 }
 
 
-function openUpNextEditor() {
-  var modal = document.getElementById('upnextModal');
-  var labelEl = document.getElementById('upnext-label');
-  var dateEl = document.getElementById('upnext-date');
-  if (labelEl) document.getElementById('upnext-input-label').value = labelEl.textContent;
-  if (dateEl) document.getElementById('upnext-input-date').value = dateEl.textContent;
-  modal.style.display = 'flex';
-}
-
-function closeUpNextEditor() {
-  document.getElementById('upnextModal').style.display = 'none';
-}
-
-function saveUpNext() {
-  var label = document.getElementById('upnext-input-label').value.trim();
-  var date = document.getElementById('upnext-input-date').value.trim();
-  if (!label || !date) return;
-  // Update timeline
-  var labelEl = document.getElementById('upnext-label');
-  var dateEl = document.getElementById('upnext-date');
-  if (labelEl) labelEl.textContent = label;
-  if (dateEl) dateEl.textContent = date;
-  // Update nav
-  var navUpNext = document.getElementById('nav-upnext-label');
-  if (navUpNext) navUpNext.textContent = label + ' — Up Next';
-  // Save to localStorage + Drive
-  var upnextData = { label: label, date: date };
-  try { localStorage.setItem('evalcommons_upnext', JSON.stringify(upnextData)); } catch(e) {}
-  drivePost('save_publish', { upnextLabel: label, upnextDate: date }).then(function(res) {
-    showDriveStatus(res !== null);
-  });
-  closeUpNextEditor();
-}
-
 function restoreUpNext() {
   var saved = publishedWidgets['upnextLabel'];
   if (saved) {
@@ -6567,11 +6533,8 @@ function acLoadTally() {
     }
     acRenderTallyTable(result.tally, result.statements || [], result.total || 0, tableEl);
 
-    // Check if we need to archive previous month (run on 1st of month)
-    var today = new Date();
-    if (today.getDate() === 1) {
-      acArchivePrevMonth(archivesEl);
-    }
+    // Archive any finished month that has responses and is not archived yet
+    acArchivePrevMonth(archivesEl);
   }).catch(function() {
     tableEl.innerHTML = '<div style="font-size:13px;color:var(--vip-midnight-muted);font-style:italic;">Drive offline — tally unavailable.</div>';
   });
@@ -6581,21 +6544,35 @@ function acLoadTally() {
 }
 
 function acArchivePrevMonth(archivesEl) {
-  var prevMonth = acPrevMonth();
-  var archiveKey = 'act5-archive-' + prevMonth;
-  if (publishedWidgets[archiveKey]) return; // already archived
-
-  drivePost('load_alignment_tally', { month: prevMonth }).then(function(result) {
-    if (!result || !result.ok || !result.total) return;
-    // Store archive in publishedWidgets
-    publishedWidgets[archiveKey] = JSON.stringify({
-      month: prevMonth,
-      tally: result.tally,
-      statements: result.statements,
-      total: result.total
-    });
-    savePublishState();
-    acRenderArchives(archivesEl);
+  // Check the last 6 finished months; archive each one that has responses and no archive yet
+  var d = new Date();
+  d.setDate(1);
+  var months = [];
+  for (var i = 0; i < 6; i++) {
+    d.setMonth(d.getMonth() - 1);
+    months.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+  }
+  var chain = Promise.resolve();
+  months.forEach(function(m) {
+    var key = 'act5-archive-' + m;
+    var emptyKey = 'ac-empty-' + m;
+    var skip = false;
+    try { skip = localStorage.getItem(emptyKey) === '1'; } catch(e) {}
+    if (publishedWidgets[key] || skip) return;
+    chain = chain.then(function() {
+      return drivePost('load_alignment_tally', { month: m }).then(function(result) {
+        if (!result || !result.ok) return;
+        if (!result.total) { try { localStorage.setItem(emptyKey, '1'); } catch(e) {} return; }
+        publishedWidgets[key] = JSON.stringify({
+          month: m,
+          tally: result.tally,
+          statements: result.statements,
+          total: result.total
+        });
+        savePublishState();
+        acRenderArchives(archivesEl);
+      });
+    }).catch(function() {});
   });
 }
 
