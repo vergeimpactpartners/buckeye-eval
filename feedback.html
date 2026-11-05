@@ -2,39 +2,42 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<title>EcoVillage Buckeye – Event Feedback</title>
+<title>EcoVillage Buckeye – Event Survey</title>
 <style>
 :root{--blue:#1890BA;--blue-light:#C9EAF0;--blue-pale:#EBF6FB;--magenta:#9E1F63;--amber:#C37D38;--amber-light:#F5E4CC;--orange-pale:#FEF3E2;--ink:#0F2328;--ink-mid:#1E3D45;--ink-soft:#4A6B73;--paper:#f8fafb;--border:rgba(15,35,40,.12);--border-strong:rgba(15,35,40,.22)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);font-family:'Outfit',system-ui,sans-serif;color:var(--ink);line-height:1.5;font-size:15px}
 .topbar{background:var(--ink);color:#fff;padding:14px 20px;font-weight:600;letter-spacing:-.01em}
+.stripe{height:5px;background:linear-gradient(90deg,#1890BA 0 25%,#9E1F63 25% 50%,#C37D38 50% 75%,#F99D33 75% 100%)}
 .topbar span{color:var(--blue-light);font-weight:400;margin-left:8px}
 .wrap{max-width:660px;margin:0 auto;padding:24px 16px 60px}
 .card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.head{background:var(--orange-pale);border-bottom:3px solid var(--amber);padding:22px 26px}
-.badge{display:inline-block;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.head{background:var(--blue);border-bottom:4px solid var(--magenta);padding:24px 26px;position:relative;overflow:hidden}
+.head:after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)}
+.badge{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
 h1{font-size:1.4rem;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
-.intro{margin:0;color:var(--ink-mid)}
+.intro{margin:0;color:#fff;position:relative;z-index:1;font-size:1.4rem;font-weight:600;line-height:1.35;letter-spacing:-.01em}
 form{padding:26px}
 .step{margin-bottom:26px}
-label.q{display:block;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:10px;color:var(--ink)}
-.hint{font-style:italic;font-size:.85rem;color:var(--ink-soft);font-weight:400;letter-spacing:0}
+label.q{border-left:4px solid var(--blue);padding-left:10px;display:block;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:10px;color:var(--ink)}
+.hint{font-style:italic;font-size:.85rem;color:var(--magenta);font-weight:400;letter-spacing:0}
 input[type=text],textarea{width:100%;padding:11px 12px;border:1.5px solid var(--border-strong);border-radius:10px;font:inherit;color:var(--ink);background:#fff}
 textarea{min-height:130px;resize:vertical}
+::placeholder{color:#a9b4b8;opacity:1}
 input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-pale)}
 .opts{display:flex;gap:10px;flex-wrap:wrap}
 .opt{flex:1;min-width:110px;padding:12px;border:1.5px solid var(--border-strong);border-radius:10px;background:#fff;cursor:pointer;font:inherit;font-weight:600;color:var(--ink-mid)}
 .opt:hover{border-color:var(--blue)}
 .opt.on{background:var(--blue);color:#fff;border-color:var(--blue)}
-.submit{width:100%;padding:14px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:1rem;cursor:pointer}
-.submit:hover{background:var(--ink-mid)}
+.submit{width:100%;padding:14px;border:0;border-radius:10px;background:var(--magenta);color:#fff;font:inherit;font-weight:700;font-size:1rem;cursor:pointer}
+.submit:hover{background:#821a52}
 .submit:disabled{opacity:.6}
 .hide{display:none}
 .btn{padding:10px 16px;border-radius:10px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font:inherit;font-weight:600;cursor:pointer}
 .btn:disabled{opacity:.55;cursor:default}
 .btn.rec-on{background:var(--magenta);color:#fff;border-color:var(--magenta)}
 .aintro{font-size:1.1rem;font-weight:400;margin-bottom:10px;color:var(--ink)}
-.aq{font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:8px;color:var(--ink)}
+.aq{border-left:4px solid var(--amber);padding-left:10px;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:8px;color:var(--ink)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .prog{font-size:.85rem;color:var(--ink-soft);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
 audio{width:100%;margin-top:6px}
@@ -44,10 +47,13 @@ audio{width:100%;margin-top:6px}
 .err{color:#b3261e}.ok{color:var(--blue)}
 </style></head><body>
 <div class="topbar">VIPIlluminate<span>EcoVillage Buckeye</span></div>
-<div class="wrap"><div class="card"><div class="head"><div class="badge">Event Feedback</div>
-<h1>EcoVillage Buckeye Event Feedback</h1>
-<p class="intro">We appreciate your willingness to share your feedback on EcoVillage Buckeye's events!</p></div>
+<div class="stripe"></div>
+<div class="wrap"><div class="card"><div class="head"><div class="badge">Event Survey</div>
+<p class="intro">We appreciate your willingness to share your thoughts on trust building with EcoVillage Buckeye!</p></div>
 <form id="f" onsubmit="return submitFb(event)">
+
+<div class="step"><label class="q" for="nm">What's your name?<span class="hint" style="display:block;margin-top:4px;">Only the evaluation team will see this – not EHW staff or other residents.</span></label>
+<input type="text" id="nm" required></div>
 
 <div class="step"><label class="q" for="ev">What event did you attend?</label>
 <input type="text" id="ev" required></div>
@@ -58,28 +64,25 @@ audio{width:100%;margin-top:6px}
 <button type="button" class="opt" data-v="No">No</button>
 <button type="button" class="opt" data-v="I don't know">I don't know</button></div></div>
 
-<div class="step"><label class="q">How would you like to submit your reflection about this moment?</label>
+<div class="step"><label class="q">Can you share an example (a story, moment, or experience from the event) of why?</label>
+<div class="aintro">You can share your story by text or voice note below. For text click "written." For voice note click "audio."</div>
 <div class="opts" id="modeOpts">
 <button type="button" class="opt" data-m="written">✍️ Written</button>
 <button type="button" class="opt" data-m="audio">🎙️ Audio</button></div></div>
 
 <div id="writtenBox" class="hide">
-<div class="step"><label class="q" for="story">Tell us the story about this moment. What happened?</label>
-<textarea id="story"></textarea></div>
-<div class="step"><label class="q" for="reason">What do you think was the main reason that trust was built or not built?</label>
-<textarea id="reason"></textarea></div>
+<div class="step"><textarea id="story" aria-label="Your example" placeholder="Share your example"></textarea></div>
+<div class="step"><label class="q" for="reason">What do you think was the MAIN reason this happened?</label>
+<textarea id="reason" placeholder="Share your reason"></textarea></div>
 </div>
 
 <div id="audioBox" class="hide">
 <div class="step"><div class="aintro">Press record and share with us:</div>
-<div class="aq">1. The story about this moment. What happened?</div>
-<div class="aq">2. What you think was the main reason that trust was built or not built?</div>
+<div class="aq">1. An example of why (a story, moment, or experience from the event)</div>
+<div class="aq">2. What you think was the MAIN reason this happened</div>
 <div class="row"><button type="button" class="btn" id="rec1">🎙️ Start recording</button></div>
 <audio id="pl1" controls class="hide"></audio></div>
 </div>
-
-<div class="step"><label class="q" for="nm">What's your name?<span class="hint" style="display:block;margin-top:4px;">Only the evaluation team will see this – not EHW staff or other residents.</span></label>
-<input type="text" id="nm" required></div>
 
 <button class="submit" id="sub" type="submit">Submit</button>
 <div id="status"></div>
