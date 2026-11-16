@@ -16,6 +16,7 @@ body{margin:0;background:var(--paper);font-family:'Outfit',system-ui,sans-serif;
 .head:after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)}
 .badge{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
 h1{font-size:1.4rem;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+.intro2{margin:12px 0 0;color:rgba(255,255,255,.92);position:relative;z-index:1;font-size:1.05rem;font-weight:400;line-height:1.45}
 .intro{margin:0;color:#fff;position:relative;z-index:1;font-size:1.4rem;font-weight:600;line-height:1.35;letter-spacing:-.01em}
 form{padding:26px}
 .step{margin-bottom:26px}
@@ -49,7 +50,8 @@ audio{width:100%;margin-top:6px}
 <div class="topbar">VIPIlluminate<span>EcoVillage Buckeye</span></div>
 <div class="stripe"></div>
 <div class="wrap"><div class="card"><div class="head"><div class="badge">Event Survey</div>
-<p class="intro">We appreciate your willingness to share your thoughts on trust building with EcoVillage Buckeye!</p></div>
+<p class="intro">We appreciate your willingness to share your thoughts on trust building with EcoVillage Buckeye!</p>
+<p class="intro2">There are no wrong answers, we just want to hear how you feel about the event you attended.</p></div>
 <form id="f" onsubmit="return submitFb(event)">
 
 <div class="step"><label class="q" for="nm">What's your name?<span class="hint" style="display:block;margin-top:4px;">Only the evaluation team will see this – not EHW staff or other residents.</span></label>
@@ -64,7 +66,7 @@ audio{width:100%;margin-top:6px}
 <button type="button" class="opt" data-v="No">No</button>
 <button type="button" class="opt" data-v="I don't know">I don't know</button></div></div>
 
-<div class="step"><label class="q">Can you share an example (a story, moment, or experience from the event) of why?</label>
+<div class="step"><label class="q">Can you share an example (a story, moment, or experience from the event) of what happened during the event that made you feel this way?</label>
 <div class="aintro">You can share your story by text or voice note below. For text click "written." For voice note click "audio."</div>
 <div class="opts" id="modeOpts">
 <button type="button" class="opt" data-m="written">✍️ Written</button>
@@ -72,14 +74,14 @@ audio{width:100%;margin-top:6px}
 
 <div id="writtenBox" class="hide">
 <div class="step"><textarea id="story" aria-label="Your example" placeholder="Share your example"></textarea></div>
-<div class="step"><label class="q" for="reason">What do you think was the MAIN reason this happened?</label>
+<div class="step"><label class="q" for="reason">What do you think was the MAIN reason trust was built or not built?</label>
 <textarea id="reason" placeholder="Share your reason"></textarea></div>
 </div>
 
 <div id="audioBox" class="hide">
 <div class="step"><div class="aintro">Press record and share with us:</div>
-<div class="aq">1. An example of why (a story, moment, or experience from the event)</div>
-<div class="aq">2. What you think was the MAIN reason this happened</div>
+<div class="aq">1. An example (a story, moment, or experience from the event) of what happened during the event that made you feel this way</div>
+<div class="aq">2. What you think was the MAIN reason trust was built or not built</div>
 <div class="row"><button type="button" class="btn" id="rec1">🎙️ Start recording</button></div>
 <audio id="pl1" controls class="hide"></audio></div>
 </div>
