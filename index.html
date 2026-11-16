@@ -2779,6 +2779,7 @@ var meetingData = [
   { num: 4, label: 'Learning Session 4', date: 'Sep 30',   status: 'future' },
   { num: 5, label: 'Learning Session 5', date: 'Oct 21',   status: 'future' },
   { num: 6, label: 'Learning Session 6', date: 'Nov 11',   status: 'future' },
+  { num: 7, label: 'Learning Session 7', date: 'Dec 2',    status: 'future' },
 ];
 
 
@@ -2869,7 +2870,15 @@ function saveMeetingData() {
 function restoreMeetingData() {
   var saved = publishedWidgets['meetingData'];
   if (saved) {
-    try { meetingData = JSON.parse(saved); } catch(e) {}
+    try {
+      var _defaults = meetingData.slice();
+      meetingData = JSON.parse(saved);
+      // Add any sessions that exist in the code but not in the saved copy (e.g. a newly added session)
+      _defaults.forEach(function(d) {
+        if (!meetingData.some(function(m) { return m.num === d.num; })) meetingData.push(d);
+      });
+      meetingData.sort(function(x, y) { return x.num - y.num; });
+    } catch(e) {}
   }
   renderTimeline();
 }
@@ -6596,12 +6605,15 @@ function acArchivePrevMonth(archivesEl) {
     var emptyKey = 'ac-empty-' + m;
     var skip = false;
     try { skip = localStorage.getItem(emptyKey) === '1'; } catch(e) {}
-    if (publishedWidgets[key] || skip) return;
+    var existing = null;
+    try { existing = publishedWidgets[key] ? JSON.parse(publishedWidgets[key]) : null; } catch(e) {}
+    if ((existing && existing.v === 2) || skip) return;
     chain = chain.then(function() {
       return drivePost('load_alignment_tally', { month: m }).then(function(result) {
-        if (!result || !result.ok) return;
+        if (!result || !result.ok || result.v !== 2) return; // v2 = corrected counting (needs updated Code.gs)
         if (!result.total) { try { localStorage.setItem(emptyKey, '1'); } catch(e) {} return; }
         publishedWidgets[key] = JSON.stringify({
+          v: 2,
           month: m,
           tally: result.tally,
           statements: result.statements,
@@ -6621,7 +6633,7 @@ function acRenderArchives(archivesEl) {
     if (key.indexOf('act5-archive-') === 0) {
       try {
         var data = JSON.parse(publishedWidgets[key]);
-        archives.push(data);
+        if (data && data.v === 2) archives.push(data); // older archives used wrong counts; rebuilt automatically
       } catch(e) {}
     }
   });
